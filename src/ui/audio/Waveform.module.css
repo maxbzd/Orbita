@@ -1,0 +1,70 @@
+.wave {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* A horizontal drag scrubs; a vertical one still scrolls the page. */
+  touch-action: pan-y;
+  cursor: pointer;
+}
+
+.wave[aria-disabled='true'],
+.static {
+  cursor: default;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Bars not played yet: ink-3 at 40 %. */
+.rest {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-opacity: 0.4;
+  stroke-width: var(--bar);
+  stroke-linecap: round;
+}
+
+/* Played bars take the AI gradient (the gradient stops come from --ai-*). */
+.played {
+  fill: none;
+  stroke-width: var(--bar);
+  stroke-linecap: round;
+}
+
+.mirror {
+  opacity: 0.4;
+}
+
+.head {
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+.knob {
+  fill: var(--ink);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.wave:focus-visible .knob,
+.scrubbing .knob {
+  opacity: 1;
+}
+
+.scrubbing .head {
+  opacity: 1;
+}
+
+.wave:focus-visible {
+  outline-offset: 4px;
+}

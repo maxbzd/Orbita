@@ -1,0 +1,74 @@
+/* The pill above the navigation: ● 02:14 ▮▮▮▮ ⏸ ✓. */
+.mini {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  height: 56px;
+  padding: 0 var(--s-2) 0 var(--s-1);
+  width: 100%;
+}
+
+/* The body is one button: a tap goes back to the recording screen. */
+.open {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--s-3);
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.open:active {
+  background: var(--hover);
+}
+
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--rec);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--rec) 70%, transparent);
+  animation: rec-beat 1.6s ease-in-out infinite;
+}
+
+.paused .dot {
+  background: var(--ink-2);
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes rec-beat {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.state {
+  flex: none;
+  color: var(--ink-2);
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+.spacer {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}
+:global(:root[data-motion='reduced']) .dot {
+  animation: none;
+}

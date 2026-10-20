@@ -1,0 +1,345 @@
+/*
+ * Colour tokens for the two themes. One system of tokens, two palettes:
+ *   "Ночь"   - default, :root and :root[data-theme='night'];
+ *   "Рассвет" - :root[data-theme='dawn'], and automatically when no data-theme is set and the
+ *               system prefers a light scheme (the block under @media is a copy of the dawn block;
+ *               src/styles/tokens.contrast.test.ts fails if the two drift apart).
+ * Values and measured contrast (checked by tokens.contrast.test.ts). Every text/background pair
+ * is re-checked by that test.
+ */
+
+/* ===================== НОЧЬ ===================== */
+:root,
+:root[data-theme='night'] {
+  color-scheme: dark;
+
+  --bg-0: #07080f; /* bottom of the sky; not #000, or the glow does not read */
+  --bg-1: #0c0f1e; /* top of the sky / base surface */
+  --bg-2: #12152b; /* raised, opaque sheets */
+  --glass-solid: #161a33; /* stands in for glass when blur is off */
+
+  --ink: #eef0fa; /* 16.8:1 */
+  --ink-2: #b6bbd3; /* 10.0:1 */
+  --ink-3: #8d93b0; /* 6.3:1; never over an aura */
+  --ink-off: #5f6485; /* disabled only, not readable text */
+
+  --stroke: rgb(255 255 255 / 0.1); /* decorative borders (not for controls) */
+  --stroke-ui: rgb(255 255 255 / 0.38); /* borders of fields, chips, toggles: 3.5:1 */
+  --surface: rgb(255 255 255 / 0.06);
+  --surface-2: rgb(255 255 255 / 0.09);
+  --surface-card: linear-gradient(180deg, rgb(255 255 255 / 0.075), rgb(255 255 255 / 0.04));
+  --card-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+
+  --hover: rgb(255 255 255 / 0.06);
+  --press: rgb(255 255 255 / 0.12);
+  --pill-active: rgb(255 255 255 / 0.1);
+  --scrim: rgb(3 4 10 / 0.6);
+  --selection: rgb(139 108 255 / 0.38);
+  --scroll-thumb: rgb(255 255 255 / 0.2);
+  --skeleton: rgb(255 255 255 / 0.06);
+  --skeleton-hi: rgb(255 255 255 / 0.12);
+
+  --cta-bg: #f2eddc; /* the one main button: cream pill, 15.5:1 */
+  --cta-ink: #15132b;
+  --focus: #f2eddc; /* 16.2:1 */
+  --accent: #f2eddc;
+  --on-accent: #15132b;
+
+  /* The AI gradient: AI frame, AI action button, orb glow. Only for what the AI did or does. */
+  --ai-1: #7c8cff;
+  --ai-2: #b38cff;
+  --ai-3: #e56bd9;
+  --ai-ink: #0b0c1a; /* text on the gradient: 6.5 / 7.5 / 6.9 */
+  --grad-ai: linear-gradient(120deg, var(--ai-1), var(--ai-2) 55%, var(--ai-3));
+
+  /* Statuses only. */
+  --ok: #6fe0b8;
+  --warn: #ffc46b;
+  --danger: #ff6b6b;
+  --rec: #ff5c6c;
+  --on-danger: #0b0c1a;
+
+  /* Record types: colour lives only in the dot / glyph, chip text stays --ink (>= 8.3:1 on bg-0). */
+  --t-decision: #79aeff;
+  --t-commitment: #ff8a7a;
+  --t-idea: #ffc95c;
+  --t-forecast: #b396ff;
+  --t-state: #f59ad6;
+  --t-person: #5fd8c8;
+  --t-pattern: #bcdb6a;
+  /* Added for the item kinds with no colour of their own (domain ITEM_KINDS). */
+  --t-task: #a9b7d0;
+  --t-question: #ffa45e;
+  --t-lesson: #d8b589;
+  --t-fact: #8fd0e0;
+
+  /* Mood -3..+3: shape + colour + word; colour alone never carries the meaning. */
+  --m-n3: #7a5bd6;
+  --m-n2: #5b6fe0;
+  --m-n1: #4f8df0;
+  --m-0: #bfe3ee;
+  --m-p1: #a9d86b;
+  --m-p2: #f5cf4f;
+  --m-p3: #f7a22e;
+
+  /* Aura: three layers, alpha is baked into the colour and capped by the table in §2.3. */
+  --aura-a: rgb(111 182 201 / 0.28); /* core: mood colour */
+  --aura-b: rgb(75 79 216 / 0.28); /* brand anchor: always indigo */
+  --aura-c: rgb(139 108 255 / 0.22); /* partner: neighbouring hue */
+
+  /* Glass recipes (§2.6). */
+  --glass-bg: color-mix(in srgb, #12152b 74%, transparent); /* QA: 58 % let the list text show through the nav pill and the mini recorder */
+  --glass-shadow: 0 10px 40px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.08);
+
+  /* Sky. */
+  --sky-top: var(--bg-1);
+  --sky-bottom: var(--bg-0);
+  --star-opacity: 1;
+  --grain-opacity: 0.07;
+
+  /* Orb (CSS sphere fallback and shell slots). */
+  --orb-core: #e8eeff;
+  --orb-edge: #8b6cff;
+  --orb-accent: #5b8cff;
+  --orb-glow: rgb(139 108 255 / 0.5);
+}
+
+/* ===================== РАССВЕТ (explicit) ===================== */
+:root[data-theme='dawn'] {
+  color-scheme: light;
+
+  --bg-0: #f6f3ec;
+  --bg-1: #f6f3ec;
+  --bg-2: #ffffff;
+  --glass-solid: #ffffff;
+
+  --ink: #17162a; /* 16.0:1 */
+  --ink-2: #4b4a62; /* FIX: was #54536B (6.7:1); 7.7:1 so ink-2 also holds on the pastel aura peaks (4.1 before) */
+  --ink-3: #686780; /* FIX: was #6C6B82 (4.66:1); 4.5+ also on --surface-2; only from 13 px, never over an aura */
+  --ink-off: #a3a2b4;
+
+  --stroke: rgb(23 22 42 / 0.1);
+  --stroke-ui: rgb(23 22 42 / 0.55); /* 3.9:1 */
+  --surface: #ffffff;
+  --surface-2: #f0ece3;
+  --surface-card: #ffffff;
+  --card-shadow: 0 8px 30px rgb(23 22 42 / 0.06);
+
+  --hover: rgb(23 22 42 / 0.05);
+  --press: rgb(23 22 42 / 0.1);
+  --pill-active: rgb(23 22 42 / 0.08);
+  --scrim: rgb(23 22 42 / 0.38);
+  --selection: rgb(90 71 232 / 0.22);
+  --scroll-thumb: rgb(23 22 42 / 0.25);
+  --skeleton: rgb(23 22 42 / 0.06);
+  --skeleton-hi: rgb(23 22 42 / 0.11);
+
+  --cta-bg: #17162a; /* the one main button: black pill */
+  --cta-ink: #f6f3ec;
+  --focus: #5a47e8; /* 5.4:1 on paper */
+  --accent: #5a47e8;
+  --on-accent: #ffffff; /* 6.0:1 */
+
+  --ai-ink: #0b0c1a;
+
+  --ok: #0e7a57; /* FIX: night mint is invisible on paper; text-safe 4.8:1 */
+  --warn: #8a5a00; /* FIX: 5.4:1 */
+  --danger: #c0392b; /* 4.9:1 */
+  --rec: #c9283d; /* FIX: 4.9:1 */
+  --on-danger: #ffffff; /* 5.4:1 */
+
+  /* Text-safe variants (4.7-5.7:1 on paper). */
+  --t-decision: #2459c9;
+  --t-commitment: #bf3b2b;
+  --t-idea: #8a5a00;
+  --t-forecast: #6e4fe0;
+  --t-state: #b03388;
+  --t-person: #0a7a6d;
+  --t-pattern: #587000;
+  --t-task: #4a5a7a;
+  --t-question: #b04e00;
+  --t-lesson: #7a5a2e;
+  --t-fact: #0b6e85;
+
+  /* Pastel aura on paper: mood colour mixed with white. */
+  --aura-a: #fbd9c4;
+  --aura-b: #e3d2fb;
+  --aura-c: #cdefe3;
+
+  --glass-bg: rgb(255 255 255 / 0.72);
+  --glass-shadow: 0 8px 30px rgb(23 22 42 / 0.1), inset 0 1px 0 #fff;
+
+  --star-opacity: 0;
+  --grain-opacity: 0.06;
+
+  --orb-glow: rgb(90 71 232 / 0.32);
+}
+
+/* ===================== РАССВЕТ (automatic: no data-theme, light system scheme) ===================== */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    --bg-0: #f6f3ec;
+    --bg-1: #f6f3ec;
+    --bg-2: #ffffff;
+    --glass-solid: #ffffff;
+
+    --ink: #17162a;
+    --ink-2: #4b4a62;
+    --ink-3: #686780;
+    --ink-off: #a3a2b4;
+
+    --stroke: rgb(23 22 42 / 0.1);
+    --stroke-ui: rgb(23 22 42 / 0.55);
+    --surface: #ffffff;
+    --surface-2: #f0ece3;
+    --surface-card: #ffffff;
+    --card-shadow: 0 8px 30px rgb(23 22 42 / 0.06);
+
+    --hover: rgb(23 22 42 / 0.05);
+    --press: rgb(23 22 42 / 0.1);
+    --pill-active: rgb(23 22 42 / 0.08);
+    --scrim: rgb(23 22 42 / 0.38);
+    --selection: rgb(90 71 232 / 0.22);
+    --scroll-thumb: rgb(23 22 42 / 0.25);
+    --skeleton: rgb(23 22 42 / 0.06);
+    --skeleton-hi: rgb(23 22 42 / 0.11);
+
+    --cta-bg: #17162a;
+    --cta-ink: #f6f3ec;
+    --focus: #5a47e8;
+    --accent: #5a47e8;
+    --on-accent: #ffffff;
+
+    --ai-ink: #0b0c1a;
+
+    --ok: #0e7a57;
+    --warn: #8a5a00;
+    --danger: #c0392b;
+    --rec: #c9283d;
+    --on-danger: #ffffff;
+
+    --t-decision: #2459c9;
+    --t-commitment: #bf3b2b;
+    --t-idea: #8a5a00;
+    --t-forecast: #6e4fe0;
+    --t-state: #b03388;
+    --t-person: #0a7a6d;
+    --t-pattern: #587000;
+    --t-task: #4a5a7a;
+    --t-question: #b04e00;
+    --t-lesson: #7a5a2e;
+    --t-fact: #0b6e85;
+
+    --aura-a: #fbd9c4;
+    --aura-b: #e3d2fb;
+    --aura-c: #cdefe3;
+
+    --glass-bg: rgb(255 255 255 / 0.72);
+    --glass-shadow: 0 8px 30px rgb(23 22 42 / 0.1), inset 0 1px 0 #fff;
+
+    --star-opacity: 0;
+    --grain-opacity: 0.06;
+
+    --orb-glow: rgb(90 71 232 / 0.32);
+  }
+}
+
+/* Aliases that follow whichever palette is active. */
+:root {
+  --t-prediction: var(--t-forecast);
+  --t-project: var(--t-pattern);
+}
+
+/* ===================== MOOD -> AURA (any element with data-mood) ===================== */
+/* Night: warm = pleasant, cold violet = unpleasant. Only the core and the partner change. */
+[data-mood='-3'] {
+  --aura-a: rgb(122 91 214 / 0.34);
+  --aura-c: rgb(58 63 168 / 0.3);
+}
+[data-mood='-2'] {
+  --aura-a: rgb(91 111 224 / 0.34);
+  --aura-c: rgb(122 91 214 / 0.26);
+}
+[data-mood='-1'] {
+  --aura-a: rgb(79 141 240 / 0.32);
+  --aura-c: rgb(91 111 224 / 0.26);
+}
+[data-mood='0'] {
+  --aura-a: rgb(111 182 201 / 0.28);
+  --aura-c: rgb(139 108 255 / 0.22);
+}
+[data-mood='1'] {
+  --aura-a: rgb(169 216 107 / 0.2);
+  --aura-c: rgb(95 216 200 / 0.22);
+}
+[data-mood='2'] {
+  --aura-a: rgb(245 207 79 / 0.22);
+  --aura-c: rgb(247 162 46 / 0.2);
+}
+[data-mood='3'] {
+  --aura-a: rgb(247 162 46 / 0.26);
+  --aura-c: rgb(255 122 138 / 0.22);
+}
+
+/* Dawn: pastel = mood colour mixed with white. */
+:root[data-theme='dawn'] [data-mood='-3'] {
+  --aura-a: color-mix(in srgb, var(--m-n3) 38%, #fff);
+  --aura-c: color-mix(in srgb, var(--m-n2) 38%, #fff);
+}
+:root[data-theme='dawn'] [data-mood='-2'] {
+  --aura-a: color-mix(in srgb, var(--m-n2) 38%, #fff);
+  --aura-c: color-mix(in srgb, var(--m-n3) 38%, #fff);
+}
+:root[data-theme='dawn'] [data-mood='-1'] {
+  --aura-a: color-mix(in srgb, var(--m-n1) 38%, #fff);
+  --aura-c: color-mix(in srgb, var(--m-n2) 38%, #fff);
+}
+:root[data-theme='dawn'] [data-mood='0'] {
+  --aura-a: color-mix(in srgb, var(--m-0) 70%, #fff);
+  --aura-c: #e3d2fb;
+}
+:root[data-theme='dawn'] [data-mood='1'] {
+  --aura-a: color-mix(in srgb, var(--m-p1) 45%, #fff);
+  --aura-c: #cdefe3;
+}
+:root[data-theme='dawn'] [data-mood='2'] {
+  --aura-a: color-mix(in srgb, var(--m-p2) 45%, #fff);
+  --aura-c: #fbd9c4;
+}
+:root[data-theme='dawn'] [data-mood='3'] {
+  --aura-a: color-mix(in srgb, var(--m-p3) 40%, #fff);
+  --aura-c: #ffd9de;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) [data-mood='-3'] {
+    --aura-a: color-mix(in srgb, var(--m-n3) 38%, #fff);
+    --aura-c: color-mix(in srgb, var(--m-n2) 38%, #fff);
+  }
+  :root:not([data-theme]) [data-mood='-2'] {
+    --aura-a: color-mix(in srgb, var(--m-n2) 38%, #fff);
+    --aura-c: color-mix(in srgb, var(--m-n3) 38%, #fff);
+  }
+  :root:not([data-theme]) [data-mood='-1'] {
+    --aura-a: color-mix(in srgb, var(--m-n1) 38%, #fff);
+    --aura-c: color-mix(in srgb, var(--m-n2) 38%, #fff);
+  }
+  :root:not([data-theme]) [data-mood='0'] {
+    --aura-a: color-mix(in srgb, var(--m-0) 70%, #fff);
+    --aura-c: #e3d2fb;
+  }
+  :root:not([data-theme]) [data-mood='1'] {
+    --aura-a: color-mix(in srgb, var(--m-p1) 45%, #fff);
+    --aura-c: #cdefe3;
+  }
+  :root:not([data-theme]) [data-mood='2'] {
+    --aura-a: color-mix(in srgb, var(--m-p2) 45%, #fff);
+    --aura-c: #fbd9c4;
+  }
+  :root:not([data-theme]) [data-mood='3'] {
+    --aura-a: color-mix(in srgb, var(--m-p3) 40%, #fff);
+    --aura-c: #ffd9de;
+  }
+}

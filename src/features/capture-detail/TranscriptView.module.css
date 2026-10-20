@@ -1,0 +1,65 @@
+.text {
+  font: var(--type-thought);
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.current {
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ai-2) 15%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.dot {
+  display: inline-block;
+  margin-right: 3px;
+  vertical-align: 0.18em;
+}
+
+.quote {
+  padding: 0 1px;
+  border-bottom: 1.5px solid var(--ink-3);
+  border-radius: 3px 3px 0 0;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  cursor: pointer;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.quote:hover {
+  background: color-mix(in srgb, var(--ink) 11%, transparent);
+  border-bottom-color: var(--ink-2);
+}
+.quote.current {
+  background: color-mix(in srgb, var(--ai-2) 22%, transparent);
+}
+.selected {
+  background: color-mix(in srgb, var(--ink) 16%, transparent);
+  border-bottom-color: var(--ink);
+}
+.flash {
+  animation: quoteFlash 1.6s var(--ease-out);
+}
+@keyframes quoteFlash {
+  0%,
+  35% {
+    background: color-mix(in srgb, var(--ai-2) 45%, transparent);
+    border-bottom-color: var(--ink);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    animation: none;
+    background: color-mix(in srgb, var(--ai-2) 35%, transparent);
+  }
+}
+
+.quote:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

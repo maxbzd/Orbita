@@ -1,0 +1,102 @@
+/* One fixed layer behind the app. Layers inside: sky (stars), aura, grain. No filters over animation. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sky);
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 62%);
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-size: 360px 360px;
+  background-repeat: repeat;
+  opacity: var(--star-opacity);
+}
+
+.twinkle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--star-opacity);
+}
+
+/* ───────── aura ───────── */
+.aura {
+  position: absolute;
+  z-index: var(--z-aura);
+  left: -10%;
+  right: -10%;
+  opacity: var(--aura-level, 1);
+  transition: opacity var(--dur-slow) var(--ease-inout);
+}
+
+.hero {
+  top: -10%;
+  height: 70%;
+}
+.full {
+  top: -10%;
+  bottom: -10%;
+}
+.edge {
+  top: -25%;
+  height: 55%;
+}
+
+.auraLayer {
+  position: absolute;
+  inset: 0;
+}
+
+/* A new mood colour fades in over the old one (900 ms; --dur-hero shrinks under reduced motion). */
+.fresh {
+  animation: aura-fade var(--dur-hero) var(--ease-inout) both;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(48% 42% at 50% 20%, var(--aura-a) 0, transparent 70%),
+    radial-gradient(40% 36% at 10% 42%, var(--aura-b) 0, transparent 70%),
+    radial-gradient(40% 36% at 92% 46%, var(--aura-c) 0, transparent 70%);
+  animation: var(--anim-aura);
+  will-change: transform;
+}
+
+.edge .glow {
+  background:
+    radial-gradient(60% 55% at 50% 30%, var(--aura-a) 0, transparent 70%),
+    radial-gradient(40% 45% at 8% 40%, var(--aura-b) 0, transparent 70%),
+    radial-gradient(40% 45% at 94% 40%, var(--aura-c) 0, transparent 70%);
+}
+
+/* Hidden tab: the drift stops (infinite loops pause with document.hidden). */
+.aura[data-paused] .glow {
+  animation-play-state: paused;
+}
+
+@keyframes aura-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ───────── grain ───────── */
+.grain {
+  position: absolute;
+  inset: 0;
+  background-size: 128px 128px;
+  background-repeat: repeat;
+  opacity: calc(var(--grain-opacity) * var(--fx-grain, 1));
+}

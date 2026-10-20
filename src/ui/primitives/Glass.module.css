@@ -1,0 +1,31 @@
+.glass {
+  position: relative;
+  border-radius: var(--glass-radius, var(--r-card));
+  border: 1px solid var(--stroke);
+  color: var(--ink);
+}
+
+/* Real glass: the blur radius, saturation and fallbacks all come from effects.css variables. */
+.real {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: var(--glass-fx);
+  backdrop-filter: var(--glass-fx);
+  box-shadow: var(--glass-shadow);
+}
+
+.real.panel {
+  background: var(--glass-fill-lg);
+  -webkit-backdrop-filter: var(--glass-fx-lg);
+  backdrop-filter: var(--glass-fx-lg);
+}
+
+/* Light glass: no blur at all. */
+.light {
+  background: var(--surface-card);
+  box-shadow: var(--card-shadow);
+}
+
+.flat {
+  background: var(--surface);
+  border-color: transparent;
+}

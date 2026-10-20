@@ -1,0 +1,77 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding-top: var(--s-4);
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+.toggles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+
+/* The chip row scrolls sideways to the edge of the screen, past the shell's gutter. */
+.chipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--s-1) var(--gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--gutter);
+}
+.chipRow::-webkit-scrollbar {
+  display: none;
+}
+.chipDivider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  background: var(--stroke);
+}
+
+.skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+.groupTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  margin: 0;
+  padding-inline: var(--s-3);
+}
+.groupCount {
+  font: var(--type-status);
+  color: var(--ink-2);
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

@@ -1,0 +1,48 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.md {
+  width: var(--tap);
+  height: var(--tap);
+}
+.lg {
+  width: var(--tap-primary);
+  height: var(--tap-primary);
+}
+.button:active:not(:disabled) {
+  transform: scale(0.94);
+}
+.button:disabled {
+  opacity: 0.45;
+}
+
+.ghost {
+  color: var(--ink-2);
+}
+.ghost:hover:not(:disabled),
+.ghost[aria-pressed='true'] {
+  background: var(--hover);
+  color: var(--ink);
+}
+.ghost[aria-pressed='true'] {
+  background: var(--pill-active);
+}
+
+.glass {
+  color: var(--ink);
+  background: var(--surface-2);
+  border-color: var(--stroke);
+}
+
+.filled {
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+}

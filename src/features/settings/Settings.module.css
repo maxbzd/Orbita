@@ -1,0 +1,316 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-8);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.title {
+  margin: 0;
+}
+
+.lead {
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* quick jump bar */
+.jump {
+  display: flex;
+  gap: var(--s-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--s-1);
+  margin-inline: calc(-1 * var(--gutter));
+  padding-inline: var(--gutter);
+}
+.jump::-webkit-scrollbar {
+  display: none;
+}
+.jump > * {
+  flex: none;
+}
+
+@media (min-width: 768px) {
+  .jump {
+    flex-wrap: wrap;
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}
+
+/* groups */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  scroll-margin-top: var(--s-4);
+}
+
+.groupTitle {
+  margin: 0;
+  padding-inline: var(--s-2);
+  color: var(--ink-2);
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-card);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+.card > * + * {
+  border-top: 1px solid var(--stroke);
+}
+
+.footer {
+  padding-inline: var(--s-2);
+  color: var(--ink-2);
+  font: var(--type-caption);
+  max-width: 60ch;
+}
+.footer p {
+  margin: 0;
+}
+.footer p + p {
+  margin-top: var(--s-2);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+}
+.rowLabel {
+  font: var(--type-body);
+  color: var(--ink);
+}
+.rowHint {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+
+.inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.secret {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+}
+.secretText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+.masked {
+  font: var(--type-numeral);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0 var(--s-4) var(--s-3);
+  padding: var(--s-3);
+  border: 1px solid var(--warn);
+  border-radius: var(--r-md);
+  color: var(--ink);
+  font: var(--type-caption);
+}
+.notice strong {
+  color: var(--warn);
+  font: var(--type-headline);
+}
+.notice p {
+  margin: 0;
+}
+.code {
+  font: var(--type-numeral);
+  word-break: break-all;
+  user-select: all;
+}
+
+.result {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.resultOk {
+  color: var(--ok);
+}
+.resultBad {
+  color: var(--danger);
+}
+
+/* usage */
+.usage {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: var(--s-4);
+  row-gap: var(--s-1);
+  padding: var(--s-3) var(--s-4);
+  font: var(--type-numeral);
+  color: var(--ink);
+}
+.usage .muted {
+  color: var(--ink-2);
+}
+.usageTotal {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-bottom: var(--s-2);
+  margin-bottom: var(--s-1);
+  border-bottom: 1px solid var(--stroke);
+}
+.num {
+  text-align: right;
+}
+
+/* glossary */
+.terms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.term {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-4);
+}
+.term + .term {
+  border-top: 1px solid var(--stroke);
+}
+.termText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.termHint {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.addTerm {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* sheets */
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-2) var(--s-4) var(--s-6);
+}
+.sheetBody p {
+  margin: 0;
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.list > li + li {
+  border-top: 1px solid var(--stroke);
+}
+.trashRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) 0;
+}
+.trashText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+}
+.about ol {
+  margin: 0;
+  padding-left: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  font: var(--type-body);
+}
+
+/* Segmented controls inside cards: tighter padding so three or four labels fit a 360 px phone. */
+.card [role='radiogroup'],
+.sheetBody [role='radiogroup'] {
+  max-width: 100%;
+}
+.card [role='radio'],
+.sheetBody [role='radio'] {
+  min-width: 0;
+  padding-inline: var(--s-2);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Switches (Toggle) bring no horizontal padding of their own. */
+.card > button[role='switch'] {
+  padding: var(--s-3) var(--s-4);
+  width: 100%;
+  box-sizing: border-box;
+}
+.rowPad {
+  padding: var(--s-1) var(--s-2);
+}
+
+/* A form or a block of controls placed straight into a card (the cloud account). */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+}
+.form p {
+  margin: 0;
+}

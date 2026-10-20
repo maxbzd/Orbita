@@ -1,0 +1,64 @@
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--s-3) 0;
+  text-align: start;
+}
+.row:disabled {
+  opacity: 0.5;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.label {
+  font: var(--type-body);
+  color: var(--ink);
+}
+.description {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+
+/* Off: outlined with the control stroke (3.5:1). On: the cream (black in dawn) pill. */
+.track {
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 32px;
+  margin-top: 2px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--stroke-ui);
+  background: var(--surface);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.row[aria-checked='true'] .track {
+  background: var(--cta-bg);
+  border-color: var(--cta-bg);
+}
+.row[aria-checked='true'] .thumb {
+  transform: translateX(20px);
+  background: var(--cta-ink);
+}

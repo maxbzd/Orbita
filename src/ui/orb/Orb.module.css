@@ -1,0 +1,50 @@
+.orb {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  line-height: 0;
+  contain: layout style;
+}
+
+.canvas {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Radar rings (listening, §2.11): scale 1 -> 1.6 with delays 0 / .4 / .8 s. Transform and opacity only. */
+.radar {
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--orb-edge) 60%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: radar 2.4s var(--ease-out) infinite;
+  animation-delay: var(--delay);
+}
+
+@keyframes radar {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar {
+    display: none;
+  }
+}
+:global(:root[data-motion='reduced']) .radar,
+:global(:root[data-overlay]) .radar {
+  display: none;
+}

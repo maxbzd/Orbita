@@ -1,0 +1,47 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: var(--chip-h);
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  font: var(--type-status);
+  letter-spacing: var(--ls-status);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--stroke);
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--dot);
+}
+
+.blink {
+  animation: pill-blink 1s steps(1, end) infinite;
+}
+
+@keyframes pill-blink {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blink {
+    animation: none;
+  }
+}
+
+:global(:root[data-motion='reduced']) .blink {
+  animation: none;
+}

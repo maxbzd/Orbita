@@ -1,0 +1,210 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding-top: var(--s-6);
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.head h1 {
+  margin: 0;
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  min-width: 0;
+}
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+/* ── the day strip: the cursor shared by every view ── */
+.strip {
+  display: flex;
+  gap: var(--s-1);
+  margin-inline: calc(var(--gutter, 16px) * -1);
+  padding: var(--s-1) var(--gutter, 16px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.strip::-webkit-scrollbar {
+  display: none;
+}
+.stripDay {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 48px;
+  min-height: 76px;
+  padding: var(--s-2) 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--ink);
+  font: 500 14px/1 var(--font-ui);
+  cursor: pointer;
+  scroll-snap-align: center;
+  position: relative;
+}
+.stripDay:hover {
+  background: var(--surface);
+}
+.stripDay:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.stripSelected {
+  border-color: var(--ink);
+  background: var(--surface-2);
+}
+.stripToday .stripNumber {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.stripFuture {
+  color: var(--ink-2);
+}
+.stripWeekday {
+  font: var(--type-status);
+  color: var(--ink-2);
+  text-transform: uppercase;
+}
+.stripNumber {
+  font: 600 18px/1.2 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.stripDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot, transparent);
+}
+.stripCount {
+  font: var(--type-status);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.stripCountEmpty {
+  opacity: 0.4;
+}
+
+.layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* ── the figure ── */
+.figureBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+}
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-width: 0;
+}
+.periodBar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  width: 100%;
+  max-width: 420px;
+}
+.periodTitle {
+  margin: 0;
+  text-align: center;
+}
+.yearTools {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+}
+.toToday {
+  align-self: center;
+}
+.periodLine {
+  margin: 0;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+/* ── trend ── */
+.trend,
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.trend h2,
+.details h2,
+.trend p,
+.details p {
+  margin: 0;
+}
+.trendText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ── the details of a day ── */
+.detailsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.groupTitle {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+}
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.marked {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+  border-radius: var(--r-card);
+}

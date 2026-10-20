@@ -1,0 +1,80 @@
+.root {
+  margin-inline: auto;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+}
+
+.date {
+  flex: 1;
+  text-align: center;
+  font: var(--type-headline);
+  color: var(--ink);
+  text-transform: capitalize;
+}
+
+.track {
+  fill: none;
+  stroke: var(--stroke);
+}
+
+.hour {
+  font: var(--type-label);
+  letter-spacing: 0;
+  fill: var(--ink-2);
+}
+
+.moodArc {
+  stroke: var(--bg-0);
+  stroke-width: 0.75;
+}
+
+.segment {
+  stroke: var(--bg-0);
+  stroke-width: 1;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.segmentSelected {
+  stroke: var(--cta-bg);
+  stroke-width: 2;
+}
+
+.nowHalo {
+  fill: var(--cta-bg);
+  opacity: 0.28;
+}
+
+.nowDot {
+  fill: var(--cta-bg);
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}
+
+.centerNumber {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 40px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink);
+}
+
+.centerTime {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink);
+}
+
+.centerLabel {
+  font: var(--type-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--ink-2);
+}

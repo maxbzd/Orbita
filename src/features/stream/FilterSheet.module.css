@@ -1,0 +1,27 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding: var(--s-2) 0 var(--s-4);
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}

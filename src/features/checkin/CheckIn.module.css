@@ -1,0 +1,157 @@
+/* The mood colour is registered, so the tint glides when the slider moves (not under reduced motion). */
+@property --mood {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #bfe3ee;
+}
+
+.screen {
+  --tint: 26%;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  background:
+    radial-gradient(120% 60% at 50% 0%, color-mix(in oklch, var(--mood) 34%, transparent), transparent 72%),
+    color-mix(in oklch, var(--mood) var(--tint), var(--bg-1));
+  color: var(--ink);
+  transition: --mood var(--dur-base) var(--ease-out);
+}
+:root[data-theme='dawn'] .screen {
+  --tint: 24%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  min-height: 100%;
+  padding: var(--s-3) var(--gutter) var(--s-6);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.stepLabel {
+  color: var(--ink-2);
+}
+
+.title {
+  margin: var(--s-5) 0 0;
+  text-align: center;
+  outline: none;
+  text-wrap: balance;
+}
+
+.hiddenNote {
+  margin-top: var(--s-2);
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding-block: var(--s-6);
+}
+
+.energy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+
+.flowerSmall {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-4);
+}
+.flowerSmall p {
+  margin: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ───────── AI suggestions ───────── */
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  border-radius: var(--r-card);
+  border: 1px solid var(--stroke);
+  background: color-mix(in srgb, var(--bg-1) 55%, transparent);
+}
+.suggestions h2 {
+  margin: 0;
+  color: var(--ink-2);
+}
+.suggestions ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.suggestion {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.suggestionText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+.suggestionText strong {
+  font: var(--type-headline);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-3);
+  padding-top: var(--s-3);
+  margin-top: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen {
+    transition: none;
+  }
+}
+:root[data-motion='reduced'] .screen {
+  transition: none;
+}

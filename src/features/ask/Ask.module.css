@@ -1,0 +1,200 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-4);
+  min-height: 100%;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.title {
+  margin: 0;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+.link {
+  color: var(--ink);
+  font: var(--type-caption);
+  text-decoration: underline;
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-card);
+  background: var(--surface-card);
+}
+.notice p {
+  margin: 0;
+}
+
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* the conversation */
+.turns {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.question {
+  align-self: flex-end;
+  max-width: 85%;
+  margin: 0;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-card) var(--r-card) var(--r-xs) var(--r-card);
+  background: var(--surface-2);
+  color: var(--ink);
+  font: var(--type-body);
+  overflow-wrap: anywhere;
+}
+
+/* the answer: serif, in a frame of the AI gradient */
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1.5px solid transparent;
+  border-radius: var(--r-card);
+  background:
+    linear-gradient(var(--bg-0), var(--bg-0)) padding-box,
+    var(--grad-ai) border-box;
+}
+.answer[data-status='error'] {
+  background: var(--bg-0);
+  border-color: var(--danger);
+}
+.answer[data-status='stopped'] {
+  background: var(--bg-0);
+  border-color: var(--stroke-ui);
+}
+.answerText {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.error {
+  margin: 0;
+  color: var(--danger);
+}
+
+.ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  margin: 0 2px;
+  padding: 2px 8px;
+  border: 1px solid var(--stroke-ui);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  vertical-align: baseline;
+  white-space: normal;
+}
+.ref:hover {
+  background: var(--surface-2);
+}
+.ref:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.seen summary {
+  cursor: pointer;
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
+}
+.seenList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding-bottom: var(--s-2);
+}
+
+.manual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px solid var(--stroke-ui);
+  border-radius: var(--r-card);
+  background: var(--surface-card);
+}
+.manual p {
+  margin: 0;
+}
+
+/* composer: sticks above the navigation pill on a phone */
+.composer {
+  position: sticky;
+  bottom: calc(var(--nav-h) + var(--nav-gap) + var(--safe-bottom) + var(--s-2));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin-top: auto;
+  padding: var(--s-2);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--bg-0) 92%, transparent);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.2);
+}
+@media (min-width: 768px) {
+  .composer {
+    bottom: var(--s-4);
+  }
+}
+.inputRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+.input {
+  flex: 1;
+  min-width: 0;
+}
+.hint {
+  text-align: center;
+}
+
+.end {
+  scroll-margin-bottom: calc(var(--nav-clearance) + 96px);
+}
+.input textarea {
+  resize: none;
+}
+@media (min-width: 768px) {
+  .end {
+    scroll-margin-bottom: 120px;
+  }
+}
