@@ -1,0 +1,44 @@
+.skippable {
+  cursor: pointer;
+}
+
+.confirmed {
+  stroke: var(--ink-2);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.candidate {
+  stroke: var(--ink-2);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-dasharray: 4 5;
+  opacity: 0.85;
+}
+
+.glow {
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.star {
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}
+
+.selected {
+  fill: none;
+  stroke: var(--cta-bg);
+  stroke-width: 2;
+}
+
+.name {
+  font: var(--type-label);
+  letter-spacing: 0;
+  fill: var(--ink-2);
+  /* a halo in the page colour keeps the name legible where a line runs under it */
+  paint-order: stroke;
+  stroke: var(--bg-0);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}

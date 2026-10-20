@@ -1,0 +1,54 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.composerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-2);
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: var(--tap);
+  padding-block: var(--s-1);
+  border-bottom: 1px solid var(--stroke);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.time {
+  flex: none;
+  min-width: 52px;
+  min-height: var(--tap);
+  padding: 0 var(--s-2);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink);
+  font: var(--type-numeral);
+  cursor: pointer;
+}
+.time:hover {
+  background: var(--hover);
+}
+.text {
+  flex: 1;
+  min-width: 0;
+  font: var(--type-body);
+  overflow-wrap: anywhere;
+}

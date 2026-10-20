@@ -1,0 +1,39 @@
+.root {
+  display: block;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.bar {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--skeleton);
+  max-width: 100%;
+}
+
+.text {
+  border-radius: 6px;
+}
+.block {
+  border-radius: var(--r-md);
+  min-height: 48px;
+}
+.circle {
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+/* The shimmer is a highlight sliding across; --anim-shimmer is `none` on low tiers and reduced motion. */
+.bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--skeleton-hi), transparent);
+  animation: var(--anim-shimmer);
+}

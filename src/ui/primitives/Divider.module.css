@@ -1,0 +1,16 @@
+.divider {
+  flex: none;
+  background: var(--stroke);
+}
+.horizontal {
+  height: 1px;
+  width: 100%;
+}
+.vertical {
+  width: 1px;
+  align-self: stretch;
+}
+.inset {
+  margin-inline-start: 56px;
+  width: auto;
+}

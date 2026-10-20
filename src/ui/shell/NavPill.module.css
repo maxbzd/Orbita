@@ -1,0 +1,110 @@
+.nav {
+  position: fixed;
+  left: max(var(--nav-side), var(--safe-left));
+  right: max(var(--nav-side), var(--safe-right));
+  bottom: calc(var(--safe-bottom) + var(--nav-gap));
+  z-index: var(--z-nav);
+  max-width: 520px;
+  margin-inline: auto;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+/* Gone from view and from the accessibility tree; `visibility` flips after the slide. */
+.hidden {
+  transform: translateY(calc(100% + 40px));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform var(--dur-base) var(--ease-in),
+    opacity var(--dur-fast) var(--ease-in),
+    visibility 0s linear var(--dur-base);
+}
+
+.bar {
+  height: var(--nav-h);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 84px 1fr 1fr;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--s-1);
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.gap {
+  height: 1px;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  max-width: 76px;
+  min-height: 48px;
+  padding: 4px 2px;
+  border-radius: 22px;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.link:hover {
+  color: var(--ink);
+}
+.link:active {
+  transform: scale(0.96);
+}
+
+/* The active item: a tablet, not a colour change alone (it also carries aria-current). */
+.active {
+  background: var(--pill-active);
+  color: var(--ink);
+}
+
+.label {
+  font: 500 11px/1.1 var(--font-ui);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* The sphere rises 18 px above the pill; the 84 px grid gap under it keeps the tabs clear. */
+.sphere {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--sphere-lift) * -1);
+  display: grid;
+  place-items: center;
+  width: var(--sphere-size);
+  height: var(--sphere-size);
+  margin-left: calc(var(--sphere-size) / -2);
+  border-radius: 50%;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.sphere:active {
+  transform: scale(0.94);
+}
+
+.sphere:focus-visible {
+  outline-offset: 4px;
+}

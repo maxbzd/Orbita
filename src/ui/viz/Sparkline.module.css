@@ -1,0 +1,25 @@
+.spark {
+  display: inline-block;
+  flex: none;
+  overflow: visible;
+  vertical-align: middle;
+}
+
+.line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.area {
+  fill: currentColor;
+  opacity: 0.12;
+}
+
+.dot {
+  fill: currentColor;
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}

@@ -1,0 +1,27 @@
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid var(--stroke-ui);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.inverse {
+  border-color: currentColor;
+  background: transparent;
+  color: inherit;
+  opacity: 0.8;
+}
+
+.combo {
+  display: inline-flex;
+  gap: 4px;
+}

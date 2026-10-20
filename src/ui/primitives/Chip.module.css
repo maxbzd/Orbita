@@ -1,0 +1,64 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex: none;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--stroke);
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 14px/1 var(--font-ui);
+  white-space: nowrap;
+}
+.md {
+  height: var(--chip-h);
+  padding: 0 var(--s-3);
+}
+.lg {
+  height: var(--chip-h-lg);
+  padding: 0 var(--s-4);
+  font-size: 15px;
+}
+
+/* Interactive chips are controls: their border needs the 3:1 control stroke. */
+.interactive {
+  border-color: var(--stroke-ui);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+.interactive:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+.interactive:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.interactive:disabled {
+  opacity: 0.45;
+}
+.selected {
+  background: var(--pill-active);
+  border-color: var(--ink);
+}
+
+/* The hit area stays 44 px tall even though the chip is 32. */
+.interactive::after {
+  content: '';
+  position: absolute;
+  inset: -6px 0;
+}
+.interactive {
+  position: relative;
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.count {
+  font: var(--type-status);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}

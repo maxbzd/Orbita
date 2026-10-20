@@ -1,0 +1,100 @@
+.button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-width: var(--tap);
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font: 600 16px/1 var(--font-ui);
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.lg {
+  height: var(--tap-primary);
+  padding: 0 var(--s-6);
+}
+.md {
+  height: var(--field-h);
+  padding: 0 var(--s-5);
+}
+.sm {
+  height: var(--tap);
+  padding: 0 var(--s-4);
+  font-size: 15px;
+}
+
+.full {
+  width: 100%;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.button:disabled {
+  opacity: 0.45;
+}
+
+/* primary: the one cream pill (black in dawn) */
+.primary {
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--stroke-ui);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ink-2);
+}
+.ghost:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+/* ai: gradient with dark text; white on this gradient is forbidden (4.3:1 at best) */
+.ai {
+  background: linear-gradient(135deg, var(--ai-1), var(--ai-2));
+  color: var(--ai-ink);
+}
+/* A small static halo: a blurred copy of the fill. Allowed because it is tiny and never animates. */
+.ai::before {
+  content: '';
+  position: absolute;
+  inset: 6px -2px -8px;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(14px);
+  opacity: 0.55;
+}
+
+.danger {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.loading .label {
+  opacity: 0.6;
+}

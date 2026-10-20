@@ -1,0 +1,124 @@
+/* Shared by the SVG objects. Colours are tokens, so the cards follow the theme; the export writes the computed values. */
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-3);
+  margin: 0;
+  width: 100%;
+  color: var(--ink);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  user-select: none;
+}
+
+.save {
+  align-self: center;
+}
+
+/* Text voices (docs §2.3 of the typography table). */
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-weight: 450;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+.displayItalic {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poster {
+  font-family: var(--font-poster);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sans {
+  font-family: var(--font-ui);
+}
+
+.ink {
+  fill: var(--ink);
+}
+
+.ink2 {
+  fill: var(--ink-2);
+}
+
+.ink3 {
+  fill: var(--ink-3);
+}
+
+.cardFill {
+  fill: var(--bg-2);
+}
+
+.cardStroke {
+  fill: none;
+  stroke: var(--stroke);
+  stroke-width: 1;
+}
+
+.hairline {
+  stroke: var(--stroke);
+  stroke-width: 1;
+  fill: none;
+}
+
+.dashed {
+  stroke: var(--stroke-ui);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  fill: none;
+}
+
+.barcode {
+  fill: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal var(--dur-slow, 640ms) var(--ease-out, ease-out) both;
+  }
+}
+
+/* "Раскрытие" инсайта: blur 8 → 0 and fade, once (docs §2.7). */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.stubFill {
+  fill: var(--surface-2);
+}

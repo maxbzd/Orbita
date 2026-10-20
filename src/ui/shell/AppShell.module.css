@@ -1,0 +1,156 @@
+.shell {
+  position: relative;
+  min-height: 100dvh;
+  isolation: isolate;
+}
+
+/* ───────── content column ───────── */
+.main {
+  position: relative;
+  z-index: var(--z-content);
+  min-width: 0;
+  min-height: 100dvh;
+  padding-top: var(--safe-top);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+  /* The floating pill would cover the last rows (a lesson from Orbit/Moonly): leave room for it. */
+  padding-bottom: var(--nav-clearance);
+  outline: none;
+}
+
+.noNav {
+  padding-bottom: calc(var(--safe-bottom) + var(--s-6));
+}
+
+.withMini {
+  padding-bottom: calc(var(--nav-clearance) + 64px);
+}
+
+.withDock {
+  padding-bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--s-6));
+}
+
+/* The shell owns the horizontal gutter and the 760 px reading width; screens add no side padding. */
+.page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  animation: var(--anim-enter);
+}
+
+/* ───────── wide layouts ───────── */
+.shell[data-layout='tablet'],
+.shell[data-layout='desktop'] {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  align-items: start;
+}
+
+.shell[data-layout='desktop'] {
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr) auto;
+}
+
+.shell[data-layout='tablet'][data-nav-hidden],
+.shell[data-layout='desktop'][data-nav-hidden] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Explicit cells: without them an item with only a row would be placed first and land in column 1. */
+.navCol {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+}
+
+.shell[data-layout='tablet'] > .main,
+.shell[data-layout='desktop'] > .main {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.shell[data-nav-hidden][data-layout='tablet'] > .main,
+.shell[data-nav-hidden][data-layout='desktop'] > .main {
+  grid-column: 1;
+}
+
+.shell[data-layout='tablet'] .page,
+.shell[data-layout='desktop'] .page {
+  padding-top: var(--s-6);
+}
+
+.shell[data-layout='desktop'] .main {
+  padding-bottom: calc(var(--s-12));
+}
+
+.shell[data-layout='desktop'] .withDock,
+.shell[data-layout='tablet'] .withDock {
+  padding-bottom: calc(var(--dock-h) + var(--safe-bottom) + var(--s-6));
+}
+
+.panel {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: start;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-content);
+  width: var(--panel-w);
+  height: 100dvh;
+  padding: calc(var(--s-6) + var(--safe-top)) var(--s-4) var(--s-4);
+  border-left: 1px solid var(--stroke);
+  background: color-mix(in srgb, var(--bg-1) 70%, transparent);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* ───────── recorder slots ───────── */
+.mini {
+  position: fixed;
+  left: max(var(--nav-side), var(--safe-left));
+  right: max(var(--nav-side), var(--safe-right));
+  bottom: calc(var(--safe-bottom) + var(--nav-gap) + var(--nav-h) + var(--s-2));
+  z-index: var(--z-mini);
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.dock {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: var(--rail-w);
+  z-index: var(--z-mini);
+  height: calc(var(--dock-h) + var(--safe-bottom));
+  padding: 0 var(--gutter) var(--safe-bottom);
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--stroke);
+  background: var(--glass-solid);
+}
+
+.shell[data-layout='desktop'] .dock {
+  left: var(--sidebar-w);
+}
+
+.shell[data-nav-hidden] .dock {
+  left: 0;
+}
+
+/* ───────── skip link ───────── */
+.skip {
+  position: fixed;
+  top: var(--s-2);
+  left: var(--s-2);
+  z-index: var(--z-dialog);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+  font: 600 14px/1 var(--font-ui);
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
+}

@@ -1,0 +1,181 @@
+.viewer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, calc(100dvh * 9 / 16));
+  max-height: 100dvh;
+  aspect-ratio: 9 / 16;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--bg-0);
+  color: var(--ink);
+  outline: none;
+  touch-action: pan-y;
+  isolation: isolate;
+}
+
+.viewer:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus);
+}
+
+.segments {
+  position: absolute;
+  inset: calc(env(safe-area-inset-top, 0px) + var(--s-3)) var(--s-3) auto;
+  z-index: 3;
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.segment {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.28);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #f2eddc;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.controls {
+  position: absolute;
+  inset: calc(env(safe-area-inset-top, 0px) + var(--s-3) + 12px) var(--s-3) auto auto;
+  z-index: 3;
+  display: flex;
+  gap: var(--s-2);
+}
+
+.round,
+.nav {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: rgb(7 8 15 / 0.55);
+  color: #f2eddc;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.round:focus-visible,
+.nav:focus-visible,
+.export:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.stage {
+  container-type: size;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: calc(env(safe-area-inset-top, 0px) + 72px) var(--s-4) calc(env(safe-area-inset-bottom, 0px) + 72px);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.slide {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 0;
+}
+
+/* QA: an object is as wide as the stage and 9:16 tall, taller than the stage once the controls are subtracted, so it
+   ran under the export button. The stage is a size container: the drawing is capped at its free height and the
+   viewBox (meet) scales it down, keeping proportions. */
+.slide > figure > svg {
+  max-height: 100cqh;
+}
+
+/* Page arrows: invisible until focused or hovered; taps use the zones, these serve keyboards and switch devices. */
+.nav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  margin-top: -22px;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.nav:focus-visible,
+.viewer:hover .nav {
+  opacity: 1;
+}
+
+.nav:disabled {
+  visibility: hidden;
+}
+
+.navPrev {
+  left: var(--s-2);
+}
+
+.navNext {
+  right: var(--s-2);
+}
+
+@media (hover: none) {
+  .viewer:hover .nav:not(:focus-visible) {
+    opacity: 0;
+  }
+}
+
+.export {
+  position: absolute;
+  inset: auto var(--s-4) calc(env(safe-area-inset-bottom, 0px) + var(--s-4));
+  z-index: 3;
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slide {
+    animation: slide-in var(--dur-fast) var(--ease-out) both;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,68 @@
+.display {
+  margin: 0;
+  letter-spacing: var(--ls-display);
+  text-wrap: balance;
+}
+.display-xl {
+  font: var(--type-display-xl);
+}
+.display-l {
+  font: var(--type-display-l);
+}
+.italic {
+  font-style: italic;
+}
+
+.title {
+  margin: 0;
+  font: var(--type-title);
+  letter-spacing: var(--ls-title);
+}
+.headline {
+  margin: 0;
+  font: var(--type-headline);
+}
+
+.body {
+  margin: 0;
+  font: var(--type-body);
+}
+.muted {
+  color: var(--ink-2);
+}
+
+.caption {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.faint {
+  color: var(--ink-3);
+}
+
+.thought {
+  margin: 0;
+  font: var(--type-thought);
+}
+.thought-sm {
+  font: var(--type-thought-sm);
+}
+
+.label {
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.strong {
+  color: var(--ink);
+}
+
+.mono {
+  font: var(--type-numeral);
+  font-variant-numeric: tabular-nums;
+}
+.mono small {
+  font-size: 0.55em;
+  color: var(--ink-2);
+  margin-inline: 0.15em;
+}

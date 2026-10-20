@@ -1,0 +1,241 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-6);
+}
+
+.nav {
+  display: flex;
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  min-height: var(--tap);
+  margin-left: calc(-1 * var(--s-2));
+  padding: 0 var(--s-3) 0 var(--s-2);
+  border-radius: var(--r-pill);
+  color: var(--ink-2);
+  font: 500 15px/1 var(--font-ui);
+  text-decoration: none;
+}
+.back:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.plainLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ───── header */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.metaLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-1) var(--s-2);
+}
+.when {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+.title {
+  min-width: 0;
+  margin: 0;
+  font: 500 28px/1.12 var(--font-display);
+  letter-spacing: var(--ls-display);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.titleForm {
+  display: block;
+}
+.summary {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--ink-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* One row that scrolls sideways to the screen edge, so a record with many people does not push the player away. */
+.links {
+  display: flex;
+  gap: var(--s-2);
+  margin-inline: calc(-1 * var(--gutter));
+  padding-inline: var(--gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.links::-webkit-scrollbar {
+  display: none;
+}
+.links > * {
+  flex: none;
+}
+.source {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.source a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+.bannerText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+.bannerError {
+  font: var(--type-caption);
+  color: var(--danger);
+}
+
+.noAudio {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border: 1px dashed var(--stroke-ui);
+  border-radius: var(--r-md);
+  color: var(--ink-2);
+}
+.noAudio p {
+  margin: 0;
+  font: var(--type-body);
+}
+
+/* ───── blocks */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.blockHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-height: 36px;
+}
+
+.transcript {
+  position: relative;
+}
+.toCurrent {
+  position: sticky;
+  bottom: calc(var(--nav-clearance, 96px) - var(--s-2));
+  display: block;
+  margin: var(--s-3) auto 0;
+  min-height: var(--tap);
+  padding: 0 var(--s-5);
+  border: 1px solid var(--stroke-ui);
+  border-radius: var(--r-pill);
+  background: var(--glass-solid);
+  color: var(--ink);
+  font: 500 14px/1 var(--font-ui);
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+}
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.textarea {
+  font: var(--type-thought);
+}
+.editorActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-2);
+}
+.emptyText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  color: var(--ink-2);
+}
+.emptyText p {
+  margin: 0;
+}
+
+.objects {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.quiet {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--ink-2);
+}
+.dismissed summary {
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
+  color: var(--ink-2);
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.dismissed[open] summary {
+  margin-bottom: var(--s-2);
+}
+.reviewLink {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--s-1);
+  min-height: var(--tap);
+  color: var(--ink);
+  font: 500 15px/1 var(--font-ui);
+  text-decoration: none;
+}
+.reviewLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--stroke);
+}

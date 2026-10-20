@@ -1,0 +1,105 @@
+.viewport {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--toast-offset, 0px) + var(--safe-bottom) + var(--s-4));
+  z-index: var(--z-toast);
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--s-4);
+  pointer-events: none;
+}
+
+.live {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Opaque on purpose: glass is a scarce resource, and a toast sits over everything. */
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 52px;
+  max-width: min(440px, 100%);
+  padding: var(--s-1) var(--s-1) var(--s-1) var(--s-4);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-pill);
+  background: var(--bg-2);
+  color: var(--ink);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+  animation: toast-in var(--dur-base) var(--ease-out);
+}
+
+.danger {
+  border-color: var(--danger);
+}
+
+.ok .message::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: var(--s-2);
+  border-radius: 50%;
+  background: var(--ok);
+  vertical-align: middle;
+}
+
+.message {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: var(--type-caption);
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  flex: none;
+  min-height: var(--tap);
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--ink);
+  font: 600 14px/1 var(--font-ui);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.action:hover {
+  background: var(--press);
+}
+.action:active {
+  transform: scale(0.96);
+}
+
+.more {
+  flex: none;
+  font: var(--type-status);
+  color: var(--ink-2);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: 50%;
+  color: var(--ink-2);
+}
+
+.close:hover {
+  background: var(--hover);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}

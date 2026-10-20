@@ -1,0 +1,25 @@
+.flower {
+  display: inline-block;
+  flex: none;
+  overflow: visible;
+}
+
+/* Second contour, offset and lighter: frosted glass over the petals. Screen only on the night sky. */
+.glass {
+  fill: rgb(255 255 255 / 0.2);
+  stroke: rgb(255 255 255 / 0.5);
+  stroke-width: 0.8;
+  mix-blend-mode: screen;
+}
+
+:global(:root[data-theme='dawn']) .glass {
+  mix-blend-mode: normal;
+  fill: rgb(255 255 255 / 0.28);
+}
+
+@media (prefers-color-scheme: light) {
+  :global(:root:not([data-theme])) .glass {
+    mix-blend-mode: normal;
+    fill: rgb(255 255 255 / 0.28);
+  }
+}

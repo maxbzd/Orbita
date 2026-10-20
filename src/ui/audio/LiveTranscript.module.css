@@ -1,0 +1,39 @@
+/*
+ * Three to five lines of what is being said: thought 18 px, anchored to
+ * the bottom, older lines melt away at the top. Only ink and ink-2: this sits over the aura.
+ */
+.box {
+  --line: 27.9px; /* 18 px x 1.55 */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  height: calc(var(--lines) * var(--line));
+  overflow: hidden;
+  font: var(--type-thought);
+  color: var(--ink);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 42%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 42%);
+}
+
+.compact {
+  --line: 24px; /* 16 px x 1.5 */
+  font: var(--type-thought-sm);
+}
+
+.text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* Words the recogniser may still change. */
+.interim {
+  color: var(--ink-2);
+}
+
+.placeholder {
+  margin: 0;
+  color: var(--ink-2);
+}

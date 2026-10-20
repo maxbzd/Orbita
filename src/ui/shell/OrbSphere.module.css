@@ -1,0 +1,27 @@
+.sphere {
+  display: block;
+  width: var(--sphere);
+  height: var(--sphere);
+  border-radius: 50%;
+  position: relative;
+  /* Same look as the CSS orb of the low tier: a deep body, a soft core, a dot matrix (not a glossy balloon). */
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--orb-core) 38%, transparent) 0, transparent 48%),
+    radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--orb-accent) 46%, #080a18) 0, color-mix(in srgb, var(--orb-edge) 30%, #070813) 66%, #05060d 100%);
+  box-shadow:
+    0 0 calc(var(--sphere) * 0.4) var(--orb-glow),
+    inset 0 0 calc(var(--sphere) * 0.08) color-mix(in srgb, var(--orb-edge) 55%, transparent);
+  animation: var(--anim-breathe);
+}
+
+.sphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: radial-gradient(circle closest-side, var(--orb-core) 0, var(--orb-core) 30%, transparent 46%);
+  background-size: 14% 14%;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 0, rgb(0 0 0 / 0.85) 45%, rgb(0 0 0 / 0.2) 86%, transparent 100%);
+  mask-image: radial-gradient(circle closest-side, #000 0, rgb(0 0 0 / 0.85) 45%, rgb(0 0 0 / 0.2) 86%, transparent 100%);
+}

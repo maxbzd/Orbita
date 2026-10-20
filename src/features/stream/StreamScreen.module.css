@@ -1,0 +1,119 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding-top: var(--s-6);
+}
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+/* The chip row scrolls sideways to the edge of the screen, past the shell's gutter. */
+.chipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--s-1) var(--gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--gutter);
+}
+.chipRow::-webkit-scrollbar {
+  display: none;
+}
+.chipDivider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  background: var(--stroke);
+}
+
+.skeletons,
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-2);
+}
+
+/* ───── the unsorted records */
+.inbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-2) var(--s-2);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.inboxHead {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding-inline: var(--s-3);
+}
+.inboxCount {
+  font: var(--type-status);
+  letter-spacing: var(--ls-status);
+  color: var(--ink-2);
+}
+.inboxList {
+  display: flex;
+  flex-direction: column;
+}
+.working {
+  font: var(--type-status);
+  letter-spacing: var(--ls-status);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+/* ───── days */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.rowBox {
+  min-width: 0;
+}
+.dayHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-1) var(--s-3);
+  padding: var(--s-6) var(--s-3) var(--s-1);
+}
+.rowBox:first-child .dayHead {
+  padding-top: var(--s-2);
+}
+.dayTitle {
+  margin: 0;
+  font: var(--type-title);
+  letter-spacing: var(--ls-title);
+}
+.daySub {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.partHead {
+  padding: var(--s-2) var(--s-3) 0;
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.onlyInbox {
+  margin: 0;
+  color: var(--ink-2);
+}
+.sentinel {
+  height: 1px;
+}
