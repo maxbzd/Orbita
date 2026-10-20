@@ -1,0 +1,141 @@
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+.body {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(90px, 30%) 1fr;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+}
+.row + .row {
+  border-top: 1px solid var(--stroke);
+}
+.row dt {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.row dd {
+  margin: 0;
+  min-width: 0;
+  font: var(--type-body);
+  overflow-wrap: anywhere;
+}
+.row dd a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.late {
+  color: var(--danger);
+  font-weight: 600;
+}
+.bullets {
+  margin: 0;
+  padding-inline-start: var(--s-4);
+}
+.sub {
+  display: block;
+  color: var(--ink-2);
+}
+.ringLine {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.source {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+.quote {
+  margin: 0;
+  padding: var(--s-1) 0 var(--s-1) var(--s-3);
+  border-inline-start: 2px solid var(--stroke-ui);
+  font: var(--type-thought-sm);
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.sourceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: var(--tap);
+  color: var(--ink);
+  font: 500 15px/1 var(--font-ui);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.chipLink {
+  text-decoration: none;
+}
+.related {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.relatedButton {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--s-2) var(--s-3);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink);
+  font: var(--type-body);
+  text-align: start;
+  cursor: pointer;
+}
+.relatedButton:hover {
+  background: var(--hover);
+}
+.relatedButton:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.relation {
+  flex: none;
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.relatedTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.status {
+  margin: 0;
+}

@@ -1,0 +1,139 @@
+/* The arc over the held sphere. Fixed to the viewport; satellites are placed from JS (--x, --y). */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at var(--ox) var(--oy), rgb(8 9 20 / 0.45), rgb(8 9 20 / 0.7) 62%);
+  animation: fade var(--dur-fast) var(--ease-out) both;
+}
+
+.menu {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.satellite {
+  position: absolute;
+  left: calc(var(--x) * 1px - 28px);
+  top: calc(var(--y) * 1px - 28px);
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid var(--stroke-ui);
+  border-radius: 50%;
+  background: var(--glass-solid);
+  color: var(--ink);
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  animation: pop var(--dur-base) var(--ease-out) both;
+  animation-delay: calc(var(--i) * 40ms);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.satellite[data-hot] {
+  transform: scale(1.18);
+  border-color: var(--focus);
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+}
+
+.satellite:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Captions are mono caps 11 px (§3.2) on small solid plates, so they read on any sky. The outer ones sit beside their
+   satellite, the middle two lean outwards above theirs so that they never meet. */
+.caption {
+  position: absolute;
+  max-width: 116px;
+  padding: 4px 8px;
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  background: var(--glass-solid);
+  color: var(--ink);
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  line-height: 1.25;
+  animation: fade var(--dur-base) var(--ease-out) both;
+  animation-delay: calc(var(--i) * 40ms + 80ms);
+  pointer-events: none;
+}
+
+.caption[data-side='left'] {
+  left: calc(var(--x) * 1px - 36px);
+  top: calc(var(--y) * 1px);
+  max-width: min(116px, calc(var(--x) * 1px - 44px));
+  text-align: right;
+  transform: translate(-100%, -50%);
+}
+
+.caption[data-side='right'] {
+  left: calc(var(--x) * 1px + 36px);
+  top: calc(var(--y) * 1px);
+  max-width: min(116px, calc(100vw - var(--x) * 1px - 44px));
+  text-align: left;
+  transform: translate(0, -50%);
+}
+
+.caption[data-side='up-left'] {
+  left: calc(var(--x) * 1px + 12px);
+  top: calc(var(--y) * 1px - 34px);
+  text-align: right;
+  transform: translate(-100%, -100%);
+}
+
+.caption[data-side='up-right'] {
+  left: calc(var(--x) * 1px - 12px);
+  top: calc(var(--y) * 1px - 34px);
+  text-align: left;
+  transform: translate(0, -100%);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4) translate(calc((var(--ox) - var(--x) * 1px) * 0.5), calc((var(--oy) - var(--y) * 1px) * 0.5));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .satellite,
+  .caption,
+  .scrim {
+    animation: none;
+  }
+}
+
+:root[data-motion='reduced'] .satellite,
+:root[data-motion='reduced'] .caption,
+:root[data-motion='reduced'] .scrim {
+  animation: none;
+}

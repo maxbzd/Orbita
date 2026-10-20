@@ -1,0 +1,81 @@
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dialog);
+  display: flex;
+  justify-content: center;
+  padding: var(--s-4);
+  padding-top: calc(var(--s-4) + var(--safe-top));
+  padding-bottom: calc(var(--s-4) + var(--safe-bottom));
+  overflow-y: auto;
+}
+
+.center {
+  align-items: center;
+}
+
+.top {
+  align-items: flex-start;
+  padding-top: calc(max(8vh, 40px) + var(--safe-top));
+}
+
+/* A dialog is opaque: it is rare, and a panel of text must not depend on what is behind it. */
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: 100%;
+  padding: var(--s-6);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-sheet);
+  background: var(--bg-2);
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.45);
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+  outline: none;
+}
+
+.shown {
+  opacity: 1;
+  transform: none;
+}
+
+.sm {
+  max-width: 360px;
+}
+.md {
+  max-width: 480px;
+}
+.lg {
+  max-width: 640px;
+}
+
+.bare {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.title {
+  margin: 0;
+  font: var(--type-title);
+  letter-spacing: var(--ls-title);
+}
+
+.description {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--ink-2);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}

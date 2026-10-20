@@ -1,0 +1,170 @@
+/* Real glass (effects.css decides blur or a solid fill). The only animation is a transform. */
+.sheet {
+  position: fixed;
+  z-index: var(--z-sheet);
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  background: var(--glass-fill-lg);
+  -webkit-backdrop-filter: var(--glass-fx-lg);
+  backdrop-filter: var(--glass-fx-lg);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  outline: none;
+}
+
+/* ───────── bottom sheet: as tall as its top stop, shifted down to the current one ───────── */
+.sheet[data-mode='sheet'] {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--sheet-max) * 100dvh);
+  max-width: 720px;
+  margin-inline: auto;
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+  border-bottom: 0;
+  transform: translateY(100%);
+  transition: transform var(--dur-sheet) var(--ease-out);
+  will-change: transform;
+}
+
+.sheet[data-mode='sheet'].shown {
+  transform: translateY(calc(var(--sheet-shift) * 100dvh + var(--sheet-drag, 0px)));
+}
+
+.sheet.dragging {
+  transition: none;
+}
+
+/* The lower part of the sheet is off screen at the shorter stops: content and footer stay above it. */
+.sheet[data-mode='sheet'] {
+  padding-bottom: calc(var(--sheet-shift) * 100dvh);
+}
+
+/* ───────── centred window ───────── */
+.sheet[data-mode='modal'] {
+  top: 50%;
+  left: 50%;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(86dvh, 720px);
+  border-radius: var(--r-sheet);
+  transform: translate(-50%, -48%) scale(0.98);
+  opacity: 0;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+.sheet[data-mode='modal'].shown {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+/* ───────── right panel ───────── */
+.sheet[data-mode='panel'] {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(var(--panel-w), 100vw);
+  border-radius: var(--r-sheet) 0 0 var(--r-sheet);
+  border-right: 0;
+  padding-top: var(--safe-top);
+  transform: translateX(100%);
+  transition: transform var(--dur-sheet) var(--ease-out);
+}
+
+.sheet[data-mode='panel'].shown {
+  transform: translateX(0);
+}
+
+/* ───────── parts ───────── */
+.head {
+  flex: none;
+  padding: 0 var(--s-4);
+  touch-action: none; /* the header is the drag handle; the body scrolls normally */
+}
+
+.sheet:not([data-mode='sheet']) .head {
+  touch-action: auto;
+  padding-top: var(--s-2);
+}
+
+.grabber {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 28px; /* the visible handle is small; the touch target is not */
+  margin: 0;
+  cursor: grab;
+}
+
+.handle {
+  width: 36px;
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: var(--stroke-ui);
+}
+
+.grabber:focus-visible {
+  outline-offset: -4px;
+  border-radius: var(--r-sm);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-height: var(--tap);
+}
+
+.title {
+  margin: 0;
+  font: var(--type-title);
+  letter-spacing: var(--ls-title);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tap);
+  height: var(--tap);
+  margin-right: calc(var(--s-3) * -1);
+  border-radius: 50%;
+  color: var(--ink-2);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.close:hover {
+  background: var(--hover);
+}
+.close:active {
+  background: var(--press);
+  transform: scale(0.96);
+}
+
+.description {
+  margin: 0 0 var(--s-2);
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--s-2) var(--s-4) calc(var(--s-4) + var(--safe-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.footer {
+  flex: none;
+  padding: var(--s-3) var(--s-4) calc(var(--s-3) + var(--safe-bottom));
+  border-top: 1px solid var(--stroke);
+}

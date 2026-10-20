@@ -1,0 +1,81 @@
+.scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 3px;
+  scrollbar-width: thin;
+}
+
+.grid {
+  display: grid;
+  grid-template-rows: 14px repeat(7, var(--cell));
+  gap: 3px;
+  width: max-content;
+}
+
+.month,
+.weekday {
+  font: var(--type-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.weekday {
+  display: flex;
+  align-items: center;
+  padding-right: var(--s-2);
+}
+
+.cell {
+  display: block;
+  width: var(--cell);
+  height: var(--cell);
+  padding: 0;
+  border: 1px solid var(--stroke);
+  border-radius: 3px;
+  background: transparent;
+  appearance: none;
+}
+
+button.cell {
+  cursor: pointer;
+}
+
+button.cell:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.l1 {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--heat) 24%, transparent);
+}
+
+.l2 {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--heat) 46%, transparent);
+}
+
+.l3 {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--heat) 70%, transparent);
+}
+
+.l4 {
+  border-color: transparent;
+  background: var(--heat);
+}
+
+.future {
+  opacity: 0.35;
+}
+
+.today {
+  box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 3.5px var(--cta-bg);
+}
+
+.selected {
+  border-color: var(--cta-bg);
+  box-shadow: 0 0 0 1.5px var(--cta-bg);
+}

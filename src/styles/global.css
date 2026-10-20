@@ -1,0 +1,282 @@
+/*
+ * Entry stylesheet: tokens, themes and effect tiers, then the reset, focus ring, selection,
+ * scrollbars, safe-area handling and the typography utility classes.
+ * Fonts are imported from TypeScript (src/styles/fonts.ts).
+ */
+
+@import './tokens.css';
+@import './themes.css';
+@import './effects.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--bg-0);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) transparent;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--ink);
+  font: var(--type-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg,
+canvas,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+/* Interface chrome is not text to select; reading content stays selectable. */
+button,
+nav,
+[role='button'],
+[role='tab'],
+label {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 16 px minimum, or iOS Safari zooms the page on focus. */
+input,
+textarea,
+select {
+  font-size: max(16px, 1em);
+}
+
+textarea {
+  resize: vertical;
+}
+
+a {
+  color: inherit;
+}
+
+/* Focus ring: always visible for keyboard users, never for pointer clicks. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--selection);
+  color: var(--ink);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: var(--r-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Safe-area helpers for full-bleed fixed layers. */
+.safe-pad {
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+}
+
+.safe-pad-bottom {
+  padding-bottom: var(--safe-bottom);
+}
+
+.select-text {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.no-callout {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== Typography utility classes (§2.4); the React text components use the same tokens ===== */
+.t-display-xl {
+  font: var(--type-display-xl);
+  letter-spacing: var(--ls-display);
+}
+
+.t-display-l {
+  font: var(--type-display-l);
+  letter-spacing: var(--ls-display);
+}
+
+.t-display-italic {
+  font-style: italic;
+}
+
+.t-title {
+  font: var(--type-title);
+  letter-spacing: var(--ls-title);
+}
+
+.t-headline {
+  font: var(--type-headline);
+}
+
+.t-body {
+  font: var(--type-body);
+}
+
+.t-thought {
+  font: var(--type-thought);
+}
+
+.t-thought-sm {
+  font: var(--type-thought-sm);
+}
+
+.t-caption {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+
+.t-label {
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+.t-status {
+  font: var(--type-status);
+  letter-spacing: var(--ls-status);
+  text-transform: uppercase;
+}
+
+.t-numeral {
+  font: var(--type-numeral);
+  font-variant-numeric: tabular-nums;
+}
+
+.t-poster {
+  font: var(--type-poster);
+  letter-spacing: var(--ls-poster);
+  text-transform: uppercase;
+}
+
+/* Units are smaller and greyer than the number: 2<small>ч</small> 27<small>мин</small>. */
+.t-numeral small,
+.t-display-xl small,
+.t-display-l small {
+  font-size: 0.5em;
+  color: var(--ink-2);
+  margin-inline: 0.1em;
+}
+
+/* Less motion: infinite loops and entrance animations collapse to their end state. Transitions stay
+   (they are shortened to a cross-fade through the --dur-* tokens in effects.css). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The same through the in-app "Меньше движения" switch (ThemeProvider sets data-motion="reduced"). */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+}

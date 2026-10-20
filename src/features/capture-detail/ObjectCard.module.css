@@ -1,0 +1,91 @@
+.card {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  list-style: none;
+  scroll-margin-block: 96px;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+.selected {
+  border-color: var(--ink-3);
+  background: var(--surface-2);
+}
+.flash {
+  animation: cardFlash 1.6s var(--ease-out);
+}
+@keyframes cardFlash {
+  0%,
+  35% {
+    background: color-mix(in srgb, var(--ai-2) 20%, var(--surface));
+    border-color: var(--ink-2);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    animation: none;
+    border-color: var(--ink-2);
+  }
+}
+.muted .title {
+  color: var(--ink-2);
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-3);
+}
+.medallion {
+  flex: none;
+}
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--s-1);
+  min-width: 0;
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.kind {
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.title {
+  margin: 0;
+  font: var(--type-headline);
+  overflow-wrap: anywhere;
+}
+.meta {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+.quote {
+  margin: var(--s-1) 0 0;
+  padding-left: var(--s-3);
+  border-left: 2px solid var(--stroke-ui);
+  font: var(--type-thought-sm);
+  font-size: 15px;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-1) var(--s-2);
+  margin-top: var(--s-2);
+}
+.lost {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}

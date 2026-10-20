@@ -1,0 +1,150 @@
+/*
+ * Effect tiers and motion, expressed as variables.
+ *
+ * <html> carries, set by ThemeProvider:
+ *   data-effects = the user's choice: auto | max | reduced | min
+ *   data-quality = the resolved tier:  high (T0) | mid (T1) | low (T2)
+ *                  max -> high, reduced -> mid, min -> low, auto -> detected from the device
+ *   data-motion  = full | reduced   (system prefers-reduced-motion OR the "less motion" switch)
+ *   data-overlay = present while a modal sheet/dialog (real blur) is open
+ *
+ * Components never read the attributes: they use the variables below, so a tier only has to flip
+ * variables. Without JavaScript the two media queries still protect the user.
+ */
+
+@keyframes aura-drift {
+  to {
+    transform: translate3d(0, 2%, 0) scale(1.06) rotate(6deg);
+  }
+}
+
+@keyframes orb-breathe {
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes orb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- T0 high: the defaults ---------- */
+:root {
+  --blur: 22px; /* backdrop-filter radius */
+  --saturate: 1.5;
+  /* Small surfaces (nav pill, mini recorder) and large ones (sheets, composer) are separate:
+     the middle tier keeps blur on the nav only. */
+  --glass-fx: blur(var(--blur)) saturate(var(--saturate));
+  --glass-fx-lg: blur(var(--blur)) saturate(var(--saturate));
+  --glass-fill: var(--glass-bg);
+  --glass-fill-lg: var(--glass-bg);
+
+  /* Ambient animations as full `animation` shorthands: `animation: var(--anim-aura)`. */
+  --anim-aura: aura-drift 36s ease-in-out infinite alternate;
+  --anim-breathe: orb-breathe 4s ease-in-out infinite;
+  --anim-spin: orb-spin 90s linear infinite;
+  --anim-spin-slow: orb-spin 120s linear infinite;
+  --anim-shimmer: shimmer 1.4s ease-in-out infinite;
+  --anim-enter: fade-in var(--dur-fast) var(--ease-out) both; /* a new screen cross-fades in; no slide */
+
+  --fx-grain: 1; /* multiplier of the grain opacity */
+  --fx-twinkle: 1; /* 1 = the canvas twinkle layer may run */
+}
+
+/* ---------- T1 mid: blur 12 on the nav pill only, static aura, no grain ---------- */
+:root[data-quality='mid'] {
+  --blur: 12px;
+  --glass-fx-lg: none;
+  --glass-fill-lg: var(--glass-solid);
+  --anim-aura: none;
+  --fx-grain: 0;
+  --fx-twinkle: 0;
+}
+
+/* ---------- T2 low: no blur anywhere, no rotation ---------- */
+:root[data-quality='low'] {
+  --blur: 0px;
+  --glass-fx: none;
+  --glass-fx-lg: none;
+  --glass-fill: var(--glass-solid);
+  --glass-fill-lg: var(--glass-solid);
+  --anim-aura: none;
+  --anim-breathe: none;
+  --anim-spin: none;
+  --anim-spin-slow: none;
+  --fx-grain: 0;
+  --fx-twinkle: 0;
+}
+
+/* ---------- No glass: the user asked for it, or the browser cannot do it ---------- */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-fx: none;
+    --glass-fx-lg: none;
+    --glass-fill: var(--glass-solid);
+    --glass-fill-lg: var(--glass-solid);
+    --fx-grain: 0;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --glass-fx: none;
+    --glass-fx-lg: none;
+    --glass-fill: var(--glass-solid);
+    --glass-fill-lg: var(--glass-solid);
+  }
+}
+
+/* ---------- Less motion: ambient loops off, transitions become a short cross-fade ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --anim-aura: none;
+    --anim-breathe: none;
+    --anim-spin: none;
+    --anim-spin-slow: none;
+    --anim-shimmer: none;
+    --fx-twinkle: 0;
+    --dur-press: 60ms;
+    --dur-fast: 120ms;
+    --dur-base: 120ms;
+    --dur-sheet: 120ms;
+    --dur-slow: 120ms;
+    --dur-hero: 120ms;
+  }
+}
+
+:root[data-motion='reduced'] {
+  --anim-aura: none;
+  --anim-breathe: none;
+  --anim-spin: none;
+  --anim-spin-slow: none;
+  --anim-shimmer: none;
+  --fx-twinkle: 0;
+  --dur-press: 60ms;
+  --dur-fast: 120ms;
+  --dur-base: 120ms;
+  --dur-sheet: 120ms;
+  --dur-slow: 120ms;
+  --dur-hero: 120ms;
+}
+
+/* ---------- A real-blur layer is open: nothing animated may sit under it (risk 3, §4.1) ---------- */
+:root[data-overlay] {
+  --anim-aura: none;
+  --fx-twinkle: 0;
+}

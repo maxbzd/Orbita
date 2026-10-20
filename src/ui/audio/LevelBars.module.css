@@ -1,0 +1,24 @@
+.bars {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+  flex: none;
+}
+
+.bar {
+  --h: 0;
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  /* Neutral ink: the meter shows the microphone, not the AI (the AI gradient is only for what the AI does). */
+  background: var(--ink);
+  /* Never fully flat: a resting meter is a row of dots. */
+  transform: scaleY(calc(0.16 + var(--h) * 0.84));
+  transition: transform 50ms linear;
+}
+
+.paused .bar {
+  background: var(--ink-3);
+  opacity: 0.6;
+}

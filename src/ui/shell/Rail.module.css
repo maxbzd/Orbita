@@ -1,0 +1,67 @@
+.rail {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-4);
+  width: var(--rail-w);
+  height: 100dvh;
+  padding: calc(var(--s-4) + var(--safe-top)) 0 calc(var(--s-4) + var(--safe-bottom));
+  border-right: 1px solid var(--stroke);
+  background: color-mix(in srgb, var(--bg-1) 70%, transparent);
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin-top: auto;
+}
+
+.link {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-md);
+  color: var(--ink-2);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.active {
+  background: var(--pill-active);
+  color: var(--ink);
+}
+
+.record {
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+}
+
+.record:hover {
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+  opacity: 0.9;
+}

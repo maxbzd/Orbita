@@ -1,0 +1,42 @@
+.checking {
+  position: fixed;
+  inset: 0;
+}
+
+.screen {
+  position: relative;
+  z-index: var(--z-content);
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-8);
+  padding: calc(var(--s-6) + var(--safe-top)) max(var(--gutter), var(--safe-right)) calc(var(--s-6) + var(--safe-bottom)) max(var(--gutter), var(--safe-left));
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  text-align: center;
+}
+
+.lead {
+  max-width: 32ch;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  width: min(100%, 360px);
+}
+
+.wait {
+  margin: 0;
+  text-align: center;
+}

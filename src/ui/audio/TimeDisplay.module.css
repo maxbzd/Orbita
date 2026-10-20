@@ -1,0 +1,67 @@
+.time {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* hero: the scrub timer, huge; lg: the record screen; md: a header; sm: the 15 px "● 02:14". */
+.hero {
+  font-size: 72px;
+}
+.lg {
+  font-size: 40px;
+}
+.md {
+  font-size: 20px;
+}
+.sm {
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+@media (max-width: 359px) {
+  .hero {
+    font-size: 60px;
+  }
+}
+
+.total {
+  color: var(--ink-2);
+  font-size: 0.4em;
+  letter-spacing: 0;
+}
+
+/* While the finger is down the time reads as the thing being moved. */
+.scrubbing {
+  color: var(--ink);
+  text-shadow: 0 0 24px var(--orb-glow);
+}
+
+/* "ПАУЗА 02:14" blinks once a second. */
+.blink {
+  animation: time-blink 1s steps(1, end) infinite;
+}
+
+@keyframes time-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blink {
+    animation: none;
+  }
+}
+:global(:root[data-motion='reduced']) .blink {
+  animation: none;
+}

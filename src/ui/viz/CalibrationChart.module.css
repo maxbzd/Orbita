@@ -1,0 +1,88 @@
+.root {
+  margin-inline: auto;
+}
+
+.grid {
+  stroke: var(--stroke);
+  stroke-width: 1;
+}
+
+.tick {
+  font: var(--type-label);
+  letter-spacing: 0;
+  fill: var(--ink-2);
+}
+
+.axis {
+  font: var(--type-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--ink-2);
+}
+
+.ideal {
+  stroke: var(--stroke-ui);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+
+.curve {
+  fill: none;
+  stroke: var(--t-prediction, var(--t-forecast));
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  opacity: 0.7;
+}
+
+.bucket {
+  fill: var(--t-prediction, var(--t-forecast));
+  fill-opacity: 0.85;
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}
+
+.emptyTitle {
+  font: var(--type-headline);
+  fill: var(--ink);
+}
+
+.emptyNote {
+  font: var(--type-numeral);
+  fill: var(--ink-2);
+}
+
+.pip {
+  fill: var(--t-prediction, var(--t-forecast));
+}
+
+.pipEmpty {
+  fill: none;
+  stroke: var(--stroke-ui);
+  stroke-width: 1.5;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin-top: var(--s-2);
+}
+
+.brier {
+  font: var(--type-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.brier b {
+  margin-left: var(--s-2);
+  font: 500 28px/1 var(--font-mono);
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.note {
+  font: var(--type-caption);
+  color: var(--ink-2);
+}

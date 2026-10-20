@@ -1,0 +1,17 @@
+.dot {
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.medallion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 50%;
+  color: var(--c);
+  border: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07080f" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="Orbita — a personal system for making sense of life and work. Your data stays on your device." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Orbita" />
+
+    <!--
+      Content-Security-Policy (production only: vite.config.ts strips this tag in `npm run dev`).
+
+      >>> AI PROVIDER HOSTS: the `connect-src` list below. <<<
+      A <meta> CSP can only be tightened after parsing, never loosened, so a user-defined
+      OpenAI-compatible baseUrl (Ollama, a proxy, ...) cannot be added to it at runtime by
+      appending another tag. Hosts for custom providers must be added to this list at
+      deploy time (or the policy must be generated before first script runs).
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.groq.com https://openrouter.ai https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <title>Orbita</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Orbita needs JavaScript. / Для работы «Орбиты» нужен JavaScript.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

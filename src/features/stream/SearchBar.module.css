@@ -1,0 +1,23 @@
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+.search {
+  flex: 1;
+  min-width: 0;
+}
+.hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--ink-2);
+}
+
+.bar > :first-child {
+  align-self: flex-start;
+}

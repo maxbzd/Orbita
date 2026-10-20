@@ -1,0 +1,157 @@
+/*
+ * The CSS orb: the fallback of the Canvas orb (low tier, reduced motion, no 2D canvas). A radial-gradient
+ * sphere plus one rotating sheen. Under reduced motion the microphone feedback stays but turns into
+ * brightness and ring thickness instead of scale.
+ */
+.orb {
+  --level: 0;
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  line-height: 0;
+  contain: layout style;
+  transition: filter var(--dur-slow) var(--ease-inout);
+}
+
+/* The light behind the body. Listening: brighter and with a thicker ring as the voice rises. */
+.halo {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--orb-glow) 0, transparent 70%);
+  opacity: calc(0.55 + var(--level) * 0.45);
+}
+
+.body {
+  position: absolute;
+  inset: 13%;
+  overflow: hidden;
+  border-radius: 50%;
+  /* QA: a glossy balloon (specular spot, saturated fill) was the "3D clay" look the brief rules out and did not
+     resemble the dotted Canvas orb. Now: a deep body with a soft core of light, and a dot matrix on top (.body::after). */
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--orb-core) 38%, transparent) 0, transparent 48%),
+    radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--orb-accent) 46%, #080a18) 0, color-mix(in srgb, var(--orb-edge) 30%, #070813) 66%, #05060d 100%);
+  box-shadow:
+    0 0 calc(var(--orb-size) * 0.18) var(--orb-glow),
+    inset 0 0 calc(var(--orb-size) * 0.06) color-mix(in srgb, var(--orb-edge) 55%, transparent),
+    0 0 0 calc(var(--level) * var(--orb-size) * 0.03) color-mix(in srgb, var(--orb-edge) 50%, transparent);
+  transition:
+    opacity var(--dur-slow) var(--ease-inout),
+    transform var(--dur-slow) var(--ease-inout);
+  animation: var(--anim-breathe);
+}
+
+/* The dot matrix: brightest where the sphere faces the viewer, fading to the limb like the Canvas dots. */
+.body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: radial-gradient(circle closest-side, var(--orb-core) 0, var(--orb-core) 30%, transparent 46%);
+  background-size: 14% 14%;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 0, rgb(0 0 0 / 0.85) 45%, rgb(0 0 0 / 0.2) 86%, transparent 100%);
+  mask-image: radial-gradient(circle closest-side, #000 0, rgb(0 0 0 / 0.85) 45%, rgb(0 0 0 / 0.2) 86%, transparent 100%);
+}
+
+/* One slow turning highlight: the single rotation of the low tier. */
+.sheen {
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from 0deg, transparent 0 55%, rgb(255 255 255 / 0.14) 68%, transparent 80% 100%);
+  animation: var(--anim-spin);
+  mix-blend-mode: soft-light;
+}
+
+/* The torus of "thinking": a ring with a bright arc. */
+.ring {
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--orb-accent), var(--orb-edge) 40%, var(--orb-core) 62%, var(--orb-edge) 80%, var(--orb-accent));
+  -webkit-mask: radial-gradient(farthest-side, transparent 58%, #000 60%);
+  mask: radial-gradient(farthest-side, transparent 58%, #000 60%);
+  opacity: 0;
+  transform: scale(0.7);
+  transition:
+    opacity var(--dur-slow) var(--ease-inout),
+    transform var(--dur-slow) var(--ease-inout);
+}
+
+.flash {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ok) 70%, transparent) 0, transparent 68%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ───────── States ───────── */
+.orb[data-state='listening'] .body {
+  animation: none;
+}
+.orb[data-state='listening']:not([data-reduced='true']) .body {
+  transform: scale(calc(1 + var(--level) * 0.08));
+  transition: transform 60ms linear;
+}
+
+.orb[data-state='paused'] {
+  filter: saturate(0.6);
+}
+.orb[data-state='paused'] .body,
+.orb[data-state='paused'] .sheen {
+  animation: none;
+}
+
+.orb[data-state='thinking'] .body {
+  opacity: 0;
+  transform: scale(0.55);
+  animation: none;
+}
+.orb[data-state='thinking'] .halo {
+  opacity: 0.45;
+}
+.orb[data-state='thinking'] .ring {
+  opacity: 1;
+  transform: scale(1);
+  animation: ring-spin 7s linear infinite;
+}
+
+.orb[data-state='done'] .flash {
+  animation: orb-flash var(--dur-slow) var(--ease-out);
+}
+
+.orb[data-state='error'] {
+  filter: saturate(0.35);
+}
+.orb[data-state='error'] .body {
+  animation: none;
+}
+
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orb-flash {
+  35% {
+    opacity: 1;
+  }
+}
+
+/* No rotation on the low tier or when motion is reduced; the ring keeps its shape, which carries the state. */
+:global(:root[data-quality='low']) .ring,
+:global(:root[data-motion='reduced']) .ring {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring {
+    animation: none !important;
+  }
+}

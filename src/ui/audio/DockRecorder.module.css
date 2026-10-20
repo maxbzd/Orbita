@@ -1,0 +1,100 @@
+/* The 64 px recorder of tablet and desktop: it lives on the shell's dock bar, which supplies the background. */
+.dock {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-width: 0;
+  max-width: var(--content-max);
+  height: 64px;
+  margin-inline: auto;
+}
+
+.open {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--s-4);
+  min-width: 0;
+  height: 56px;
+  padding: 0 var(--s-3);
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.open:hover {
+  background: var(--hover);
+}
+
+.orb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: none;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--ink-2);
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rec);
+  animation: dock-beat 1.6s ease-in-out infinite;
+}
+
+.paused .dot {
+  background: var(--ink-2);
+  animation: none;
+}
+
+@keyframes dock-beat {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.meter {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}
+:global(:root[data-motion='reduced']) .dot {
+  animation: none;
+}

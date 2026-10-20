@@ -1,0 +1,109 @@
+/*
+ * Design tokens that do not depend on the theme: type, shape, spacing, layers, motion, layout.
+ * Colour tokens live in themes.css ("Ночь" / "Рассвет"); effect tiers in effects.css.
+ * See docs/DESIGN.md for the decisions behind them.
+ */
+
+:root {
+  /* ===== TYPOGRAPHY (§2.4) ===== */
+  --font-ui: 'Onest Variable', 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Literata Variable', 'Literata', Georgia, 'Times New Roman', serif;
+  --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', 'Literata Variable', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-poster: 'Unbounded Variable', 'Unbounded', 'Onest Variable', system-ui, sans-serif;
+
+  /* Scale at 390 px: weight size/line-height family. Letter-spacing is a separate token. */
+  --type-display-xl: 500 44px/1.02 var(--font-display);
+  --type-display-l: 500 32px/1.08 var(--font-display);
+  --type-title: 600 22px/1.25 var(--font-ui);
+  --type-headline: 600 17px/1.3 var(--font-ui);
+  --type-body: 400 16px/1.5 var(--font-ui);
+  --type-thought: 400 18px/1.55 var(--font-serif);
+  --type-thought-sm: 400 16px/1.5 var(--font-serif);
+  --type-caption: 400 13px/1.4 var(--font-ui);
+  --type-label: 500 11px/1.2 var(--font-mono);
+  --type-status: 500 12px/1 var(--font-mono);
+  --type-numeral: 500 15px/1.2 var(--font-mono);
+  --type-poster: 800 48px/0.92 var(--font-poster);
+
+  --ls-display: -0.01em;
+  --ls-title: -0.01em;
+  --ls-label: 0.12em;
+  --ls-status: 0.08em;
+  --ls-poster: -0.02em;
+
+  /* ===== SHAPE AND SPACE (§2.5) ===== */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-card: 24px;
+  --r-sheet: 28px;
+  --r-bar: 32px;
+  --r-pill: 999px;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-12: 48px;
+  --gutter: 16px;
+
+  --tap: 44px;
+  --tap-primary: 56px;
+  --field-h: 48px;
+  --chip-h: 32px;
+  --chip-h-lg: 40px;
+
+  /* ===== LAYERS (§2.5) ===== */
+  --z-sky: 0;
+  --z-aura: 1;
+  --z-content: 2;
+  --z-nav: 10;
+  --z-mini: 20;
+  --z-scrim: 30;
+  --z-sheet: 31;
+  --z-toast: 40;
+  --z-dialog: 50;
+
+  /* ===== MOTION (§2.7) ===== */
+  --dur-press: 90ms;
+  --dur-fast: 160ms;
+  --dur-base: 240ms;
+  --dur-sheet: 420ms;
+  --dur-slow: 640ms;
+  --dur-hero: 900ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ===== SAFE AREA ===== */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* ===== SHELL LAYOUT (§2.5, §3.2) ===== */
+  --nav-h: 64px;
+  --nav-gap: 10px;
+  --nav-side: 12px;
+  --sphere-size: 68px;
+  --sphere-lift: 18px;
+  --rail-w: 64px;
+  --sidebar-w: 240px;
+  --panel-w: 340px;
+  --dock-h: 64px;
+  --content-max: 760px;
+  /* Bottom padding that keeps the last rows clear of the floating phone nav pill. */
+  --nav-clearance: calc(var(--nav-h) + var(--nav-gap) + var(--safe-bottom) + 24px);
+}
+
+/* The phone scale is the base; wider screens get a slightly larger display voice. */
+@media (min-width: 768px) {
+  :root {
+    --type-display-xl: 500 52px/1.02 var(--font-display);
+    --type-display-l: 500 36px/1.08 var(--font-display);
+  }
+}

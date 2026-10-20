@@ -1,0 +1,84 @@
+/* MonthRing and WeekOrbit share this sheet. */
+.root {
+  margin-inline: auto;
+}
+
+.track {
+  fill: none;
+  stroke: var(--stroke);
+  stroke-width: 1.5;
+}
+
+.dot {
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.hollow {
+  fill: transparent;
+  stroke: var(--stroke-ui);
+  stroke-width: 1.5;
+}
+
+.selected {
+  fill: none;
+  stroke: var(--cta-bg);
+  stroke-width: 2;
+}
+
+.todayHalo {
+  fill: var(--cta-bg);
+  opacity: 0.22;
+}
+
+.center {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 44px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink);
+}
+
+.centerLabel {
+  font: var(--type-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--ink-2);
+}
+
+.weekday {
+  font: var(--type-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--ink-2);
+}
+
+.weekdayActive {
+  fill: var(--ink);
+}
+
+.cursor {
+  fill: var(--cta-bg);
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}
+
+.cursorHalo {
+  fill: var(--cta-bg);
+  opacity: 0.25;
+}
+
+.arc {
+  fill: none;
+  stroke: var(--cta-bg);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+.scrub {
+  cursor: grab;
+  /* Horizontal drags scrub the week; vertical ones still scroll the page. */
+  touch-action: pan-y;
+}

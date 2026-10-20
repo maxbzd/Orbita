@@ -1,0 +1,34 @@
+.root {
+  margin-inline: auto;
+}
+
+.month {
+  font: var(--type-label);
+  letter-spacing: 0.12em;
+  fill: var(--ink-2);
+}
+
+.rule {
+  stroke: var(--stroke);
+  stroke-width: 1;
+}
+
+.selected {
+  fill: none;
+  stroke: var(--cta-bg);
+  stroke-width: 1.5;
+}
+
+.todayHalo {
+  fill: var(--cta-bg);
+  opacity: 0.28;
+}
+
+.recorded {
+  fill: var(--ink-3);
+}
+
+.empty {
+  fill: var(--stroke-ui);
+  opacity: 0.6;
+}

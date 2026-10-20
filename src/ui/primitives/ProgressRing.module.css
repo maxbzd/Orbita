@@ -1,0 +1,32 @@
+.ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+
+.ring svg {
+  position: absolute;
+  inset: 0;
+}
+
+.track {
+  stroke: var(--stroke);
+}
+
+.arc {
+  stroke: var(--ring-color);
+  transition: stroke-dasharray var(--dur-slow) var(--ease-out);
+}
+
+.center {
+  position: relative;
+  font: var(--type-numeral);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.indeterminate svg {
+  animation: var(--anim-spin);
+  animation-duration: 2.4s;
+}

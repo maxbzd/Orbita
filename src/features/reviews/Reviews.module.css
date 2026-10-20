@@ -1,0 +1,238 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-8);
+}
+
+.listHead,
+.viewHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.viewHead {
+  gap: var(--s-1);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--s-1);
+  min-height: var(--tap);
+  margin-left: calc(var(--s-1) * -1);
+  padding-right: var(--s-3);
+  color: var(--ink-2);
+  font: var(--type-caption);
+  text-decoration: none;
+  border-radius: var(--r-pill);
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+.back:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ───────── list screen ───────── */
+
+.hero,
+.make,
+.ticketCard,
+.passportCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-card);
+  background: var(--surface-card);
+}
+
+/* The weekly reading is the main card: the AI frame (the same gradient as "Что заметил"). */
+.hero {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--bg-1, var(--bg-0)), var(--bg-1, var(--bg-0))) padding-box,
+    var(--grad-ai) border-box;
+  border: 1.5px solid transparent;
+}
+
+.ticketFrame {
+  display: flex;
+  justify-content: center;
+}
+
+.ticketFrame > figure {
+  max-width: 360px;
+}
+
+.passportCard {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.passportText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  min-width: 0;
+}
+
+.passportFrame {
+  flex: 0 0 min(42%, 180px);
+  min-width: 0;
+}
+
+@media (max-width: 420px) {
+  .passportCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .passportFrame {
+    flex-basis: auto;
+    align-self: center;
+    width: min(100%, 220px);
+  }
+}
+
+.makeControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ───────── review screen ───────── */
+
+.viewBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+
+/* The viewer is 9:16 and as tall as the free screen allows; it never grows past 380 px on wide screens. */
+.story {
+  width: min(100%, 380px, calc((100dvh - 150px) * 9 / 16));
+  max-height: none;
+  flex: none;
+}
+
+.side {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--s-5);
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .viewBody {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--s-8);
+  }
+
+  .story {
+    position: sticky;
+    top: var(--s-4);
+    margin-inline: 0;
+  }
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.questionActions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.fullText {
+  border-top: 1px solid var(--stroke);
+  padding-top: var(--s-3);
+}
+
+.fullText > summary {
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
+  color: var(--ink-2);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+
+.fullText > summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+.textSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin-top: var(--s-3);
+}
+
+.preLine {
+  white-space: pre-line;
+}
+
+.sideFoot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+
+/* ───────── share ───────── */
+
+.shareActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}

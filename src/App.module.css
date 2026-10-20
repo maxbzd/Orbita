@@ -1,0 +1,30 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-4);
+  max-width: 480px;
+  margin-inline: auto;
+  padding: var(--s-12) var(--gutter);
+}
+
+.muted {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--s-5);
+  border-radius: var(--r-pill);
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+  font: 600 16px/1 var(--font-ui);
+  text-decoration: none;
+}
+
+.title {
+  margin: 0;
+}

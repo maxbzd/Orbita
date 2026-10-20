@@ -1,0 +1,6 @@
+.screen {
+  position: relative;
+  z-index: var(--z-content);
+  min-height: 100dvh;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+}

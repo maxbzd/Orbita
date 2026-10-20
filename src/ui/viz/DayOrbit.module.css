@@ -1,0 +1,112 @@
+.root {
+  position: relative;
+  margin-inline: auto;
+}
+
+.track {
+  fill: none;
+  stroke: var(--stroke);
+  stroke-width: 2;
+}
+
+.past {
+  fill: none;
+  stroke: var(--stroke-ui);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.tick {
+  stroke: var(--stroke-ui);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.hour {
+  font: var(--type-label);
+  fill: var(--ink-2);
+  letter-spacing: 0;
+}
+
+.orbit {
+  fill: none;
+  stroke: var(--stroke-ui);
+  stroke-width: 1;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+  opacity: 0.7;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: var(--anim-spin);
+  animation-duration: 96s;
+}
+
+.planet {
+  stroke: none;
+}
+
+.planetQuiet {
+  fill: var(--surface-2);
+  stroke: var(--stroke-ui);
+  stroke-width: 1.5;
+}
+
+.gloss {
+  pointer-events: none;
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 38px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.satellite {
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}
+
+.overdue rect {
+  fill: var(--danger);
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}
+
+.bang {
+  fill: none;
+  stroke: var(--bg-0);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.more {
+  fill: var(--bg-0);
+  stroke: var(--ink-2);
+  stroke-width: 1.5;
+}
+
+.moreText {
+  font: var(--type-label);
+  fill: var(--ink);
+  letter-spacing: 0;
+  pointer-events: none;
+}
+
+.entry {
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.nowHalo {
+  fill: var(--cta-bg);
+  opacity: 0.28;
+}
+
+.nowDot {
+  fill: var(--cta-bg);
+  stroke: var(--bg-0);
+  stroke-width: 1.5;
+}

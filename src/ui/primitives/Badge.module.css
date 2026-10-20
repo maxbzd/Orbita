@@ -1,0 +1,30 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-pill);
+  font: var(--type-status);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+.dot {
+  min-width: 8px;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+}
+.accent {
+  background: var(--cta-bg);
+  color: var(--cta-ink);
+}
+.neutral {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.danger {
+  background: var(--danger);
+  color: var(--on-danger);
+}

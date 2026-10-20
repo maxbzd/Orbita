@@ -1,0 +1,135 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  border-radius: var(--r-md);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.row:hover:has(.main) {
+  background: var(--hover);
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--s-1);
+  min-width: 0;
+  padding: var(--s-3);
+  border-radius: var(--r-md);
+  color: var(--ink);
+  text-decoration: none;
+}
+.main:active {
+  background: var(--press);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.title {
+  min-width: 0;
+  font: var(--type-headline);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.flower {
+  flex: none;
+}
+
+.summary {
+  font: var(--type-caption);
+  color: var(--ink-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.error {
+  font: var(--type-caption);
+  color: var(--danger);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-3);
+  min-height: 20px;
+  margin-top: var(--s-1);
+}
+.meta {
+  color: var(--ink-2);
+  font: var(--type-status);
+  letter-spacing: var(--ls-status);
+}
+.capsule {
+  display: inline-flex;
+  align-items: center;
+  width: 72px;
+  height: 18px;
+  overflow: hidden;
+}
+.kind {
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.status {
+  height: 24px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-1);
+}
+.chips .chip {
+  height: 26px;
+  padding: 0 var(--s-2);
+  gap: 6px;
+  max-width: 100%;
+  font-size: 12px;
+}
+.chipInner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.chipText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* A cream dot: the object waits for the user's decision. */
+.pending {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.more,
+.pendingNote {
+  font: var(--type-status);
+  letter-spacing: var(--ls-status);
+  color: var(--ink-2);
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--s-3) var(--s-3);
+}
