@@ -8,7 +8,7 @@ beforeEach(wipeAll);
 describe('palette search provider', () => {
   it('finds records and people and leads to their screens', async () => {
     const capture = await capturesRepo.create({ kind: 'text', text: 'Решил поднять цену на тестовое занятие', status: 'done' });
-    const person = await peopleRepo.create({ name: 'Светлана Орлова', role: 'parent' });
+    const person = await peopleRepo.create({ name: 'Светлана Орлова', role: 'family' });
     await buildIndex();
     const go = vi.fn();
     const provider = createSearchProvider(go);

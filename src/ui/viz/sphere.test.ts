@@ -38,7 +38,7 @@ describe('Fibonacci sphere', () => {
 describe('belts', () => {
   it('cut the sphere into equal-area bands, north to south', () => {
     expect(beltRange('mentors')[1]).toBeCloseTo(1);
-    expect(beltRange('students')[0]).toBeCloseTo(-1);
+    expect(beltRange('clients')[0]).toBeCloseTo(-1);
     for (let i = 1; i < BELTS.length; i++) expect(beltRange(BELTS[i]!)[1]).toBeCloseTo(beltRange(BELTS[i - 1]!)[0]);
   });
 
@@ -49,13 +49,13 @@ describe('belts', () => {
 
 describe('assignLattice', () => {
   const people = [
-    person('anna', 'student', 14),
-    person('boris', 'student', 3),
+    person('anna', 'client', 14),
+    person('boris', 'client', 3),
     person('vera', 'family', 20),
     person('gleb', 'mentor', 5),
     person('dina', 'friend', 1),
     person('egor', 'client', 9),
-    person('zoya', 'parent', 2),
+    person('zoya', 'family', 2),
   ];
 
   it('gives each person a distinct lattice point', () => {
@@ -81,9 +81,9 @@ describe('assignLattice', () => {
   });
 
   it('spreads the members of one belt over the belt, not in a clump', () => {
-    const many = Array.from({ length: 20 }, (_, i) => person(`s${i}`, 'student', 20 - i));
+    const many = Array.from({ length: 20 }, (_, i) => person(`s${i}`, 'client', 20 - i));
     const ys = [...assignLattice(many).values()].map((i) => fibonacciPoint(i).y);
-    const [lo, hi] = beltRange('students');
+    const [lo, hi] = beltRange('clients');
     expect(Math.max(...ys) - Math.min(...ys)).toBeGreaterThan((hi - lo) * 0.6);
   });
 });

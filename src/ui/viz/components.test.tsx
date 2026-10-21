@@ -176,8 +176,8 @@ describe('graph figures', () => {
       <PeopleSphereList
         onSelect={onSelect}
         people={[
-          { id: 'p1', name: 'Анна', role: 'student', mentions: 5 },
-          { id: 'p2', name: 'Борис', role: 'parent', mentions: 1 },
+          { id: 'p1', name: 'Анна', role: 'client', mentions: 5 },
+          { id: 'p2', name: 'Борис', role: 'client', mentions: 1 },
         ]}
       />,
     );

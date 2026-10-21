@@ -80,7 +80,7 @@ describe('processCapture', () => {
   });
 
   it('links to an existing person instead of creating a duplicate', async () => {
-    const masha = await peopleRepo.create({ name: 'Маша', role: 'student' });
+    const masha = await peopleRepo.create({ name: 'Маша', role: 'client' });
     const capture = await newCapture('Обещал Маше прислать план занятий до пятницы.');
     const result = await processCapture(capture.id, { llm: llm(), now: NOW });
 
@@ -90,7 +90,7 @@ describe('processCapture', () => {
   });
 
   it('does not link a real record to a person from the demo set', async () => {
-    const demo = await peopleRepo.create({ name: 'Маша', role: 'student', isDemo: true });
+    const demo = await peopleRepo.create({ name: 'Маша', role: 'client', isDemo: true });
     const capture = await newCapture('Обещал Маше прислать план занятий до пятницы.');
     const result = await processCapture(capture.id, { llm: llm(), now: NOW });
 
