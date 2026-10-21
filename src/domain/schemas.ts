@@ -14,6 +14,7 @@ import {
   PATTERN_KINDS,
   PATTERN_STATUSES,
   PERSON_ROLES,
+  normalizePersonRole,
   PREDICTION_OUTCOMES,
   PRIVACY_LEVELS,
   PROCESS_STATUSES,
@@ -68,7 +69,7 @@ export const captureContextSchema = z.enum(CAPTURE_CONTEXTS);
 export const processStatusSchema = z.enum(PROCESS_STATUSES);
 export const itemKindSchema = z.enum(ITEM_KINDS);
 export const itemStatusSchema = z.enum(ITEM_STATUSES);
-export const personRoleSchema = z.enum(PERSON_ROLES);
+export const personRoleSchema = z.preprocess(normalizePersonRole, z.enum(PERSON_ROLES));
 export const projectKindSchema = z.enum(PROJECT_KINDS);
 export const projectStatusSchema = z.enum(PROJECT_STATUSES);
 export const patternKindSchema = z.enum(PATTERN_KINDS);

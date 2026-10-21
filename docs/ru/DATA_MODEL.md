@@ -85,7 +85,8 @@ interface Fact extends ItemBase { kind: 'fact'; value?: string; validFrom?: ISOD
 type Item = Decision | Commitment | Idea | Prediction | Task | Question | Lesson | Fact;
 
 // ───────── Люди и проекты ─────────
-type PersonRole = 'student' | 'parent' | 'lead' | 'teacher' | 'partner' | 'teammate' | 'client' | 'friend' | 'family' | 'mentor' | 'other';
+// Роли прежних версий (student, parent, lead, teacher) читаются как other, family, client, mentor.
+type PersonRole = 'partner' | 'teammate' | 'client' | 'friend' | 'family' | 'mentor' | 'other';
 interface Person extends Base {
   name: string; aliases: string[]; role: PersonRole; notes?: string;
   lastMentionAt?: ISODate; mentionCount: number;

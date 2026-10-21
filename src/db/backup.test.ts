@@ -28,7 +28,7 @@ import {
   reviewsRepo,
   usageRepo,
 } from './repos';
-import { db } from './schema';
+import { SCHEMA_VERSIONS, db } from './schema';
 import { getSettings, updateSettings } from './settings';
 
 const iterations = PBKDF2_MIN_ITERATIONS;
@@ -38,7 +38,7 @@ beforeEach(wipeAll);
 
 /** A little of everything, including a permanent deletion (tombstone) and a recording. */
 async function seed() {
-  const person = await peopleRepo.create({ name: 'Маша', aliases: ['Мария'], role: 'student' });
+  const person = await peopleRepo.create({ name: 'Маша', aliases: ['Мария'], role: 'client' });
   const project = await projectsRepo.create({ name: 'Онлайн-школа', kind: 'business' });
   const capture = await capturesRepo.create({
     kind: 'voice',
@@ -77,7 +77,7 @@ describe('export', () => {
   it('describes itself and carries every table', async () => {
     const { capture } = await seed();
     const backup = await exportBackup();
-    expect(backup).toMatchObject({ format: BACKUP_FORMAT, encrypted: false, schemaVersion: 2, includesAudio: false });
+    expect(backup).toMatchObject({ format: BACKUP_FORMAT, encrypted: false, schemaVersion: SCHEMA_VERSIONS.length, includesAudio: false });
     expect(Number.isNaN(Date.parse(backup.exportedAt))).toBe(false);
     expect(backup.tables.captures.map((row) => row.id)).toContain(capture.id);
     expect(backup.tables.items).toHaveLength(3);

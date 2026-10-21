@@ -36,7 +36,7 @@ function renderCard(id: string) {
 
 describe('карточка человека', () => {
   it('показывает обязательства в обе стороны и хронологию упоминаний', async () => {
-    const anna = await peopleRepo.create({ name: 'Анна', role: 'parent', notes: 'Мама Миши' });
+    const anna = await peopleRepo.create({ name: 'Анна', role: 'family', notes: 'Мама Миши' });
     const capture = await capturesRepo.create({ kind: 'text', text: 'Говорил с Анной про оплату', title: 'Разговор с Анной', personIds: [anna.id], status: 'done' });
     await itemsRepo.create({ kind: 'commitment', title: 'Прислать план занятий', direction: 'i_owe', counterpartyId: anna.id, status: 'active', dueAt: '2020-01-01T10:00:00.000Z', captureId: capture.id });
     await itemsRepo.create({ kind: 'commitment', title: 'Оплатить месяц', direction: 'owed_to_me', counterpartyId: anna.id, status: 'active' });

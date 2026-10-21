@@ -26,8 +26,8 @@ const MS_PER_HOUR = 3_600_000;
 
 const roleLabels = (): Record<PersonRole, string> =>
   pick(
-    { student: 'student', parent: 'parent', lead: 'lead', teacher: 'teacher', partner: 'partner', teammate: 'teammate', client: 'client', friend: 'friend', family: 'family', mentor: 'mentor', other: 'other' },
-    { student: 'ученик', parent: 'родитель', lead: 'лид', teacher: 'преподаватель', partner: 'партнёр', teammate: 'коллега', client: 'клиент', friend: 'друг', family: 'семья', mentor: 'ментор', other: 'другое' },
+    { partner: 'partner', teammate: 'teammate', client: 'client', friend: 'friend', family: 'family', mentor: 'mentor', other: 'other' },
+    { partner: 'партнёр', teammate: 'коллега', client: 'клиент', friend: 'друг', family: 'семья', mentor: 'ментор', other: 'другое' },
   );
 
 const patternStatusLabels = () =>

@@ -24,7 +24,7 @@ let mashaId: ID;
 let igorId: ID;
 
 async function seedWeek() {
-  const masha = await peopleRepo.create({ name: 'Маша', role: 'parent', relationMood: 0.6 });
+  const masha = await peopleRepo.create({ name: 'Маша', role: 'family', relationMood: 0.6 });
   const igor = await peopleRepo.create({ name: 'Борис', role: 'teammate' });
   mashaId = masha.id;
   igorId = igor.id;

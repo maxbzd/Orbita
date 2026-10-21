@@ -40,7 +40,7 @@ export const peopleSpecs = (): PersonSpec[] => [
     key: 'hana',
     name: L('Hana Kimura', 'Хана Кимура'),
     aliases: L(['Hana', 'Hana K.'], ['Хана', 'Хана К.']),
-    role: 'lead',
+    role: 'client',
     notes: L(
       'Owns a five-person design agency and asked about a team plan for Lumen. Wanted a call before committing, and has not answered since my last message.',
       'Владелица дизайн-агентства на пять человек, спрашивала про командный тариф Lumen. Хотела созвониться перед решением и не отвечает после моего последнего сообщения.',
@@ -117,7 +117,7 @@ export const peopleSpecs = (): PersonSpec[] => [
     key: 'sam',
     name: L('Sam Ortiz', 'Сэм Ортис'),
     aliases: L(['Sam', 'Samantha'], ['Сэм', 'Саманта']),
-    role: 'student',
+    role: 'other',
     notes: L(
       'Junior designer I mentor on weekends. Strong visual taste, shy about showing work. Wants to move from agency to product design.',
       'Начинающая дизайнерка, которую я консультирую по выходным. Хороший визуальный вкус, стесняется показывать работы. Хочет перейти из агентства в продуктовый дизайн.',
@@ -128,7 +128,7 @@ export const peopleSpecs = (): PersonSpec[] => [
     key: 'dana',
     name: L('Coach Dana', 'Тренер Дана'),
     aliases: L(['Dana', 'Dana Whitlock'], ['Дана', 'Дана Уитлок']),
-    role: 'teacher',
+    role: 'mentor',
     notes: L(
       'Running coach. Wrote my half-marathon plan and insists that sleep counts as training. Strict about rest days.',
       'Тренер по бегу. Составила мой план к полумарафону и настаивает, что сон — это тоже тренировка. Строга к дням отдыха.',

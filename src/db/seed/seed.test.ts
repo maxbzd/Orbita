@@ -163,7 +163,7 @@ describe('buildDemoDataset: volume and variety', () => {
 
   it('has people in every role the story needs, with aliases', () => {
     const roles = new Set(data.people.map((person) => person.role));
-    for (const role of ['client', 'student', 'teacher', 'partner', 'teammate', 'mentor', 'friend', 'family', 'lead'] as const) {
+    for (const role of ['client', 'partner', 'teammate', 'mentor', 'friend', 'family'] as const) {
       expect(roles.has(role), role).toBe(true);
     }
     expect(data.people.filter((person) => person.aliases.length > 0).length).toBeGreaterThanOrEqual(10);

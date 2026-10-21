@@ -24,38 +24,30 @@ export function fibonacciPoint(i: number, n: number = SPHERE_POINTS): Vec3 {
   return { x: r * Math.cos(phi), y, z: r * Math.sin(phi) };
 }
 
-export type Belt = 'mentors' | 'family' | 'friends' | 'partners' | 'students';
+export type Belt = 'mentors' | 'family' | 'friends' | 'partners' | 'clients';
 
 /** North to south. Equal y-bands of a sphere have equal area, so every belt has room for the same number of people. */
-export const BELTS: readonly Belt[] = ['mentors', 'family', 'friends', 'partners', 'students'];
+export const BELTS: readonly Belt[] = ['mentors', 'family', 'friends', 'partners', 'clients'];
 
 export const BELT_LABELS: Record<Belt, string> = {
   get mentors() { return t('Mentors') },
   get family() { return t('Family') },
   get friends() { return t('Friends') },
   get partners() { return t('Partners and colleagues') },
-  get students() { return t('Students and parents') },
+  get clients() { return t('Clients') },
 };
 
 export const ROLE_BELT: Record<PersonRole, Belt> = {
   mentor: 'mentors',
-  teacher: 'mentors',
   family: 'family',
   friend: 'friends',
   other: 'friends',
   partner: 'partners',
   teammate: 'partners',
-  client: 'partners',
-  lead: 'partners',
-  student: 'students',
-  parent: 'students',
+  client: 'clients',
 };
 
 export const ROLE_LABELS: Record<PersonRole, string> = {
-  get student() { return t('Student') },
-  get parent() { return t('Parent') },
-  get lead() { return t('Prospect') },
-  get teacher() { return t('Teacher') },
   get partner() { return t('Partner') },
   get teammate() { return t('Colleague') },
   get client() { return t('Client') },

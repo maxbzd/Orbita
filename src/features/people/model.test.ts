@@ -3,18 +3,18 @@ import type { CheckIn, ItemOfKind, Person } from '../../domain/types';
 import { coMentionLinks, commitmentsOf, dueText, filterPeople, mergeCandidates, parseAliases, peopleStats, relationSeries, relationWord, toLinesPeople } from './model';
 
 const person = (id: string, name: string, extra: Partial<Person> = {}): Person =>
-  ({ id, name, aliases: [], role: 'student', mentionCount: 1, createdAt: '', updatedAt: '', ...extra }) as Person;
+  ({ id, name, aliases: [], role: 'client', mentionCount: 1, createdAt: '', updatedAt: '', ...extra }) as Person;
 
 const commitment = (id: string, direction: 'i_owe' | 'owed_to_me', extra: Partial<ItemOfKind<'commitment'>> = {}): ItemOfKind<'commitment'> =>
   ({ id, kind: 'commitment', status: 'active', title: id, direction, personIds: [], projectIds: [], tags: [], createdAt: '2026-10-01T00:00:00Z', updatedAt: '', ...extra }) as ItemOfKind<'commitment'>;
 
 describe('people list', () => {
-  const people = [person('a', 'Анна Петрова', { aliases: ['Аня'] }), person('b', 'Борис', { role: 'parent' })];
+  const people = [person('a', 'Анна Петрова', { aliases: ['Аня'] }), person('b', 'Борис', { role: 'family' })];
 
   it('searches by name, alias and case form; filters by role', () => {
     expect(filterPeople(people, 'аня', 'all').map((p) => p.id)).toEqual(['a']);
     expect(filterPeople(people, 'Бориса', 'all').map((p) => p.id)).toEqual(['b']);
-    expect(filterPeople(people, '', 'parent').map((p) => p.id)).toEqual(['b']);
+    expect(filterPeople(people, '', 'family').map((p) => p.id)).toEqual(['b']);
     expect(filterPeople(people, 'Ксения', 'all')).toEqual([]);
   });
 

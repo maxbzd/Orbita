@@ -1,4 +1,5 @@
 import Dexie from 'dexie';
+import { normalizePersonRole } from '../domain/types';
 import type { EntityTable, Transaction } from 'dexie';
 import type {
   AudioBlob,
@@ -60,6 +61,16 @@ export const SCHEMA_VERSIONS: readonly SchemaVersion[] = [
   { version: 1, stores: STORES_V1 },
   // Cloud sync bookkeeping (src/sync): which version of each record the cloud is known to have. Local only.
   { version: 2, stores: { syncmeta: 'id' } },
+  // Person roles were narrowed to neutral ones; the old ones become their closest equivalent.
+  {
+    version: 3,
+    stores: {},
+    upgrade: async (tx) => {
+      await tx.table('people').toCollection().modify((person: { role?: unknown }) => {
+        person.role = normalizePersonRole(person.role);
+      });
+    },
+  },
 ];
 
 export function applyVersions(dexie: Dexie, versions: readonly SchemaVersion[]): void {

@@ -50,9 +50,9 @@ describe('people', () => {
   });
 
   it('filters by role', async () => {
-    await peopleRepo.create({ name: 'Ученик', role: 'student' });
-    await peopleRepo.create({ name: 'Родитель', role: 'parent' });
-    expect((await peopleRepo.list({ role: 'parent' })).map((person) => person.name)).toEqual(['Родитель']);
+    await peopleRepo.create({ name: 'Ученик', role: 'client' });
+    await peopleRepo.create({ name: 'Родитель', role: 'family' });
+    expect((await peopleRepo.list({ role: 'family' })).map((person) => person.name)).toEqual(['Родитель']);
   });
 
   it('merge moves every reference to the target and keeps the source name as an alias', async () => {

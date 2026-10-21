@@ -243,10 +243,6 @@ export type ItemOfKind<K extends ItemKind> = Extract<Item, { kind: K }>;
 // ───────── People and projects ─────────
 
 export const PERSON_ROLES = [
-  'student',
-  'parent',
-  'lead',
-  'teacher',
   'partner',
   'teammate',
   'client',
@@ -256,6 +252,18 @@ export const PERSON_ROLES = [
   'other',
 ] as const;
 export type PersonRole = (typeof PERSON_ROLES)[number];
+
+/** Roles of earlier versions, read as the closest current one (old backups, old rows). */
+export const LEGACY_PERSON_ROLES: Readonly<Record<string, PersonRole>> = {
+  student: 'other',
+  parent: 'family',
+  lead: 'client',
+  teacher: 'mentor',
+};
+
+/** A role as stored or received: legacy values are mapped, anything unknown is left for the schema to reject. */
+export const normalizePersonRole = (role: unknown): unknown =>
+  typeof role === 'string' && Object.hasOwn(LEGACY_PERSON_ROLES, role) ? LEGACY_PERSON_ROLES[role] : role;
 
 export interface Person extends Base {
   name: string;

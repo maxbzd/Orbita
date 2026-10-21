@@ -81,7 +81,7 @@ describe('migrations', () => {
       createDb(name, [
         ...SCHEMA_VERSIONS,
         {
-          version: 3,
+          version: 4,
           stores: { captures: `${STORES_V1.captures}, pinned` },
           upgrade: async (tx) => {
             await tx.table('captures').toCollection().modify((capture: { id: string; pinned?: boolean }) => {
@@ -102,10 +102,23 @@ describe('migrations', () => {
     expect(v2.table('items').schema.idxByName['[kind+status]']).toBeDefined();
   });
 
+  it('maps the roles of earlier versions to the current ones', async () => {
+    const name = uniqueName();
+    const old = track(createDb(name, SCHEMA_VERSIONS.slice(0, 2)));
+    for (const [id, role] of [['a', 'student'], ['b', 'parent'], ['c', 'lead'], ['d', 'teacher'], ['e', 'friend']] as const) {
+      await old.table('people').add({ id, name: id, role });
+    }
+    old.close();
+    const upgraded = track(createDb(name));
+    await upgraded.open();
+    const roles = (await upgraded.table('people').orderBy('id').toArray()).map((person) => person.role);
+    expect(roles).toEqual(['other', 'family', 'client', 'mentor', 'friend']);
+  });
+
   it('does not run an upgrade on a fresh database', async () => {
     let ran = false;
     const database = track(
-      createDb(uniqueName(), [...SCHEMA_VERSIONS, { version: 3, stores: {}, upgrade: () => void (ran = true) }]),
+      createDb(uniqueName(), [...SCHEMA_VERSIONS, { version: 4, stores: {}, upgrade: () => void (ran = true) }]),
     );
     await database.open();
     expect(ran).toBe(false);

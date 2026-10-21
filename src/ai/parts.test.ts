@@ -72,12 +72,12 @@ describe('mergeExtractions', () => {
   });
 
   it('merges one person and one project mentioned in several parts', () => {
-    const person = (aliases: string[], role: 'other' | 'parent', sentiment: number | null) => ({ name: 'Маша', aliases, role, sentiment, note: null });
+    const person = (aliases: string[], role: 'other' | 'family', sentiment: number | null) => ({ name: 'Маша', aliases, role, sentiment, note: null });
     const merged = mergeExtractions([
       extraction({ people: [person(['Машенька'], 'other', null)], projects: [{ name: 'Маяк', kind: 'business', keywords: ['курс'] }] }),
-      extraction({ people: [person(['Мария'], 'parent', 0.5)], projects: [{ name: 'маяк', kind: 'business', keywords: ['запуск'] }] }),
+      extraction({ people: [person(['Мария'], 'family', 0.5)], projects: [{ name: 'маяк', kind: 'business', keywords: ['запуск'] }] }),
     ]);
-    expect(merged.people).toEqual([{ name: 'Маша', aliases: ['Машенька', 'Мария'], role: 'parent', sentiment: 0.5, note: null }]);
+    expect(merged.people).toEqual([{ name: 'Маша', aliases: ['Машенька', 'Мария'], role: 'family', sentiment: 0.5, note: null }]);
     expect(merged.projects).toEqual([{ name: 'Маяк', kind: 'business', keywords: ['курс', 'запуск'] }]);
   });
 });

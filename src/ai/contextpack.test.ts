@@ -30,7 +30,7 @@ async function seed() {
     talkStyle: 'Коротко и по делу',
     glossary: [{ term: 'тестовое', hint: 'первое занятие' }],
   });
-  const masha = await peopleRepo.create({ name: 'Мария Иванова', aliases: ['Маша'], role: 'parent', relationMood: 0.7, notes: 'Мама ученика Вани' });
+  const masha = await peopleRepo.create({ name: 'Мария Иванова', aliases: ['Маша'], role: 'family', relationMood: 0.7, notes: 'Мама ученика Вани' });
   const igor = await peopleRepo.create({ name: 'Борис', role: 'teammate' });
   mashaId = masha.id;
   igorId = igor.id;
@@ -108,7 +108,7 @@ describe('buildContextPack', () => {
 
   it('describes people and patterns, leaving out rejected patterns', async () => {
     const { markdown } = await buildContextPack({ now: NOW, sections: ['people', 'patterns'] });
-    expect(markdown).toContain('- Мария Иванова (родитель) — упоминаний: 1, последний раз 2026-10-08, отношения тёплые, я должен: 1. Мама ученика Вани');
+    expect(markdown).toContain('- Мария Иванова (семья) — упоминаний: 1, последний раз 2026-10-08, отношения тёплые, я должен: 1. Мама ученика Вани');
     expect(markdown).toContain('- Откладывает звонки (подтверждён, 3 раз): Звонки переносятся на вечер. Что делать: Звонить утром');
     expect(markdown).not.toContain('Отклонённый паттерн');
   });
