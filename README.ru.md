@@ -14,6 +14,8 @@
 
 [English](README.md) · [Русский](README.ru.md)
 
+**[▶ Открыть приложение](https://maxbzd.github.io/Orbita/)**: работает в браузере, ничего ставить не нужно
+
 <img src="docs/img/today-ru.jpg" width="190" alt="Сегодня" /> &nbsp; <img src="docs/img/stream-ru.jpg" width="190" alt="Поток записей" /> &nbsp; <img src="docs/img/orbit-ru.jpg" width="190" alt="Орбита" /> &nbsp; <img src="docs/img/commitments-ru.jpg" width="190" alt="Обязательства" />
 
 </div>
