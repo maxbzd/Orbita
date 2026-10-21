@@ -14,6 +14,8 @@ A private, local-first journal that turns your voice notes into decisions, commi
 
 [English](README.md) · [Русский](README.ru.md)
 
+**[▶ Open the app](https://maxbzd.github.io/Orbita/)**: runs in your browser, nothing to install
+
 <img src="docs/img/today.jpg" width="190" alt="Today" /> &nbsp; <img src="docs/img/stream.jpg" width="190" alt="Stream of records" /> &nbsp; <img src="docs/img/orbit.jpg" width="190" alt="Orbit" /> &nbsp; <img src="docs/img/commitments.jpg" width="190" alt="Commitments" />
 
 </div>
