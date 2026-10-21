@@ -87,7 +87,7 @@ describe('«Орбита»', () => {
   it('«Люди»: пустой список подсказывает, как появятся люди; созданный вручную виден', async () => {
     renderAt('/orbit?tab=people');
     expect(await screen.findByText('Назови кого-нибудь в записи, и человек появится здесь сам.')).toBeInTheDocument();
-    await peopleRepo.create({ name: 'Анна', role: 'parent' });
+    await peopleRepo.create({ name: 'Анна', role: 'family' });
     expect(await screen.findByRole('link', { name: /Анна/ })).toHaveAttribute('href', expect.stringMatching(/^#\/people\//));
   });
 });

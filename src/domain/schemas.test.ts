@@ -119,9 +119,12 @@ describe('entity schemas', () => {
   });
 
   it('validates people and projects', () => {
-    const person = { ...base, name: 'Маша', aliases: ['Мария'], role: 'student', mentionCount: 0 };
+    const person = { ...base, name: 'Маша', aliases: ['Мария'], role: 'client', mentionCount: 0 };
     expect(personSchema.safeParse(person).success).toBe(true);
     expect(personSchema.safeParse({ ...person, role: 'enemy' }).success).toBe(false);
+    // Roles of earlier versions (old backups) are read as the closest current role.
+    expect(personSchema.parse({ ...person, role: 'parent' }).role).toBe('family');
+    expect(personSchema.parse({ ...person, role: 'teacher' }).role).toBe('mentor');
     expect(personSchema.safeParse({ ...person, name: '' }).success).toBe(false);
     expect(personSchema.safeParse({ ...person, relationMood: 1.5 }).success).toBe(false);
     expect(personSchema.safeParse({ ...person, mentionCount: -1 }).success).toBe(false);

@@ -313,7 +313,7 @@ export function mockExtraction({ text, captureDay, context }: MockExtractionInpu
     people: people.map((name) => ({
       name,
       aliases: [],
-      role: /ученик|ученица|\bstudent\b|\bpupil\b/.test(lower) ? ('student' as const) : /мама|папа|родител|\bmom\b|\bdad\b|\bparents?\b/.test(lower) ? ('parent' as const) : ('other' as const),
+      role: /мама|папа|родител|\bmom\b|\bdad\b|\bparents?\b/.test(lower) ? ('family' as const) : ('other' as const),
       sentiment: null,
       note: null,
     })),

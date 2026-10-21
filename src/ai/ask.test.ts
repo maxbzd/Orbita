@@ -19,7 +19,7 @@ let mashaId: ID;
 let igorId: ID;
 
 async function seed() {
-  const masha = await peopleRepo.create({ name: 'Маша', role: 'parent', relationMood: 0.7 });
+  const masha = await peopleRepo.create({ name: 'Маша', role: 'family', relationMood: 0.7 });
   const igor = await peopleRepo.create({ name: 'Борис', role: 'teammate' });
   mashaId = masha.id;
   igorId = igor.id;
@@ -101,7 +101,7 @@ describe('retrieveMaterials', () => {
   it('brings the person, their open promises and their latest records when a name is in the question', async () => {
     const { text, sources } = await retrieveMaterials('Что у меня с Машей?', { search: await retriever(), now: NOW });
 
-    expect(lines(text)[0]).toBe('[p1] Маша (parent; упоминаний 1, отношения тёплые; открытых обещаний: я должен 1, мне должны 0)');
+    expect(lines(text)[0]).toBe('[p1] Маша (family; упоминаний 1, отношения тёплые; открытых обещаний: я должен 1, мне должны 0)');
     expect(sources[0]).toMatchObject({ code: 'p1', kind: 'person', id: mashaId });
     expect(text).toContain('Прислать план Маше');
     expect(text).toContain('Обсуждал цены на тестовое с Машей');

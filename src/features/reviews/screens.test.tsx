@@ -40,7 +40,7 @@ function renderAt(path: string) {
 }
 
 async function makeReview() {
-  await peopleRepo.create({ name: 'Светлана', role: 'parent' });
+  await peopleRepo.create({ name: 'Светлана', role: 'family' });
   return reviewsRepo.upsert({
     period: 'week',
     startDay: '2026-10-05',

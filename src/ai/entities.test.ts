@@ -21,7 +21,7 @@ describe('resolveEntities: people', () => {
   it('creates people the model found and the ones only objects mention', async () => {
     const result = await resolveEntities(
       extraction({
-        people: [{ name: 'Маша', role: 'parent', aliases: ['Машенька'], note: 'мама Вани' }],
+        people: [{ name: 'Маша', role: 'family', aliases: ['Машенька'], note: 'мама Вани' }],
         items: [item('Позвонить Пете', { people: ['Петя'] }), item('Прислать план', { kind: 'commitment', direction: 'i_owe', counterparty: 'Борис' })],
       }),
       await pools(),
@@ -30,7 +30,7 @@ describe('resolveEntities: people', () => {
 
     expect(result.newPeople.map((person) => person.name).sort()).toEqual(['Борис', 'Маша', 'Петя']);
     const masha = result.newPeople.find((person) => person.name === 'Маша');
-    expect(masha).toMatchObject({ role: 'parent', aliases: ['Машенька'], notes: 'мама Вани' });
+    expect(masha).toMatchObject({ role: 'family', aliases: ['Машенька'], notes: 'мама Вани' });
     expect(result.personId('Маша')).toBe(masha?.id);
     expect(result.personId('Машенька')).toBe(masha?.id);
     expect(result.personId('Борис')).toBeDefined();

@@ -116,10 +116,6 @@ const IDEA_STAGE_LABEL = { get spark() { return t('spark') }, get exploring() { 
 const PROJECT_KIND_LABEL = { get business() { return t('business') }, get product() { return t('product') }, get study() { return t('study') }, get personal() { return t('personal') }, get other() { return t('other') } } as const;
 const PROJECT_STATUS_LABEL = { get active() { return t('active') }, get paused() { return t('on hold') }, get done() { return t('finished') } } as const;
 const ROLE_LABEL = {
-  get student() { return t('student') },
-  get parent() { return t('parent') },
-  get lead() { return t('prospect') },
-  get teacher() { return t('teacher') },
   get partner() { return t('partner') },
   get teammate() { return t('colleague') },
   get client() { return t('client') },

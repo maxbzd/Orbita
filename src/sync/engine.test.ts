@@ -44,7 +44,7 @@ describe('records travel between devices', () => {
   it('a new device receives everything the first one has, and a repeat sends nothing', async () => {
     const c = new FakeCloud();
     const first = await a.use(async () => {
-      const person = await peopleRepo.create({ name: 'Маша', role: 'student' });
+      const person = await peopleRepo.create({ name: 'Маша', role: 'client' });
       const capture = await capturesRepo.create({ kind: 'text', text: 'Решил поднять цену', status: 'done', personIds: [person.id] });
       await itemsRepo.create({ kind: 'decision', title: 'Поднять цену', chosen: 'Поднять', captureId: capture.id });
       await profileRepo.save({ name: 'Фёдор', about: 'консультант' });

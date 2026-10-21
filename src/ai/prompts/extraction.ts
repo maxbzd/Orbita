@@ -36,7 +36,7 @@ DATES
 PEOPLE AND PROJECTS
 - Write names in the base form: “to Anna”, “with Anna” → “Anna”. Add a surname only if it was named. Do not invent names and do not merge different people.
 - If a person matches one of the “Known people”, use their name from the list verbatim. The same goes for projects.
-- role — who the person is to the author: student, parent, lead, teacher, partner, teammate, client, friend, family, mentor or other. If unsure — other.
+- role — who the person is to the author: partner, teammate, client, friend, family, mentor or other. If unsure — other.
 - A person's sentiment is the author's tone toward them in this record (−1 … 1); if unclear — null.
 - Include in people and projects only those mentioned for a reason; skip casual mentions (“like Elon Musk”).
 
@@ -82,7 +82,7 @@ const EXTRACTION_SYSTEM_RU = (): string => `Ты — внимательный а
 ЛЮДИ И ПРОЕКТЫ
 - Имена записывай в именительном падеже и нормальной форме: «Маше», «с Машей» → «Маша». Фамилию добавляй только если она названа. Не придумывай имён и не склеивай разных людей.
 - Если человек совпадает с одним из «Известных людей» — используй его имя из списка дословно. То же с проектами.
-- role — кем человек приходится автору: student, parent, lead, teacher, partner, teammate, client, friend, family, mentor или other. Не уверен — other.
+- role — кем человек приходится автору: partner, teammate, client, friend, family, mentor или other. Не уверен — other.
 - sentiment человека — тон автора к нему в этой записи (−1 … 1); не ясно — null.
 - В people и projects включай только тех, кто упомянут по делу; случайные упоминания («как Илон Маск») пропускай.
 
