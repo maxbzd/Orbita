@@ -24,7 +24,7 @@ Actions → Variables) and pass them in the build step's `env`. They are public 
 
 ## Netlify, Cloudflare Pages, Vercel, any static host
 
-Build command `npm run build`, publish directory `dist`, Node 22. No redirects are needed: the app uses a hash router (`#/...`).
+Build command `npm run build`, publish directory `dist`, Node 22.23.4 or newer (set `NODE_VERSION` on your host). No redirects are needed: the app uses a hash router (`#/...`).
 
 ## On your own machine or network
 
