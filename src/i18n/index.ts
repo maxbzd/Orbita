@@ -14,7 +14,7 @@
  */
 import { useSyncExternalStore } from 'react'
 
-export type Locale = 'en' | 'ru'
+export type Locale = 'en' | 'es' | 'de' | 'fr' | 'pt' | 'uk' | 'ru'
 export type LocalePref = Locale | 'auto'
 export type Vars = Record<string, string | number>
 export type Entry = string | string[]
@@ -36,6 +36,11 @@ export interface LocaleInfo {
 
 export const LOCALES: LocaleInfo[] = [
   { id: 'en', name: 'English', native: 'English', tag: 'en-US', plural: ['one', 'other'] },
+  { id: 'es', name: 'Spanish', native: 'Español', tag: 'es-ES', plural: ['one', 'other'] },
+  { id: 'de', name: 'German', native: 'Deutsch', tag: 'de-DE', plural: ['one', 'other'] },
+  { id: 'fr', name: 'French', native: 'Français', tag: 'fr-FR', plural: ['one', 'other'] },
+  { id: 'pt', name: 'Portuguese', native: 'Português', tag: 'pt-BR', plural: ['one', 'other'] },
+  { id: 'uk', name: 'Ukrainian', native: 'Українська', tag: 'uk-UA', plural: ['one', 'few', 'many', 'other'] },
   { id: 'ru', name: 'Russian', native: 'Русский', tag: 'ru-RU', plural: ['one', 'few', 'many', 'other'] },
 ]
 
@@ -45,6 +50,11 @@ const CTX = '\u0004'
 
 const loaders: Record<Locale, () => Promise<Dictionary>> = {
   en: async () => ({}),
+  es: () => import('./locales/es.json').then(m => m.default as Dictionary),
+  de: () => import('./locales/de.json').then(m => m.default as Dictionary),
+  fr: () => import('./locales/fr.json').then(m => m.default as Dictionary),
+  pt: () => import('./locales/pt.json').then(m => m.default as Dictionary),
+  uk: () => import('./locales/uk.json').then(m => m.default as Dictionary),
   ru: () => import('./locales/ru.json').then(m => m.default as Dictionary),
 }
 
@@ -174,6 +184,13 @@ export const msg = <S extends string>(s: S): S => s
 
 /** The English or the Russian variant, by the current language: for content that is authored in both (demo data, prompts). */
 export const pick = <T>(en: T, ru: T): T => (current === 'ru' ? ru : en)
+
+/**
+ * Appended to the English system prompts for any interface language other than English and Russian,
+ * so a cloud model writes the user-facing text of its answer in that language.
+ */
+export const answerLanguageNote = (): string =>
+  current === 'en' || current === 'ru' ? '' : `\n\nWrite every user-facing text field of your answer in ${info(current).name}.`
 
 /** Locale-aware string comparison (names in Latin and Cyrillic sort sensibly in both languages). */
 export const collate = (a: string, b: string): number => a.localeCompare(b, info(current).tag)

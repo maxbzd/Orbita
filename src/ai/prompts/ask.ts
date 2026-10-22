@@ -1,4 +1,5 @@
 import type { Profile } from '../../domain/types';
+import { answerLanguageNote } from '../../i18n';
 import { dataNotInstructions, pick, renderProfile } from './common';
 
 /** "Ask": answers about the user's own life from retrieved materials, with source references. */
@@ -23,7 +24,7 @@ const ASK_SYSTEM_RU = (): string => `Ты — личный аналитик ав
 - Даты и числа бери из материалов как есть.
 - Если вопрос про обещания, сроки или решения — перечисли конкретные пункты с датами и людьми.`;
 
-export const askSystem = (): string => pick(ASK_SYSTEM_EN, ASK_SYSTEM_RU)();
+export const askSystem = (): string => pick(ASK_SYSTEM_EN, ASK_SYSTEM_RU)() + answerLanguageNote();
 
 /** The system prompt of one question: static rules, the author's profile and the retrieved materials. */
 export function buildAskSystem(profile: Profile, materials: string): string {

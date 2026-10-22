@@ -1,0 +1,20 @@
+.select {
+  width: 100%;
+  min-height: var(--field-h);
+  padding: 0 var(--s-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--stroke-ui);
+  background: var(--surface);
+  color: var(--ink);
+  font: var(--type-body);
+  cursor: pointer;
+}
+.select:focus-visible {
+  border-color: var(--focus);
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.sm {
+  min-height: 36px;
+  font: var(--type-caption);
+}

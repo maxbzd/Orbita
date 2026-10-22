@@ -1,6 +1,6 @@
 {
   "name": "orbita",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "type": "module",
   "description": "Orbita — a personal, local-first system for making sense of life and work: voice notes become decisions, commitments, ideas and predictions.",

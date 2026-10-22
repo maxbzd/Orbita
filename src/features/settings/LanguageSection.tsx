@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { profileRepo } from '../../db';
 import { useProfile, useSettings } from '../../db/hooks';
 import type { GlossaryEntry } from '../../domain/types';
-import { Body, Button, Chip, Field, IconButton, SegmentedControl } from '../../ui';
+import { Body, Button, Chip, Field, IconButton } from '../../ui';
 import { Group, Row } from './Group';
 import { InterfaceLanguage } from './InterfaceLanguage';
 import { LANGUAGES, SUGGESTED_TERMS } from './settingsModel';
@@ -44,13 +44,17 @@ export function LanguageSection() {
         <InterfaceLanguage />
       </Row>
       <Row label={t('Recording language')}>
-        <SegmentedControl
-          aria-label={t('Recording language')}
-          options={LANGUAGES.map((language) => ({ value: language.code, label: language.label }))}
-          value={LANGUAGES.some((language) => language.code === settings.locale.language) ? settings.locale.language : 'ru'}
-          onChange={(code) => void save({ locale: { language: code }, stt: { language: code } })}
-          fullWidth
-        />
+        <div className={styles.chips} role="group" aria-label={t('Recording language')}>
+          {LANGUAGES.map((language) => (
+            <Chip
+              key={language.code}
+              selected={(LANGUAGES.some((other) => other.code === settings.locale.language) ? settings.locale.language : 'ru') === language.code}
+              onClick={() => void save({ locale: { language: language.code }, stt: { language: language.code } })}
+            >
+              {language.label}
+            </Chip>
+          ))}
+        </div>
       </Row>
 
       {glossary.length > 0 ? (
