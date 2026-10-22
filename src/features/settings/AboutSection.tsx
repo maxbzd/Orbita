@@ -5,7 +5,7 @@ import styles from './Settings.module.css';
 import { t } from '../../i18n';
 
 /** Kept equal to `version` in package.json (a test checks it). */
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '1.0.0';
 
 export function AboutSection() {
   const hint = installHint(typeof navigator === 'undefined' ? '' : navigator.userAgent, isStandalone());

@@ -1,6 +1,7 @@
 import { addDays, formatDayLong } from '../../domain/dates';
 import { truncate } from '../../domain/text';
 import type { CaptureContext, CaptureKind, DayKey, ItemKind, PersonRole, Profile } from '../../domain/types';
+import { answerLanguageNote } from '../../i18n';
 import { dataNotInstructions, fenceSafe, pick, renderBuiltinGlossary, renderProfile, renderProfileGlossary } from './common';
 
 /**
@@ -101,7 +102,7 @@ ${renderBuiltinGlossary()}
 - questionsForUser — до трёх уточняющих вопросов, только если без ответа объект получается неоднозначным (кто «он», какой срок). Иначе пустой список.`;
 
 export function buildExtractionSystem(): string {
-  return pick(EXTRACTION_SYSTEM_EN, EXTRACTION_SYSTEM_RU)();
+  return pick(EXTRACTION_SYSTEM_EN, EXTRACTION_SYSTEM_RU)() + answerLanguageNote();
 }
 
 export interface ExtractionPerson {

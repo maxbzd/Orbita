@@ -1,23 +1,23 @@
-import { SegmentedControl } from '../../ui';
-import { changeLocalePref, getLocalePref, t, useLocale } from '../../i18n';
+import { changeLocalePref, getLocalePref, LOCALES, t, useLocale } from '../../i18n';
 import type { LocalePref } from '../../i18n';
+import styles from './InterfaceLanguage.module.css';
 
-/** English, Russian or "follow the browser". The choice is stored on the device and applied at once. */
+/** Any supported language or "follow the browser". The choice is stored on the device and applied at once. */
 export function InterfaceLanguage({ size }: { size?: 'sm' | 'md' }) {
   useLocale();
-  const options: ReadonlyArray<{ value: LocalePref; label: string }> = [
-    { value: 'auto', label: t('Auto') },
-    { value: 'en', label: 'English' },
-    { value: 'ru', label: 'Русский' },
-  ];
   return (
-    <SegmentedControl<LocalePref>
+    <select
+      className={size === 'sm' ? `${styles.select} ${styles.sm}` : styles.select}
       aria-label={t('Interface language')}
-      options={options}
       value={getLocalePref()}
-      onChange={(pref) => void changeLocalePref(pref)}
-      {...(size && { size })}
-      fullWidth
-    />
+      onChange={(event) => void changeLocalePref(event.target.value as LocalePref)}
+    >
+      <option value="auto">{t('Auto')}</option>
+      {LOCALES.map((locale) => (
+        <option key={locale.id} value={locale.id}>
+          {locale.native}
+        </option>
+      ))}
+    </select>
   );
 }

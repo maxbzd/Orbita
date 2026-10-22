@@ -148,7 +148,7 @@ export const browserRecorderServiceDeps: RecorderServiceDeps = {
 export function dictationLanguage(lang: string): string {
   const trimmed = lang.trim();
   if (trimmed.includes('-')) return trimmed;
-  return { ru: 'ru-RU', en: 'en-US', uk: 'uk-UA', de: 'de-DE', es: 'es-ES', fr: 'fr-FR' }[trimmed.toLowerCase()] ?? (trimmed || 'ru-RU');
+  return { ru: 'ru-RU', en: 'en-US', uk: 'uk-UA', de: 'de-DE', es: 'es-ES', fr: 'fr-FR', pt: 'pt-BR' }[trimmed.toLowerCase()] ?? (trimmed || 'ru-RU');
 }
 
 /** A stable level source for the orb: it forwards the current recorder's meter and survives recorder changes. */
