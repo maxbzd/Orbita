@@ -1,5 +1,6 @@
 import { formatDayRange } from '../../domain/dates';
 import type { DayKey, Profile, ReviewPeriod } from '../../domain/types';
+import { answerLanguageNote } from '../../i18n';
 import { dataNotInstructions, pick, renderProfile } from './common';
 
 /** Weekly / monthly / yearly review written by the model from a structured summary (schema: `ReviewSchema`). */
@@ -56,7 +57,7 @@ const REVIEW_SYSTEM_RU = (): string => `Ты — личный аналитик �
 - questions — 2–3 вопроса для рефлексии, привязанные к конкретным данным сводки (не «как ты себя чувствуешь?», а «ты пообещал X и Y — что мешает?»).`;
 
 export function buildReviewSystem(): string {
-  return pick(REVIEW_SYSTEM_EN, REVIEW_SYSTEM_RU)();
+  return pick(REVIEW_SYSTEM_EN, REVIEW_SYSTEM_RU)() + answerLanguageNote();
 }
 
 export interface ReviewPromptInput {

@@ -10,7 +10,7 @@ A private, local-first journal that turns your voice notes into decisions, commi
 [![CI](https://github.com/maxbzd/Orbita/actions/workflows/ci.yml/badge.svg)](https://github.com/maxbzd/Orbita/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Local-first](https://img.shields.io/badge/data-local--first-5fe3b0.svg)](#privacy-and-your-data)
-[![English · Русский](https://img.shields.io/badge/language-English%20·%20Русский-orange.svg)](docs/I18N.md)
+[![7 languages](https://img.shields.io/badge/languages-EN%20·%20ES%20·%20DE%20·%20FR%20·%20PT%20·%20UK%20·%20RU-orange.svg)](docs/I18N.md)
 
 [English](README.md) · [Русский](README.ru.md)
 
@@ -44,7 +44,7 @@ optional, and so is the cloud. Free and open source (MIT).
 - **Works without AI.** No key? It is a good voice diary with manual tagging, a rule-based engine, and a copy-paste mode: copy the prompt,
   paste it into any chat, paste the answer back.
 - **Yours to move.** Open-format export, encrypted backup, one-step "delete everything", password lock.
-- **English and Russian**, including the built-in rule-based engine, AI prompts and demo data. [Add your language](docs/I18N.md).
+- **Seven languages**: English, Spanish, German, French, Portuguese, Ukrainian and Russian (English and Russian also cover the built-in rule-based engine and demo data; a cloud model answers in any of them). [Improve a translation or add your language](docs/I18N.md).
 - **Optional cloud sync** between your devices through **your own Supabase project** ([docs/CLOUD.md](docs/CLOUD.md)).
 
 ## Quick start
