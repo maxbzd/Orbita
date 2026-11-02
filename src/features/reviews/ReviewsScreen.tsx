@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useCheckIns, useReviews } from '../../db/hooks';
 import { isDayKey, localDayKey, shiftPeriod, startOfWeek, weekdayIndex } from '../../domain/dates';
 import type { Review, ReviewPeriod } from '../../domain/types';

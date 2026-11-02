@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { formatClock, formatDayShort, formatTime, localDayKey } from '../../../domain/dates';
 import { recoveryService, selectIsRecording, useRecorder, useRecovery } from '../../../state';
 import { Body, Button, Dialog, useToast } from '../../../ui/primitives';

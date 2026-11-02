@@ -2,8 +2,8 @@
 
 ## Stack
 
-- **Vite 6 + React 18 + TypeScript (strict)**, ES modules, no SSR.
-- **Routing:** `react-router-dom` v6 with `createHashRouter` (works on any static host and in PWA shortcuts such as `#/capture?autostart=1`).
+- **Vite 8 + React 19 + TypeScript 7 (strict)**, ES modules, no SSR.
+- **Routing:** `react-router` v8 with `createHashRouter` (works on any static host and in PWA shortcuts such as `#/capture?autostart=1`).
 - **Data:** `dexie` + `dexie-react-hooks` (`useLiveQuery`): reactive queries over IndexedDB. Local UI state is `zustand` (ephemeral only: is a recording open, processing progress).
 - **Validation:** `zod`.
 - **Search:** `minisearch` (prefix + fuzzy, with Russian and English normalisation: lower case, `ё→е`, stop words).

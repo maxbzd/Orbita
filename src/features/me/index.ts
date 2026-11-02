@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 /** «Я» (SPEC §4.14). The heavy screen loads on demand. */
 export const routes: RouteObject[] = [

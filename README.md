@@ -113,7 +113,7 @@ Every document also exists in Russian under [docs/ru/](docs/ru/).
 
 ## Tech stack
 
-Vite 6 · React 18 · TypeScript (strict) · Dexie / IndexedDB · zustand · zod · react-router (hash router) · CSS Modules ·
+Vite 8 · React 19 · TypeScript 7 (strict) · Dexie / IndexedDB · zustand · zod · react-router (hash router) · CSS Modules ·
 MiniSearch · Motion · vite-plugin-pwa · Vitest + Testing Library + fake-indexeddb · optional Supabase. No UI framework, no
 chart library, no WebGL: the orb is Canvas 2D and the charts are hand-made SVG.
 

@@ -2,8 +2,8 @@
 
 ## Стек
 
-- **Vite 6 + React 18 + TypeScript (strict)**, ES-модули, без SSR.
-- **Роутинг:** `react-router-dom` v6, `createHashRouter` (работает на любом статическом хостинге и в ярлыках PWA: `#/capture?autostart=1`).
+- **Vite 8 + React 19 + TypeScript 7 (strict)**, ES-модули, без SSR.
+- **Роутинг:** `react-router` v8, `createHashRouter` (работает на любом статическом хостинге и в ярлыках PWA: `#/capture?autostart=1`).
 - **Данные:** `dexie` + `dexie-react-hooks` (`useLiveQuery`) — реактивные запросы по IndexedDB. Локальное состояние интерфейса — `zustand` (только эфемерное: открыта ли запись, ход обработки).
 - **Валидация:** `zod`.
 - **Поиск:** `minisearch` (префиксный и нечёткий, русская и английская нормализация: нижний регистр, `ё→е`, стоп-слова).

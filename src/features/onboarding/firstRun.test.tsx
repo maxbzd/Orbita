@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { Navigate, RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { Navigate, RouterProvider, createMemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { capturesRepo, updateSettings } from '../../db';
 import { wipeAll } from '../../db/maintenance';
@@ -11,8 +11,6 @@ import { routes as onboardingRoutes } from './index';
 import { FIRST_RUN_EXEMPT, needsOnboarding } from './firstRun';
 
 // The same opt-ins as the real router (src/routes.tsx), repeated so this test does not load every feature.
-const routerFuture = { v7_fetcherPersist: true, v7_normalizeFormMethod: true, v7_relativeSplatPath: true, v7_skipActionErrorRevalidation: true } as const;
-const providerFuture = { v7_startTransition: true } as const;
 
 const fresh = { onboarding: { done: false } };
 const finished = { onboarding: { done: true } };
@@ -66,8 +64,8 @@ describe('first-run redirect in the app', () => {
   ];
 
   function open(path: string) {
-    const router = createMemoryRouter(routes, { initialEntries: [path], future: routerFuture });
-    render(<RouterProvider router={router} future={providerFuture} />);
+    const router = createMemoryRouter(routes, { initialEntries: [path] });
+    render(<RouterProvider router={router} />);
     return router;
   }
 
@@ -75,7 +73,7 @@ describe('first-run redirect in the app', () => {
     const router = open('/today');
     await waitFor(() => expect(router.state.location.pathname).toBe('/onboarding'), { timeout: 5000 });
     expect(await screen.findByRole('heading', { name: 'Говори. Я разложу.' }, { timeout: 5000 })).toBeInTheDocument();
-    expect(screen.queryByRole('navigation', { name: 'Основная навигация' })).toBeNull();
+    await waitFor(() => expect(screen.queryByRole('navigation', { name: 'Основная навигация' })).toBeNull());
   });
 
   it('opens the home screen once the onboarding is done', async () => {

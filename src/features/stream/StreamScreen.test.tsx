@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { wipeAll } from '../../db/maintenance';
 import { capturesRepo, checkinsRepo, itemsRepo } from '../../db';

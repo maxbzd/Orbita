@@ -167,6 +167,9 @@ describe('invariant 3: deleting a capture keeps the accepted objects', () => {
     const earlier = await itemsRepo.create({ kind: 'task', title: 'Не надо', captureId: capture.id, status: 'dismissed' });
     const proposed = await itemsRepo.create({ kind: 'task', title: 'Посчитать', captureId: capture.id, status: 'proposed' });
 
+    // `restore` tells the trash's dismissals from earlier ones by timestamp, which has millisecond resolution:
+    // on a fast machine the whole setup can land in one millisecond. A person cannot, so the test lets one pass.
+    await new Promise((resolve) => setTimeout(resolve, 5));
     await capturesRepo.remove(capture.id);
     expect((await itemsRepo.get(proposed.id))?.status).toBe('dismissed');
     await capturesRepo.restore(capture.id);

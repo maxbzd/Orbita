@@ -1,11 +1,11 @@
 import { act, cleanup, render, screen } from '@testing-library/react';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { updateSettings } from '../db';
 import { wipeAll } from '../db/maintenance';
 import { seedDemo } from '../db/seed';
 import { setLocale } from '../i18n';
-import { providerFuture, routerFuture, routes } from '../routes';
+import { routes } from '../routes';
 import { stubCanvas } from '../ui/testUtils';
 
 /**
@@ -50,8 +50,8 @@ const settle = () => act(async () => new Promise<void>((resolve) => setTimeout(r
 
 describe('the app in English', () => {
   it.each(PATHS)('has no Russian left on %s', async (path) => {
-    const router = createMemoryRouter(routes, { initialEntries: [path], future: routerFuture });
-    render(<RouterProvider router={router} future={providerFuture} />);
+    const router = createMemoryRouter(routes, { initialEntries: [path] });
+    render(<RouterProvider router={router} />);
     await screen.findAllByRole('heading', undefined, { timeout: 5000 });
     await settle();
     const text = withoutLanguageNames(document.body.textContent ?? '');

@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 export { HIDE_FROM_AI_TAG, draftToCheckIn, wordsForMood } from './logic';
 

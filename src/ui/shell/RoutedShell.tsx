@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
-import { Outlet, useHref, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useHref, useLocation, useNavigate } from 'react-router';
 import { useCaptureShell } from '../../features/capture/shell';
 import { createSearchProvider } from '../../features/stream/paletteSearch';
 import { AppShell } from './AppShell';

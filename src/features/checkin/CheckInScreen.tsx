@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { checkinsRepo } from '../../db';
 import { useCheckIns } from '../../db/hooks';
 import { addDays, formatTime, localDayKey, relativeDay } from '../../domain/dates';

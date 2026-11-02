@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MotionGlobalConfig } from 'motion/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { capturesRepo, itemsRepo, peopleRepo, settingsRepo } from '../../db';
 import { wipeAll } from '../../db/maintenance';
@@ -181,7 +181,8 @@ describe('one by one', () => {
     // Undo brings the dismissed commitment back as the top card.
     fireEvent.click(screen.getByRole('button', { name: 'Отменить' }));
     await waitFor(async () => expect((await itemsRepo.get(items[1]!.id))?.status).toBe('proposed'));
-    expect(within(await screen.findByTestId('top-card')).getByText('Прислать план Фёдору')).toBeInTheDocument();
+    // `findBy` would settle on the card that is on top right now; wait for the restored one to take its place.
+    await waitFor(() => expect(within(screen.getByTestId('top-card')).getByText('Прислать план Фёдору')).toBeInTheDocument());
   });
 
   it('a swipe past 96 px accepts; a short drag springs back', async () => {

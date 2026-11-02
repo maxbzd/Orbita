@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { t, tn } from '../../i18n';
 import { patternsRepo } from '../../db';
 import { formatDayShort } from '../../domain';

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { MouseEvent } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useCaptureCounts, useItems, usePatterns, useProfile } from '../../db/hooks';
 import { addDays, formatDayShort, localDayKey, startOfWeek } from '../../domain/dates';
 import { t } from '../../i18n';

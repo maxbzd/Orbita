@@ -1,5 +1,5 @@
 import { act, cleanup, render, screen } from '@testing-library/react';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { updateSettings } from '../db';
 import { wipeAll } from '../db/maintenance';
@@ -12,7 +12,7 @@ import fr from '../i18n/locales/fr.json';
 import pt from '../i18n/locales/pt.json';
 import ru from '../i18n/locales/ru.json';
 import uk from '../i18n/locales/uk.json';
-import { providerFuture, routerFuture, routes } from '../routes';
+import { routes } from '../routes';
 import { stubCanvas } from '../ui/testUtils';
 
 /** Every dictionary has the messages of the Russian reference and the same placeholders; the Latin-script ones leave no Cyrillic on screen. */
@@ -82,8 +82,8 @@ describe.each(LATIN)('the app in %s', (id, dictionary) => {
   });
 
   it.each(PATHS)('has no Cyrillic left on %s', async (path) => {
-    const router = createMemoryRouter(routes, { initialEntries: [path], future: routerFuture });
-    render(<RouterProvider router={router} future={providerFuture} />);
+    const router = createMemoryRouter(routes, { initialEntries: [path] });
+    render(<RouterProvider router={router} />);
     await screen.findAllByRole('heading', undefined, { timeout: 5000 });
     await settle();
     const text = withoutLanguageNames(document.body.textContent ?? '');

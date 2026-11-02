@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 /** "Обзоры" (`/reviews`, `/reviews/:reviewId`) and the Android share target (`/share`). Screens are loaded on demand. */
 export const routes: RouteObject[] = [

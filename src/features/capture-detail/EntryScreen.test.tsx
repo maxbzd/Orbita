@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { audioRepo, capturesRepo, itemsRepo } from '../../db';
 import { wipeAll } from '../../db/maintenance';
@@ -180,12 +180,12 @@ describe('«Запись (детально)»', () => {
   it('is honest about a recording that has no sound or whose sound is gone', async () => {
     const none = await capturesRepo.create({ kind: 'voice', title: 'Без звука', text: 'Текст есть', durationSec: 42, status: 'done' });
     const view = renderEntry(none.id);
-    expect(await screen.findByTestId('no-audio')).toHaveTextContent('У этой записи нет звука');
+    await waitFor(() => expect(screen.getByTestId('no-audio')).toHaveTextContent('У этой записи нет звука'));
     view.unmount();
 
     const missing = await capturesRepo.create({ kind: 'voice', title: 'Звук потерян', text: 'Текст есть', status: 'done', audioId: 'ghost' });
     renderEntry(missing.id);
-    expect(await screen.findByTestId('no-audio')).toHaveTextContent('не найден на устройстве');
+    await waitFor(() => expect(screen.getByTestId('no-audio')).toHaveTextContent('не найден на устройстве'));
   });
 
   it('shows the player with markers placed by the share of the text, and keeps notes at a second', async () => {

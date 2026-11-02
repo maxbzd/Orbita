@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { formatClock } from '../../domain/dates';
 import type { Capture, Item } from '../../domain/types';
 import { Caption, Thought } from '../../ui/primitives';

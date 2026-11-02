@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { itemsRepo } from '../../db';
 import { useItems, usePeople, useProjects } from '../../db/hooks';
 import { nowISO } from '../../domain/dates';

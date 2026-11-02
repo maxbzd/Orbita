@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 export { citationPath, historyOf, questionFromSearch, stripCodes } from './model';
 export type { Turn } from './model';

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { checkAiReadiness, createLlmProvider, findPatterns } from '../../ai';
 import { capturesRepo, getSettings, patternsRepo } from '../../db';

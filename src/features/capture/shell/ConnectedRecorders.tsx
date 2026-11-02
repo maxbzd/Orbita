@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { recorderService, selectIsRecording, useRecorder } from '../../../state';
 import { DockRecorder, MiniRecorder } from '../../../ui/audio';
 import { OrbButton, useOrbLevel } from '../../../ui/orb';

@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import type { ReactElement } from 'react';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { capturesRepo } from '../../../db';
 import { wipeAll } from '../../../db/maintenance';
@@ -24,7 +25,7 @@ function Where() {
   return <output data-testid="where">{location.pathname + location.search}</output>;
 }
 
-function app(ui: JSX.Element, path = '/today') {
+function app(ui: ReactElement, path = '/today') {
   return (
     <ThemeProvider>
       <ToastProvider>

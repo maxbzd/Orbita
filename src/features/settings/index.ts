@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 export { SECTIONS as SETTINGS_SECTIONS } from './sections';
 export type { SectionId as SettingsSectionId } from './sections';

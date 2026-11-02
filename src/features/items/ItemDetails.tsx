@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { formatDayShort, formatDayWithWeekday, localDayKey } from '../../domain/dates';
 import type { DayKey, ID, Item, Person, Project } from '../../domain/types';
 import { Body, Caption, Chip, Icon, Label, ProgressRing, cx } from '../../ui';

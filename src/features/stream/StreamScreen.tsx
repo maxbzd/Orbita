@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import type { ID, ItemKind } from '../../domain/types';
 import { Button, Chip, Display, EmptyState, Heading, Label, Skeleton, TYPE_LABELS_PLURAL, useToast } from '../../ui';
 import { CaptureRow } from './CaptureRow';
@@ -24,7 +24,7 @@ const PAGE_SIZE = 120;
 const LOAD_AHEAD_PX = 900;
 
 /** Loads the next page when the end of the list is within reach (scrolling, resizing, and after every render). */
-function useLoadMore(sentinel: React.RefObject<HTMLElement>, enabled: boolean, onMore: () => void): void {
+function useLoadMore(sentinel: React.RefObject<HTMLElement | null>, enabled: boolean, onMore: () => void): void {
   const latest = useRef(onMore);
   latest.current = onMore;
   useEffect(() => {

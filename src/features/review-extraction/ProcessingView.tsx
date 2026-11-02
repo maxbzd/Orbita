@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import type { Capture } from '../../domain/types';
 import type { Job } from '../../state';
 import { Orb } from '../../ui/orb';

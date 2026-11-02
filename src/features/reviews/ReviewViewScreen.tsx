@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router';
 import { usePeople } from '../../db/hooks';
 import { loadItalicFonts, loadPosterFont } from '../../styles/fonts';
 import { Body, Button, Caption, Dialog, Display, EmptyState, Icon, Label, Skeleton, StoryViewer, Toggle, saveAsImage, useToast } from '../../ui';
