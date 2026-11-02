@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router';
 import { registerSW } from 'virtual:pwa-register';
 import { requestPersistentStorage, runStartupMaintenance } from './db';
 import { initLocale, msg } from './i18n';
 import { LocaleRoot } from './i18n/react';
-import { providerFuture, router } from './routes';
+import { router } from './routes';
 import './styles/global.css';
 
 const root = document.getElementById('root');
@@ -16,7 +16,7 @@ void initLocale().then(() => {
   createRoot(root).render(
     <StrictMode>
       <LocaleRoot>
-        <RouterProvider router={router} future={providerFuture} />
+        <RouterProvider router={router} />
       </LocaleRoot>
     </StrictMode>,
   );

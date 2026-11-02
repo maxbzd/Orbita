@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 export { FIRST_RUN_EXEMPT, FirstRunRedirect, ONBOARDING_PATH, needsOnboarding } from './firstRun';
 

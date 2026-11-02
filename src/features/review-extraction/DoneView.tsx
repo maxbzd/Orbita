@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { objectsCount } from '../../domain/counts';
 import { t } from '../../i18n';
 import type { Capture, ID, Item, Person } from '../../domain/types';

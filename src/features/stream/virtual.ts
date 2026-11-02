@@ -52,7 +52,7 @@ export function computeWindow(heights: readonly number[], scrollTop: number, vie
 export interface WindowVirtualizer {
   window: VirtualWindow;
   /** Put on the element that wraps the rows. */
-  containerRef: RefObject<HTMLDivElement>;
+  containerRef: RefObject<HTMLDivElement | null>;
   /** Ref callback for a rendered row; its measured height replaces the estimate. */
   measure(key: string): RefCallback<HTMLElement>;
 }

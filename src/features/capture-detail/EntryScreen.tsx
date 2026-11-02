@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent, MouseEvent } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { capturesRepo, itemsRepo } from '../../db';
 import { useCapture, useCaptureItems, usePeople, useProjects } from '../../db/hooks';
 import type { Capture, CaptureContext, ID, Item } from '../../domain/types';

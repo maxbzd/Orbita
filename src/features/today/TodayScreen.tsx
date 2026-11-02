@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useCallback, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { getSettings } from '../../db';
 import { useProfile } from '../../db/hooks';
 import { seedDemo } from '../../db/seed';

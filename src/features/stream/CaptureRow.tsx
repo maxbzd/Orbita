@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { ReactNode } from 'react';
 import type { Capture, Item } from '../../domain/types';
 import { Chip, MoodFlower, Pill, Waveform, cx } from '../../ui';

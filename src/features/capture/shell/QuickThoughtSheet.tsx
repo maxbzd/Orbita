@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { recorderService } from '../../../state';
 import { Button, Sheet, TextArea, useToast } from '../../../ui/primitives';
 import { useQuickActions } from './quickActions';

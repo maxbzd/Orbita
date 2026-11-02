@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { Display, SegmentedControl, Skeleton } from '../../ui';
 import { PatternsView } from '../patterns/PatternsView';
 import { PeopleView } from '../people/PeopleView';

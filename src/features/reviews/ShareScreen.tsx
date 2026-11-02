@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { capturesRepo } from '../../db';
 import { processing } from '../../state';
 import { Body, Button, Caption, Display, EmptyState, Heading, Label, TextArea, useToast } from '../../ui';

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { recorderService } from '../../../state';
 import type { CommandItem } from '../../../ui/shell/commandFilter';
 import type { SphereGesture } from '../../../ui/shell/NavPill';

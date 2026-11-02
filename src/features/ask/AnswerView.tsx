@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { segmentAnswer } from '../../ai';
 import type { AskAnswer, Citation } from '../../ai';
 import { useEntity } from '../../db/hooks';

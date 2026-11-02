@@ -1,5 +1,5 @@
-import { Navigate, createHashRouter } from 'react-router-dom';
-import type { RouteObject } from 'react-router-dom';
+import { Navigate, createHashRouter } from 'react-router';
+import type { RouteObject } from 'react-router';
 import { App, NotFound, RouteError } from './App';
 import { routes as askRoutes } from './features/ask';
 import { routes as captureRoutes } from './features/capture';
@@ -66,14 +66,5 @@ export const routes: RouteObject[] = [
   },
 ];
 
-/** Opt in to the React Router 7 behaviours now, so the upgrade changes nothing. */
-export const routerFuture = {
-  v7_fetcherPersist: true,
-  v7_normalizeFormMethod: true,
-  v7_relativeSplatPath: true,
-  v7_skipActionErrorRevalidation: true,
-} as const;
-export const providerFuture = { v7_startTransition: true } as const;
-
 /** Hash routing works on any static host and in PWA shortcuts (`#/capture?autostart=1`). */
-export const router = createHashRouter(routes, { future: routerFuture });
+export const router = createHashRouter(routes);

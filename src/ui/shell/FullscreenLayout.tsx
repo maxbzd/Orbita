@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { Backdrop } from '../backdrop/Backdrop';
 import styles from './FullscreenLayout.module.css';
 

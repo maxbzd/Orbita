@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { Body, Chip, Display } from '../../ui';
 import { AboutSection } from './AboutSection';
 import { AiSection } from './AiSection';

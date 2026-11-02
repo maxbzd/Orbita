@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useCapture, useCaptureItems, usePeople, useSettings } from '../../db/hooks';
 import type { ID, Item } from '../../domain/types';
 import { recorderService, useJob } from '../../state';

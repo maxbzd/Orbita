@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 /**
  * The recording screen, `/capture` (full screen, outside the app shell). `?autostart=1` starts recording at once

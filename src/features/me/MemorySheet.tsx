@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { profileRepo } from '../../db';
 import { truncate } from '../../domain/text';
 import type { Item, Pattern, Profile } from '../../domain/types';

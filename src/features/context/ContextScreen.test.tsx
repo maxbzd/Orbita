@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { capturesRepo, itemsRepo, peopleRepo, presetsRepo, profileRepo, updateSettings, wipeAll } from '../../db';
 import { ThemeProvider } from '../../styles/theme';

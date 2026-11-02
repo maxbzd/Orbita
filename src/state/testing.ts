@@ -132,20 +132,21 @@ export class FakeDictation extends Emitter<{ state: 'listening' | 'stopped'; tra
   }
 }
 
-/** jsdom has no PointerEvent: a MouseEvent with a pointer id, enough for the gestures tests. */
+/** Older jsdom has no PointerEvent: a MouseEvent with a pointer id, enough for the gestures tests. */
 export function installPointerEvent(): void {
-  if (typeof window.PointerEvent === 'function') return;
-  class TestPointerEvent extends MouseEvent {
-    readonly pointerId: number;
-    readonly pointerType: string;
-    constructor(type: string, init: MouseEventInit & { pointerId?: number; pointerType?: string } = {}) {
-      super(type, init);
-      this.pointerId = init.pointerId ?? 1;
-      this.pointerType = init.pointerType ?? 'touch';
+  if (typeof window.PointerEvent !== 'function') {
+    class TestPointerEvent extends MouseEvent {
+      readonly pointerId: number;
+      readonly pointerType: string;
+      constructor(type: string, init: MouseEventInit & { pointerId?: number; pointerType?: string } = {}) {
+        super(type, init);
+        this.pointerId = init.pointerId ?? 1;
+        this.pointerType = init.pointerType ?? 'touch';
+      }
     }
+    Object.defineProperty(window, 'PointerEvent', { value: TestPointerEvent, configurable: true });
   }
-  Object.defineProperty(window, 'PointerEvent', { value: TestPointerEvent, configurable: true });
-  // `setPointerCapture` is not implemented either.
+  // jsdom implements no pointer capture, whatever its PointerEvent support.
   for (const name of ['setPointerCapture', 'releasePointerCapture'] as const) {
     if (!(name in HTMLElement.prototype)) Object.defineProperty(HTMLElement.prototype, name, { value: () => undefined, configurable: true });
   }

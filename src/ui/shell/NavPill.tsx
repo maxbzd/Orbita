@@ -63,8 +63,6 @@ export function NavPill({ items, activeId, onNavigate, sphere, sphereLabel = t('
   const split = Math.ceil(items.length / 2);
   const left = items.slice(0, split);
   const right = items.slice(split);
-  // `inert` is not in React 18's types; the attribute still reaches the DOM.
-  const inert = hidden ? ({ inert: '' } as Record<string, string>) : undefined;
 
   const hold = useRef<{ pointerId: number; startX: number; startY: number; timer: number | undefined; held: boolean } | null>(null);
   const swallowClick = useRef(false);
@@ -145,7 +143,7 @@ export function NavPill({ items, activeId, onNavigate, sphere, sphereLabel = t('
   };
 
   return (
-    <nav aria-label={t('Main navigation')} aria-hidden={hidden || undefined} className={cx(styles.nav, hidden && styles.hidden, className)} data-hidden={hidden ? '' : undefined} {...inert}>
+    <nav aria-label={t('Main navigation')} aria-hidden={hidden || undefined} className={cx(styles.nav, hidden && styles.hidden, className)} data-hidden={hidden ? '' : undefined} inert={hidden || undefined}>
       <Glass variant="real" size="bar" radius="bar" className={styles.bar}>
         <ul className={styles.list}>
           {left.map(renderItem)}
