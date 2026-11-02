@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { itemsRepo } from '../../db';
 import { wipeAll } from '../../db/maintenance';
@@ -142,7 +142,10 @@ describe('карточка объекта', () => {
     fireEvent.click(await within(sheet).findByRole('button', { name: /Слить в эту идею: Запустить интенсив для OKR/ }));
     await waitFor(async () => expect(await itemsRepo.get(copy.id)).toMatchObject({ status: 'dropped', duplicateOf: keep.id }));
 
-    fireEvent.click(within(sheet).getByRole('button', { name: 'Сделать задачей' }));
+    // The panel stays disabled while the merge finishes; clicking earlier would hit a disabled button.
+    const makeTask = within(sheet).getByRole('button', { name: 'Сделать задачей' });
+    await waitFor(() => expect(makeTask).toBeEnabled());
+    fireEvent.click(makeTask);
     await waitFor(async () => expect((await itemsRepo.list({ kind: 'task' })).map((task) => task.title)).toEqual(['Запустить интенсив по OKR в ноябре']));
   });
 });

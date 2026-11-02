@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactElement } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { Icon } from '../../../ui/icons';
 import { ListRow, Sheet } from '../../../ui/primitives';
 import type { SphereGesture } from '../../../ui/shell/NavPill';
@@ -56,7 +56,7 @@ const haptic = (): void => {
  * The gesture of the sphere and what it opens: the arc (hold, then slide and lift; or lift and tap) and the same
  * four actions as a sheet for the keyboard and for anyone who cannot hold (§3.2).
  */
-export function useSphereMenu(): { gesture: SphereGesture; element: JSX.Element } {
+export function useSphereMenu(): { gesture: SphereGesture; element: ReactElement } {
   const { run } = useSphereActions();
   const sheet = useQuickActions((state) => state.sheet);
   const openSheet = useQuickActions((state) => state.open);

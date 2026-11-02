@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { createLlmProvider, describeError } from '../../ai';
 import { MicrophoneError, getMicrophoneAccess, probeMicrophone } from '../../audio';
 import { capturesRepo, getSettings, mergeSettings, profileRepo, updateSettings } from '../../db';

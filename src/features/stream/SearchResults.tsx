@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { ID } from '../../domain/types';
 import { formatDayShort } from '../../domain/dates';
 import { splitByRanges } from '../../search';

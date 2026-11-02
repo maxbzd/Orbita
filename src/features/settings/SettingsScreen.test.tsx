@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { capturesRepo, getSettings, getStoredSettings, profileRepo, setSessionSecrets, wipeAll } from '../../db';
 import { PBKDF2_MIN_ITERATIONS } from '../../domain/schemas';

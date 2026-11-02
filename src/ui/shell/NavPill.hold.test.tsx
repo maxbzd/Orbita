@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { installPointerEvent } from '../../state/testing';
 import { SECTIONS } from './destinations';
 import { HOLD_MS, NavPill } from './NavPill';
@@ -13,7 +14,7 @@ beforeEach(() => {
 });
 afterEach(() => vi.useRealTimers());
 
-function gesture(): SphereGesture & { [K in keyof SphereGesture]-?: ReturnType<typeof vi.fn> } {
+function gesture(): { [K in keyof SphereGesture]-?: Mock<NonNullable<SphereGesture[K]>> } {
   return { onHoldStart: vi.fn(), onHoldMove: vi.fn(), onHoldEnd: vi.fn(), onHoldCancel: vi.fn(), onMenuKey: vi.fn() };
 }
 

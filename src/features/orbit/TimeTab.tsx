@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { addDays, periodRange, shiftPeriod } from '../../domain/dates';
 import type { DayKey } from '../../domain/types';

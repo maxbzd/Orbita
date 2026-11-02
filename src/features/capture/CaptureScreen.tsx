@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useProjects, useSettings } from '../../db/hooks';
 import { recorderService, useRecorder, useWalkMode } from '../../state';
 import { LevelBars, LiveTranscript, RecordControls, TimeDisplay } from '../../ui/audio';

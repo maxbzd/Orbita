@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { getSettings } from '../../db';
 import { useFeed, useSettings } from '../../db/hooks';
 import type { Settings } from '../../domain/types';

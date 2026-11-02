@@ -1,5 +1,5 @@
 import { createElement } from 'react';
-import type { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 import type { OrbitTab } from './model';
 
 /** The screen on a fixed segment, for the paths that have their own entry in the sidebar. */

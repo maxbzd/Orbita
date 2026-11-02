@@ -113,7 +113,7 @@ npm run check          # типы + i18n + тесты + сборка (то, чт
 
 ## Стек
 
-Vite 6 · React 18 · TypeScript (strict) · Dexie / IndexedDB · zustand · zod · react-router (hash-роутер) · CSS Modules ·
+Vite 8 · React 19 · TypeScript 7 (strict) · Dexie / IndexedDB · zustand · zod · react-router (hash-роутер) · CSS Modules ·
 MiniSearch · Motion · vite-plugin-pwa · Vitest + Testing Library + fake-indexeddb · опционально Supabase. Без UI-фреймворка, без
 библиотеки графиков, без WebGL: орб рисуется на Canvas 2D, графики — вручную в SVG.
 

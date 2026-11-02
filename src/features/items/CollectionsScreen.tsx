@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useItems } from '../../db/hooks';
 import type { Item, ItemKind } from '../../domain/types';
 import { Body, CollectionCard, Display, IconButton, Skeleton } from '../../ui';

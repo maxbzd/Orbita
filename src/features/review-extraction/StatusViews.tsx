@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { capturesRepo } from '../../db';
 import type { Capture } from '../../domain/types';
 import { processing } from '../../state';

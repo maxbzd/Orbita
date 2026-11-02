@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { processing as appProcessing } from '../../../state';
 import type { ProcessingService } from '../../../state';
 import { useToast } from '../../../ui/primitives';

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { BUILTIN_PRESETS, CONTEXT_SECTIONS, CONTEXT_SECTION_TITLES, buildContextPack, presetForPerson } from '../../ai';
 import type { ContextPack } from '../../ai';
 import { presetsRepo } from '../../db';

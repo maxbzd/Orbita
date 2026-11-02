@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { QUICK_QUESTIONS, ask, checkAiReadiness, createLlmProvider, isAiError } from '../../ai';
 import { getSettings } from '../../db';
 import { useSettings } from '../../db/hooks';

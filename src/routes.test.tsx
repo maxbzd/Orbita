@@ -1,9 +1,9 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { RouterProvider, createMemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { updateSettings } from './db';
 import { wipeAll } from './db/maintenance';
-import { providerFuture, routerFuture, routes } from './routes';
+import { routes } from './routes';
 import { stubCanvas } from './ui/testUtils';
 
 // A first launch is sent to the onboarding: these tests are about a user who has been through it.
@@ -14,8 +14,8 @@ beforeEach(async () => {
 });
 
 function renderAt(path: string) {
-  const router = createMemoryRouter(routes, { initialEntries: [path], future: routerFuture });
-  render(<RouterProvider router={router} future={providerFuture} />);
+  const router = createMemoryRouter(routes, { initialEntries: [path] });
+  render(<RouterProvider router={router} />);
   return router;
 }
 

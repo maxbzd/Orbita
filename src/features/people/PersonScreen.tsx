@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { capturesRepo, checkinsRepo, itemsRepo, peopleRepo } from '../../db';
 import { formatDayWithWeekday, formatTime, localDayKey } from '../../domain/dates';

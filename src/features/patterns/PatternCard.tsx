@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { formatDayShort } from '../../domain/dates';
 import type { Pattern, PatternStatus } from '../../domain/types';
 import { Body, Button, Caption, Constellation, Heading, InsightStar, Pill, Thought, cx } from '../../ui';
