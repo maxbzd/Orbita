@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Navigate, RouterProvider, createMemoryRouter } from 'react-router';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { capturesRepo, updateSettings } from '../../db';
 import { wipeAll } from '../../db/maintenance';
 import { App } from '../../App';
@@ -97,3 +97,69 @@ describe('first-run redirect in the app', () => {
     expect(router.state.location.pathname).toBe('/stream');
   });
 });
+
+describe('Safari deletes a site\'s data after 7 idle days', () => {
+  const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+  const routes = [
+    {
+      path: '/',
+      element: <App />,
+      children: [{ element: <RoutedShell />, children: [...onboardingRoutes, ...todayRoutes] }],
+    },
+  ];
+  const open = (path: string) => render(<RouterProvider router={createMemoryRouter(routes, { initialEntries: [path] })} />);
+
+  beforeEach(async () => {
+    stubCanvas();
+    await wipeAll();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
+  });
+
+  it('on iPhone in a tab the onboarding asks to install before it asks for a name', async () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(IPHONE);
+    open('/onboarding');
+    fireEvent.click(await screen.findByRole('button', { name: 'Начать' }, { timeout: 5000 }));
+    expect(await screen.findByRole('heading', { name: 'Добавь Orbita на экран «Домой»' }, { timeout: 5000 })).toBeInTheDocument();
+    expect(screen.getByText(/Нажми «Поделиться»|Нажми «Поделиться»|Поделиться/)).toBeInTheDocument();
+    expect(screen.queryByText('Привет. Как тебя зовут?')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Продолжить без установки' }));
+    expect(await screen.findByText('Привет. Как тебя зовут?')).toBeInTheDocument();
+  });
+
+  it('the back button leaves the install screen for the first one', async () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(IPHONE);
+    open('/onboarding');
+    fireEvent.click(await screen.findByRole('button', { name: 'Начать' }, { timeout: 5000 }));
+    await screen.findByRole('heading', { name: 'Добавь Orbita на экран «Домой»' }, { timeout: 5000 });
+    fireEvent.click(screen.getByRole('button', { name: 'Назад' }));
+    expect(await screen.findByRole('button', { name: 'Начать' })).toBeInTheDocument();
+  });
+
+  it('elsewhere the onboarding goes straight to the name', async () => {
+    open('/onboarding');
+    fireEvent.click(await screen.findByRole('button', { name: 'Начать' }, { timeout: 5000 }));
+    expect(await screen.findByText('Привет. Как тебя зовут?')).toBeInTheDocument();
+  });
+
+  it('the home screen keeps reminding on iPhone in a tab, and can be told to wait', async () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(IPHONE);
+    await updateSettings({ onboarding: { done: true } });
+    open('/today');
+    expect(await screen.findByText('Safari может удалить твои данные', undefined, { timeout: 5000 })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Как' }));
+    expect(await screen.findByText(/Открой Orbita с новой иконки/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Напомнить позже' }));
+    await waitFor(() => expect(screen.queryByText('Safari может удалить твои данные')).toBeNull());
+  });
+
+  it('no reminder where the data is safe', async () => {
+    await updateSettings({ onboarding: { done: true } });
+    open('/today');
+    await screen.findByRole('region', { name: 'Сегодня' }, { timeout: 5000 });
+    expect(screen.queryByText('Safari может удалить твои данные')).toBeNull();
+  });
+});
+

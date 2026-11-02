@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 import { createLlmProvider, describeError } from '../../ai';
@@ -32,10 +32,13 @@ import {
   useToast,
 } from '../../ui';
 import { InterfaceLanguage } from '../settings/InterfaceLanguage';
+import { isDataAtRisk } from '../../lib/storageRisk';
 import { KEY_PROVIDERS, NOT_DOING, OCCUPATIONS, aiSettingsPatch, profilePatch, trainerPhrase } from './logic';
 import type { KeyProvider, Occupation } from './logic';
 import styles from './Onboarding.module.css';
 import { t } from '../../i18n';
+
+const SafetyStep = lazy(() => import('./SafetyStep'));
 
 const STEP_COUNT = 4;
 type StepIndex = 0 | 1 | 2 | 3;
@@ -426,6 +429,9 @@ export default function OnboardingScreen() {
   useAura(0, 1);
   const navigate = useNavigate();
   const [step, setStep] = useState<StepIndex>(0);
+  // Safari in a tab deletes a site's data after 7 idle days: say so before anything is typed in
+  const [atRisk] = useState(isDataAtRisk);
+  const [safety, setSafety] = useState<'pending' | 'shown' | 'done'>('pending');
 
   const toast = useToast();
   /** Data came down from the cloud: nothing left to introduce, go to the day. Keys never travel, so say so. */
@@ -436,12 +442,31 @@ export default function OnboardingScreen() {
   };
 
   const next = (): void => setStep((s) => (s < STEP_COUNT - 1 ? ((s + 1) as StepIndex) : s));
-  const back = (): void => setStep((s) => (s > 0 ? ((s - 1) as StepIndex) : s));
+  const back = (): void => {
+    if (safety === 'shown') setSafety('pending');
+    else setStep((s) => (s > 0 ? ((s - 1) as StepIndex) : s));
+  };
+  const fromSplash = (): void => {
+    if (atRisk && safety === 'pending') setSafety('shown');
+    else next();
+  };
 
   let body: ReactNode;
   switch (step) {
     case 0:
-      body = <Splash onNext={next} onRestored={() => void restored()} />;
+      body =
+        safety === 'shown' ? (
+          <Suspense fallback={null}>
+            <SafetyStep
+              onContinue={() => {
+                setSafety('done');
+                next();
+              }}
+            />
+          </Suspense>
+        ) : (
+          <Splash onNext={fromSplash} onRestored={() => void restored()} />
+        );
       break;
     case 1:
       body = <Dialogue onNext={next} />;
@@ -456,7 +481,7 @@ export default function OnboardingScreen() {
   return (
     <section className={styles.screen} aria-label={t('Getting started')}>
       <header className={styles.top}>
-        {step > 0 ? <IconButton icon="chevron-left" label={t('Back')} onClick={back} /> : <span className={styles.spacer} />}
+        {step > 0 || safety === 'shown' ? <IconButton icon="chevron-left" label={t('Back')} onClick={back} /> : <span className={styles.spacer} />}
         <ol className={styles.dots} aria-label={t('Step {v} of {STEP_COUNT}', { v: step + 1, STEP_COUNT })}>
           {Array.from({ length: STEP_COUNT }, (_, i) => (
             <li key={i} className={styles.dot} data-active={i === step ? '' : undefined} data-done={i < step ? '' : undefined} />

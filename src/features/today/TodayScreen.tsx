@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useCallback, useMemo, useState } from 'react';
+import { Suspense, lazy, useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { getSettings } from '../../db';
 import { useProfile } from '../../db/hooks';
@@ -7,6 +7,7 @@ import { seedDemo } from '../../db/seed';
 import { createLlmProvider, checkAiReadiness, generateReview } from '../../ai';
 import { formatDayLong, formatDayShort, localDayKey, localMinutesOfDay } from '../../domain/dates';
 import { greetingLine, isEveningHour, daySummary } from '../../lib/verdict';
+import { installNudgeDue } from '../../lib/storageRisk';
 import {
   Button,
   Caption,
@@ -26,6 +27,8 @@ import { loadTodaySnapshot } from './snapshot';
 import { useNow } from './useNow';
 import styles from './Today.module.css';
 import { t } from '../../i18n';
+
+const InstallReminder = lazy(() => import('./InstallReminder'));
 
 /** "СРЕДА · 7 ОКТ": the weekday and the date as a mono caption. */
 function dateLabel(day: string): string {
@@ -62,6 +65,7 @@ export default function TodayScreen() {
   useAura(model?.auraMood ?? null, model?.isFresh ? 0.25 : 0.7);
 
   const [closing, setClosing] = useState(false);
+  const [installNudge, setInstallNudge] = useState(() => installNudgeDue());
   const [seeding, setSeeding] = useState(false);
 
   const onClose = useCallback(async () => {
@@ -115,6 +119,12 @@ export default function TodayScreen() {
       <Caption className={styles.caption}>
         {greeting}.{model ? ` ${summary}` : ''}
       </Caption>
+
+      {installNudge ? (
+        <Suspense fallback={null}>
+          <InstallReminder onSnooze={() => setInstallNudge(false)} />
+        </Suspense>
+      ) : null}
 
       <div className={styles.hero}>
         <DayOrbit
