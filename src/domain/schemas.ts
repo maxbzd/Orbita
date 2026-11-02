@@ -30,6 +30,7 @@ import {
   USAGE_PURPOSES,
 } from './types';
 import type {
+  Argon2Params,
   Capture,
   CheckIn,
   ContextPackPreset,
@@ -41,6 +42,8 @@ import type {
   Project,
   Review,
   SealedData,
+  SealedDataV1,
+  SealedDataV2,
   Settings,
   Tombstone,
   UsageRow,
@@ -370,7 +373,19 @@ export const tombstoneSchema = z.object({
 export const PBKDF2_MIN_ITERATIONS = 210_000;
 export const PBKDF2_MAX_ITERATIONS = 10_000_000;
 
-export const sealedDataSchema = z.object({
+/** Argon2id limits: a cap on memory so a hostile file cannot make the tab run out of it; the floor is the spec's. */
+export const ARGON2_MAX_MEMORY_KIB = 262_144;
+export const ARGON2_MAX_PASSES = 12;
+
+export const argon2ParamsSchema = z
+  .object({
+    m: z.number().int().min(8).max(ARGON2_MAX_MEMORY_KIB),
+    t: z.number().int().min(1).max(ARGON2_MAX_PASSES),
+    p: z.number().int().min(1).max(8),
+  })
+  .refine(({ m, p }) => m >= 8 * p, 'memory must be at least 8 KiB per lane') satisfies z.ZodType<Argon2Params>;
+
+const sealedDataV1Schema = z.object({
   v: z.literal(1),
   alg: z.literal('AES-GCM'),
   kdf: z.literal('PBKDF2-SHA256'),
@@ -378,7 +393,21 @@ export const sealedDataSchema = z.object({
   salt: z.string().min(1),
   iv: z.string().min(1),
   data: z.string(),
-}) satisfies z.ZodType<SealedData>;
+}) satisfies z.ZodType<SealedDataV1>;
+
+const sealedDataV2Schema = z.object({
+  v: z.literal(2),
+  alg: z.literal('AES-GCM'),
+  kdf: z.literal('Argon2id'),
+  m: z.number().int().min(8).max(ARGON2_MAX_MEMORY_KIB),
+  t: z.number().int().min(1).max(ARGON2_MAX_PASSES),
+  p: z.number().int().min(1).max(8),
+  salt: z.string().min(1),
+  iv: z.string().min(1),
+  data: z.string(),
+}) satisfies z.ZodType<SealedDataV2>;
+
+export const sealedDataSchema = z.union([sealedDataV1Schema, sealedDataV2Schema]) satisfies z.ZodType<SealedData>;
 
 const modelsSchema = (fast: string, smart: string) =>
   section(z.object({ fast: z.string().catch(fast), smart: z.string().catch(smart) }));
@@ -430,6 +459,7 @@ export const settingsSchema = section(
         kind: z.enum(LOCK_KINDS).catch('password'),
         salt: z.string().catch(''),
         iterations: z.number().int().min(0).catch(0),
+        argon2: argon2ParamsSchema.optional().catch(undefined),
         verifier: z.string().catch(''),
         autoLockMinutes: z.number().int().min(0).max(1440).catch(5),
         sealedSecrets: sealedDataSchema.nullable().catch(null),

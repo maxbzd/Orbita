@@ -4,13 +4,14 @@ import {
   CryptoError,
   checkPassword,
   createPasswordVerifier,
+  forgetDerivedKeys,
   getSettings,
   getStoredSettings,
   setSessionSecrets,
   updateSettings,
   wipeAll,
 } from '../../db';
-import type { SessionSecrets } from '../../db';
+import type { SealOptions, SessionSecrets } from '../../db';
 import { EMPTY_SECRETS, collectSecrets, openSecrets, sealSecrets } from './secrets';
 import { t } from '../../i18n';
 
@@ -62,12 +63,28 @@ function saveThrottle(failures: number, blockedUntil: number): void {
   }
 }
 
-/** Work factor for new locks; tests lower it. */
-let iterations: number | undefined;
+/**
+ * Cost of the key derivation for new locks. The default is Argon2id at the app-wide cost; tests lower it, or ask for
+ * the older PBKDF2 (`setLockIterations`) to exercise locks made by earlier versions.
+ */
+let costOverride: SealOptions | undefined;
 export function setLockIterations(value: number | undefined): void {
-  iterations = value;
+  costOverride = value === undefined ? undefined : { iterations: value };
 }
-const sealOptions = (): { iterations?: number } | undefined => (iterations === undefined ? undefined : { iterations });
+export function setLockArgon2(value: SealOptions['argon2'] | undefined): void {
+  costOverride = value === undefined ? undefined : { argon2: value };
+}
+const sealOptions = (): SealOptions | undefined => costOverride;
+
+/**
+ * The stored form of a verifier. Settings patches ignore `undefined`, so "no Argon2id any more" (a lock that goes back to
+ * PBKDF2, or is switched off) is written as `null`, which the settings schema reads as absent.
+ */
+const storedVerifier = (verifier: Awaited<ReturnType<typeof createPasswordVerifier>>) => ({ ...verifier, argon2: verifier.argon2 ?? (null as unknown as undefined) });
+
+/** The options that make the sealed keys share the verifier's salt and cost, so one Argon2id run serves an unlock. */
+const optionsFor = (lock: { salt: string; argon2?: SealOptions['argon2'] }): SealOptions | undefined =>
+  lock.argon2 ? { argon2: lock.argon2, salt: lock.salt } : sealOptions();
 
 export const MIN_PASSWORD_LENGTH = 6;
 export const MIN_PIN_LENGTH = 4;
@@ -107,6 +124,7 @@ export async function initLock(): Promise<LockStatus> {
 export function lockNow(): void {
   if (useLockStore.getState().status !== 'unlocked') return;
   sessionPassword = null;
+  forgetDerivedKeys();
   setSessionSecrets(null);
   useLockStore.setState({ status: 'locked', failures: 0, blockedUntil: 0 });
 }
@@ -140,7 +158,22 @@ export async function unlock(password: string, now: number = Date.now()): Promis
   setSessionSecrets(secrets);
   useLockStore.setState({ status: 'unlocked', failures: 0, blockedUntil: 0 });
   saveThrottle(0, 0);
+  if (!lock.argon2 && costOverride === undefined) await upgradeLegacyLock(password, secrets);
   return 'ok';
+}
+
+/**
+ * A lock made by an earlier version checks the password with PBKDF2. The password is in hand now, so the check value
+ * and the sealed keys are made again with Argon2id. A failure here changes nothing: the old lock keeps working.
+ */
+async function upgradeLegacyLock(password: string, secrets: SessionSecrets): Promise<void> {
+  try {
+    const verifier = await createPasswordVerifier(password, sealOptions());
+    const sealedSecrets = await sealSecrets(password, secrets, optionsFor(verifier));
+    await updateSettings({ lock: { ...storedVerifier(verifier), sealedSecrets } });
+  } catch (error) {
+    console.error(t('Could not upgrade the lock'), error);
+  }
 }
 
 /** Seconds left of the delay after wrong attempts (0 when free). */
@@ -178,8 +211,8 @@ export async function enableLock(password: string, { kind, autoLockMinutes }: En
   if (problem) throw new LockError('invalid', problem);
   const secrets = collectSecrets(await getSettings());
   const verifier = await createPasswordVerifier(password, sealOptions());
-  const sealedSecrets = await sealSecrets(password, secrets, sealOptions());
-  await updateSettings({ lock: { enabled: true, kind, autoLockMinutes, ...verifier, sealedSecrets } });
+  const sealedSecrets = await sealSecrets(password, secrets, optionsFor(verifier));
+  await updateSettings({ lock: { enabled: true, kind, autoLockMinutes, ...storedVerifier(verifier), sealedSecrets } });
   sessionPassword = password;
   setSessionSecrets(secrets);
   useLockStore.setState({ status: 'unlocked', failures: 0, blockedUntil: 0 });
@@ -190,7 +223,7 @@ export async function disableLock(password: string): Promise<void> {
   await verifiedLock(password);
   const secrets = await currentSecrets(password);
   await updateSettings({
-    lock: { enabled: false, salt: '', iterations: 0, verifier: '', sealedSecrets: null },
+    lock: { enabled: false, salt: '', iterations: 0, argon2: null as unknown as undefined, verifier: '', sealedSecrets: null },
     ai: { anthropic: { apiKey: secrets.anthropic }, openaiCompat: { apiKey: secrets.openaiCompat } },
     stt: { apiKey: secrets.stt },
   });
@@ -205,8 +238,8 @@ export async function changePassword(oldPassword: string, newPassword: string, k
   if (problem) throw new LockError('invalid', problem);
   const secrets = await currentSecrets(oldPassword);
   const verifier = await createPasswordVerifier(newPassword, sealOptions());
-  const sealedSecrets = await sealSecrets(newPassword, secrets, sealOptions());
-  await updateSettings({ lock: { kind, ...verifier, sealedSecrets } });
+  const sealedSecrets = await sealSecrets(newPassword, secrets, optionsFor(verifier));
+  await updateSettings({ lock: { kind, ...storedVerifier(verifier), sealedSecrets } });
   sessionPassword = newPassword;
   setSessionSecrets(secrets);
 }
@@ -246,7 +279,7 @@ export async function saveApiKeys(keys: Partial<SessionSecrets>): Promise<void> 
     openaiCompat: (keys.openaiCompat ?? base.openaiCompat).trim(),
     stt: (keys.stt ?? base.stt).trim(),
   };
-  const sealedSecrets = await sealSecrets(sessionPassword, next, sealOptions());
+  const sealedSecrets = await sealSecrets(sessionPassword, next, stored.lock.argon2 ? optionsFor(stored.lock) : sealOptions());
   await updateSettings({ lock: { sealedSecrets } });
   setSessionSecrets(next);
 }

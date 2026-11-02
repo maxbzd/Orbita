@@ -11,6 +11,7 @@ import {
   sealText,
 } from './crypto';
 import { base64ToBytes } from './encoding';
+import type { SealedDataV1 } from '../domain/types';
 
 // The minimum allowed work factor keeps the suite fast; the default is covered below.
 const iterations = PBKDF2_MIN_ITERATIONS;
@@ -61,7 +62,7 @@ describe('sealed data', () => {
   it('refuses a work factor below the minimum, when sealing and when opening', async () => {
     await expect(sealText('p', 'x', { iterations: 1000 })).rejects.toMatchObject({ code: 'invalid_payload' });
     const sealed = await sealText('p', 'x', { iterations });
-    await expect(openText('p', { ...sealed, iterations: 1000 })).rejects.toMatchObject({ code: 'invalid_payload' });
+    await expect(openText('p', { ...(sealed as SealedDataV1), iterations: 1000 })).rejects.toMatchObject({ code: 'invalid_payload' });
   });
 
   it('reports garbled base64 as a damaged payload', async () => {
