@@ -2283,5 +2283,15 @@
  "Mood averaged {mood} on a scale from −1 to +1{trend}. Energy {energy}%, stress {stress}. Nights shorter than six hours: {shortNights}.": "Настрій у середньому {mood} за шкалою від −1 до +1{trend}. Енергія {energy}%, стрес {stress}. Ночей коротших за шість годин: {shortNights}.",
  " You returned most often to: {tags}.": " Найчастіше повертався до тем: {tags}.",
  "What worked": "Що вийшло",
- "Interface language": "Мова інтерфейсу"
+ "Interface language": "Мова інтерфейсу",
+  "Before we start": "Перш ніж почати",
+  "Add Orbita to your Home Screen": "Додай Orbita на головний екран",
+  "Safari deletes the data of websites you have not opened for 7 days. Orbita keeps everything on this phone, so your records could disappear. An app on the Home Screen is exempt.": "Safari видаляє дані сайтів, які ти не відкривав 7 днів. Orbita зберігає все на цьому телефоні, тож твої записи можуть зникнути. Застосунок на головному екрані ця дія не стосується.",
+  "Open Orbita from the new icon and set it up there. The Home Screen app has its own storage.": "Відкрий Orbita з нової іконки й налаштуй її там. Застосунок на головному екрані має власне сховище.",
+  "Also keep an encrypted backup (Settings, Data) and store the file in iCloud Drive.": "Тримай також зашифровану резервну копію (Налаштування, Дані) і зберігай файл в iCloud Drive.",
+  "Continue without installing": "Продовжити без встановлення",
+  "Safari may delete your data": "Safari може видалити твої дані",
+  "Add Orbita to your Home Screen so your records stay safe.": "Додай Orbita на головний екран, щоб твої записи були в безпеці.",
+  "How": "Як",
+  "Remind me later": "Нагадати пізніше"
 }

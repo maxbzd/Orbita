@@ -327,3 +327,43 @@ a.metric:active {
 :root[data-theme='dawn'] .late {
   color: #b3261e;
 }
+
+/* ───────── "add to the Home Screen" reminder (iPhone in a Safari tab) ───────── */
+.install {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin-block: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: var(--r-card);
+  background: var(--surface-card);
+}
+
+.installRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.installBadge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--warn) 16%, transparent);
+  color: var(--warn);
+}
+
+.installText {
+  flex: 1;
+  margin: 0;
+  font: var(--type-caption, var(--type-body));
+  color: var(--ink-2);
+}
+
+.installText b {
+  color: var(--ink);
+}

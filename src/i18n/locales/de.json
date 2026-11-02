@@ -2217,5 +2217,15 @@
  "Mood averaged {mood} on a scale from −1 to +1{trend}. Energy {energy}%, stress {stress}. Nights shorter than six hours: {shortNights}.": "Die Stimmung lag im Schnitt bei {mood} auf einer Skala von −1 bis +1{trend}. Energie {energy}%, Stress {stress}. Nächte unter sechs Stunden: {shortNights}.",
  " You returned most often to: {tags}.": " Am häufigsten bist du auf diese Themen zurückgekommen: {tags}.",
  "What worked": "Was geklappt hat",
- "Interface language": "Sprache der Oberfläche"
+ "Interface language": "Sprache der Oberfläche",
+  "Before we start": "Bevor wir beginnen",
+  "Add Orbita to your Home Screen": "Füge Orbita zum Home-Bildschirm hinzu",
+  "Safari deletes the data of websites you have not opened for 7 days. Orbita keeps everything on this phone, so your records could disappear. An app on the Home Screen is exempt.": "Safari löscht die Daten von Websites, die du 7 Tage lang nicht geöffnet hast. Orbita speichert alles auf diesem Telefon, deine Einträge könnten also verschwinden. Eine App auf dem Home-Bildschirm ist davon ausgenommen.",
+  "Open Orbita from the new icon and set it up there. The Home Screen app has its own storage.": "Öffne Orbita über das neue Symbol und richte sie dort ein. Die App auf dem Home-Bildschirm hat einen eigenen Speicher.",
+  "Also keep an encrypted backup (Settings, Data) and store the file in iCloud Drive.": "Lege außerdem ein verschlüsseltes Backup an (Einstellungen, Daten) und speichere die Datei in iCloud Drive.",
+  "Continue without installing": "Ohne Installation fortfahren",
+  "Safari may delete your data": "Safari kann deine Daten löschen",
+  "Add Orbita to your Home Screen so your records stay safe.": "Füge Orbita zum Home-Bildschirm hinzu, damit deine Einträge sicher sind.",
+  "How": "Wie",
+  "Remind me later": "Später erinnern"
 }
