@@ -215,3 +215,54 @@
 .phrase p {
   margin: 0;
 }
+
+/* ───────── "add to the Home Screen" (iPhone in a Safari tab) ───────── */
+.safetyHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding-top: var(--s-5);
+}
+
+.safetyLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--warn);
+}
+
+.installSteps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.installSteps li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--surface-2);
+  border-radius: var(--r-card);
+  background: var(--surface-card);
+  font: var(--type-body);
+  color: var(--ink-2);
+}
+
+.installSteps b {
+  color: var(--ink);
+}
+
+.installIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--warn) 16%, transparent);
+  color: var(--warn);
+}
