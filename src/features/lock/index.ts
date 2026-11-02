@@ -10,6 +10,7 @@ export {
   lockNow,
   saveApiKeys,
   setAutoLockMinutes,
+  setLockArgon2,
   setLockIterations,
   throttleSeconds,
   unlock,

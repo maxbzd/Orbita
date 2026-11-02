@@ -10,6 +10,7 @@ import {
   lockNow,
   saveApiKeys,
   secondsUntilRetry,
+  setLockArgon2,
   setLockIterations,
   throttleSeconds,
   unlock,
@@ -192,5 +193,80 @@ describe('validateNewPassword', () => {
     expect(validateNewPassword('pin', '12a4', '12a4')).toMatch(/цифр/);
     expect(validateNewPassword('pin', '1234', '1234')).toBeNull();
     expect(validateNewPassword('password', 'abcdef', 'abcdeg')).toMatch(/Повтор/);
+  });
+});
+
+describe('the lock uses Argon2id and upgrades locks made by earlier versions', () => {
+  const cheap = { m: 64, t: 1, p: 1 };
+
+  it('a new lock checks the password and seals the keys with Argon2id, from one salt', async () => {
+    setLockArgon2(cheap);
+    await withKeys();
+    await enableLock(PASSWORD, { kind: 'password', autoLockMinutes: 5 });
+    const { lock } = await getStoredSettings();
+    expect(lock.argon2).toEqual(cheap);
+    expect(lock.iterations).toBe(0);
+    expect(lock.sealedSecrets).toMatchObject({ v: 2, kdf: 'Argon2id', salt: lock.salt, ...cheap });
+
+    lockNow();
+    expect(await unlock('не тот')).toBe('wrong');
+    expect(await unlock(PASSWORD)).toBe('ok');
+    expect(getSessionSecrets()).toEqual({ anthropic: 'sk-ant-AAAA', openaiCompat: 'sk-oa-BBBB', stt: 'sk-stt-CCCC' });
+  });
+
+  it('saving a key again keeps the salt and cost, so an unlock stays one derivation', async () => {
+    setLockArgon2(cheap);
+    await enableLock(PASSWORD, { kind: 'password', autoLockMinutes: 5 });
+    const before = (await getStoredSettings()).lock;
+    await saveApiKeys({ anthropic: 'sk-new' });
+    const after = (await getStoredSettings()).lock;
+    expect(after.sealedSecrets).toMatchObject({ v: 2, salt: before.salt });
+    expect(after.sealedSecrets?.salt).toBe(after.salt);
+    expect(after.sealedSecrets?.data).not.toBe(before.sealedSecrets?.data);
+    lockNow();
+    expect(await unlock(PASSWORD)).toBe('ok');
+    expect(getSessionSecrets()?.anthropic).toBe('sk-new');
+  });
+
+  it('the sealed keys cannot be swapped for a backup of the same password', async () => {
+    setLockArgon2(cheap);
+    await enableLock(PASSWORD, { kind: 'password', autoLockMinutes: 5 });
+    const { lock } = await getStoredSettings();
+    const { sealText } = await import('../../db');
+    const foreign = await sealText(PASSWORD, JSON.stringify({ v: SEALED_SECRETS_VERSION, anthropic: 'evil', openaiCompat: '', stt: '' }), { argon2: cheap, salt: lock.salt, aad: 'orbita/backup/v1' });
+    await expect(openSecrets(PASSWORD, foreign)).rejects.toMatchObject({ code: 'wrong_password' });
+  });
+
+  it('a lock made with PBKDF2 keeps working, and becomes Argon2id on the next successful unlock', async () => {
+    await withKeys();
+    await enableLock(PASSWORD, { kind: 'password', autoLockMinutes: 5 }); // PBKDF2 (test knob)
+    let { lock } = await getStoredSettings();
+    expect(lock.argon2).toBeUndefined();
+    expect(lock.sealedSecrets).toMatchObject({ v: 1, kdf: 'PBKDF2-SHA256' });
+
+    setLockIterations(undefined); // from now on, as the real app: Argon2id at the app-wide cost
+    lockNow();
+    expect(await unlock('не тот')).toBe('wrong');
+    expect((await getStoredSettings()).lock.argon2).toBeUndefined(); // a wrong password changes nothing
+    expect(await unlock(PASSWORD)).toBe('ok');
+    expect(getSessionSecrets()).toEqual({ anthropic: 'sk-ant-AAAA', openaiCompat: 'sk-oa-BBBB', stt: 'sk-stt-CCCC' });
+
+    lock = (await getStoredSettings()).lock;
+    expect(lock.argon2).toMatchObject({ m: 32_768, t: 3, p: 1 });
+    expect(lock.iterations).toBe(0);
+    expect(lock.sealedSecrets).toMatchObject({ v: 2, kdf: 'Argon2id', salt: lock.salt });
+
+    lockNow();
+    expect(await unlock(PASSWORD)).toBe('ok'); // and the upgraded lock opens
+    expect(getSessionSecrets()?.anthropic).toBe('sk-ant-AAAA');
+  }, 60_000);
+
+  it('turning the lock off clears the Argon2id cost', async () => {
+    setLockArgon2(cheap);
+    await enableLock(PASSWORD, { kind: 'password', autoLockMinutes: 5 });
+    await disableLock(PASSWORD);
+    const { lock } = await getStoredSettings();
+    expect(lock).toMatchObject({ enabled: false, iterations: 0, verifier: '' });
+    expect(lock.argon2).toBeUndefined();
   });
 });

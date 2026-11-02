@@ -1,4 +1,5 @@
 import { CryptoError, openText, sealText } from '../../db';
+import type { SealOptions } from '../../db';
 import type { SessionSecrets } from '../../db';
 import type { SealedData, Settings } from '../../domain/types';
 import { t } from '../../i18n';
@@ -8,7 +9,7 @@ import { t } from '../../i18n';
  *
  * While the app lock is on, the API keys are not stored in the clear. The three key fields of the stored
  * settings are empty, and their values live in one AES-256-GCM blob (`SealedData`, key from the password with
- * PBKDF2-SHA256, see db/crypto.ts). The plaintext inside the blob is this JSON document:
+ * Argon2id, see db/crypto.ts; the blob is tied to this purpose). The plaintext inside the blob is this JSON document:
  *
  *   { "v": 1, "anthropic": "<key>", "openaiCompat": "<key>", "stt": "<key>" }
  *
@@ -30,14 +31,17 @@ export function collectSecrets(settings: Settings): SessionSecrets {
   };
 }
 
-export async function sealSecrets(password: string, secrets: SessionSecrets, options?: { iterations?: number }): Promise<SealedData> {
+/** Authenticated with the sealed blob: it cannot be replaced with, say, a backup that has the same password. */
+const SECRETS_AAD = 'orbita/api-keys/v1';
+
+export async function sealSecrets(password: string, secrets: SessionSecrets, options?: SealOptions): Promise<SealedData> {
   const document = { v: SEALED_SECRETS_VERSION, anthropic: secrets.anthropic, openaiCompat: secrets.openaiCompat, stt: secrets.stt };
-  return sealText(password, JSON.stringify(document), options);
+  return sealText(password, JSON.stringify(document), { ...options, aad: SECRETS_AAD });
 }
 
 /** @throws CryptoError `wrong_password` for a wrong password, `invalid_payload` when the document is not ours. */
 export async function openSecrets(password: string, sealed: SealedData): Promise<SessionSecrets> {
-  const text = await openText(password, sealed);
+  const text = await openText(password, sealed, { aad: SECRETS_AAD });
   let value: unknown;
   try {
     value = JSON.parse(text);

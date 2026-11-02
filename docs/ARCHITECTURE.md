@@ -80,7 +80,7 @@ interface SttProvider { id: 'browser' | 'openai-compat'; transcribe(blob: Blob, 
 
 ## Security and privacy
 
-- API keys are stored in IndexedDB `settings`; with the lock enabled they are encrypted with AES-GCM using a key derived from the password (PBKDF2, at least 210 000 iterations, a per-device salt). The password is never stored, only a verification hash.
+- API keys are stored in IndexedDB `settings`; with the lock enabled they are encrypted with AES-256-GCM using a key derived from the password: Argon2id (32 MiB, 3 passes; memory-hard, so a stolen file cannot be guessed against on GPUs) split with HKDF into one key that encrypts and one that checks the password, from a per-device salt. The purpose (API keys, backup) is authenticated with the data, so a blob cannot be passed off as another kind. The password is never stored, only the check value. Locks and backups made by earlier versions (PBKDF2) still open; the lock upgrades itself on the next unlock.
 - Encrypted backup uses the same mechanism; format `orbit-backup-v1` (JSON + base64 audio).
 - CSP in `index.html`: `default-src 'self'`; `connect-src` lists only the AI hosts and Supabase; no `unsafe-eval`. A `<meta>` CSP can only be tightened, never loosened, at runtime, so a self-hosted OpenAI-compatible server must be added to `connect-src` before building (the place is marked with a comment).
 - The context pack respects the privacy level (`full | initials | anonymous`): names are replaced deterministically within one export.
