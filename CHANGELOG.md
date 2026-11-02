@@ -2,6 +2,17 @@
 
 All notable changes to Orbita are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Changed
+
+- Upgraded the stack: React 19, Vite 8, TypeScript 7, Vitest 5, React Router 8 (`react-router`, with the v7 behaviours now the default), Motion 14.
+- Encryption: new backups and locks use Argon2id (32 MiB, 3 passes) instead of PBKDF2, split with HKDF into separate keys for encrypting and for checking the password, with the data's purpose authenticated. An unlock is one key derivation instead of two. Old backups and locks still open, and a lock made by an earlier version upgrades itself on its next unlock. Argon2id is pure JavaScript and loads on first use, so the content policy needs no `wasm-unsafe-eval`.
+
+### Added
+
+- On iPhone and iPad in a Safari tab, where the browser deletes a site's data after 7 idle days, the onboarding now explains it before anything is typed in and shows how to add the app to the Home Screen; the day screen reminds until it is installed.
+
 ## [1.0.0] - 2026-10-22
 
 First open-source release.

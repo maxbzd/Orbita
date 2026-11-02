@@ -432,8 +432,15 @@ export type LockKind = (typeof LOCK_KINDS)[number];
 export const PRIVACY_LEVELS = ['full', 'initials', 'anonymous'] as const;
 export type PrivacyLevel = (typeof PRIVACY_LEVELS)[number];
 
-/** AES-GCM payload whose key is derived from a password with PBKDF2. All binary fields are base64. */
-export interface SealedData {
+/** Argon2id cost: memory in KiB, passes, lanes. Stored next to the data it protects, so it can grow later. */
+export interface Argon2Params {
+  m: number;
+  t: number;
+  p: number;
+}
+
+/** Version 1 (older files): AES-GCM, key from the password with PBKDF2. All binary fields are base64. */
+export interface SealedDataV1 {
   v: 1;
   alg: 'AES-GCM';
   kdf: 'PBKDF2-SHA256';
@@ -442,6 +449,22 @@ export interface SealedData {
   iv: string;
   data: string;
 }
+
+/**
+ * Version 2: AES-256-GCM, key from the password with Argon2id (memory-hard, so a stolen file cannot be guessed against
+ * on GPUs), split with HKDF so the key that encrypts is never the key that checks the password. The context
+ * (backup, API keys) is authenticated, so a blob cannot be passed off as another kind.
+ */
+export interface SealedDataV2 extends Argon2Params {
+  v: 2;
+  alg: 'AES-GCM';
+  kdf: 'Argon2id';
+  salt: string;
+  iv: string;
+  data: string;
+}
+
+export type SealedData = SealedDataV1 | SealedDataV2;
 
 export interface AiModels {
   /** Cheap and fast: extraction, ask. */
@@ -472,9 +495,11 @@ export interface LockSettings {
   enabled: boolean;
   /** What the user typed to set the lock up: decides the keyboard on the lock screen; the check is the same. */
   kind: LockKind;
-  /** Base64 salt and iteration count of the password hash. */
+  /** Base64 salt and iteration count of the password hash (PBKDF2; `iterations` is 0 once `argon2` is set). */
   salt: string;
   iterations: number;
+  /** Present when the check value comes from Argon2id (the lock is upgraded the next time it is unlocked). */
+  argon2?: Argon2Params;
   /** Base64 password check value. The password itself is never stored. */
   verifier: string;
   autoLockMinutes: number;

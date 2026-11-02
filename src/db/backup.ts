@@ -38,6 +38,7 @@ import type {
   UsageRow,
 } from '../domain/types';
 import { CryptoError, openText, sealText } from './crypto';
+import type { Argon2Params } from '../domain/types';
 import { base64ToBlob, blobToBase64 } from './encoding';
 import { allTables } from './internal';
 import { recomputeMentions } from './repos/people';
@@ -185,9 +186,14 @@ export interface ExportOptions {
 }
 
 export interface EncryptedExportOptions extends ExportOptions {
-  /** PBKDF2 work factor (at least 210 000); the default is the app-wide one. */
+  /** Argon2id cost; the default is the app-wide one. Tests lower it. */
+  argon2?: Argon2Params;
+  /** Ask for the older PBKDF2 format (work factor, at least 210 000): only to test that old files still open. */
   iterations?: number;
 }
+
+/** What an encrypted backup is for, authenticated with it: the same bytes cannot be passed off as, say, sealed API keys. */
+const BACKUP_AAD = 'orbita/backup/v1';
 
 /** Settings without anything secret: API keys blanked, no sealed copy of them. */
 export function redactSecrets(settings: Settings): Settings {
@@ -242,10 +248,10 @@ export async function exportBackup({ includeAudio = false, includeSecrets = fals
   };
 }
 
-/** Same content as `exportBackup`, sealed with the password (AES-256-GCM, PBKDF2-SHA256). */
+/** Same content as `exportBackup`, sealed with the password (AES-256-GCM, key from Argon2id). */
 export async function exportEncryptedBackup(
   password: string,
-  { iterations, includeSecrets = true, ...options }: EncryptedExportOptions = {},
+  { iterations, argon2, includeSecrets = true, ...options }: EncryptedExportOptions = {},
 ): Promise<EncryptedBackup> {
   if (password === '') throw new BackupError('password_required', t('Enter a password to encrypt the backup.'));
   const plain = await exportBackup({ ...options, includeSecrets });
@@ -253,7 +259,7 @@ export async function exportEncryptedBackup(
     format: BACKUP_FORMAT,
     encrypted: true,
     exportedAt: plain.exportedAt,
-    sealed: await sealText(password, JSON.stringify(plain), iterations === undefined ? undefined : { iterations }),
+    sealed: await sealText(password, JSON.stringify(plain), { iterations, argon2, aad: BACKUP_AAD }),
   };
 }
 
@@ -331,7 +337,7 @@ export async function readBackup(text: string, password?: string): Promise<Plain
 
   let inner: string;
   try {
-    inner = await openText(password, envelope.data.sealed);
+    inner = await openText(password, envelope.data.sealed, { aad: BACKUP_AAD });
   } catch (error) {
     if (error instanceof CryptoError && error.code === 'wrong_password') {
       throw new BackupError('wrong_password', t('Wrong password or the file is damaged.'));
