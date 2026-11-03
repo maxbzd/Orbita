@@ -2371,5 +2371,16 @@
   "Couldn't save the backup": "Не удалось сохранить копию",
   "Automatic copies are off": "Автоматические копии выключены",
   "Back up now": "Сохранить сейчас",
-  "Turn off": "Выключить"
+  "Turn off": "Выключить",
+  "Storage is full": "Хранилище переполнено",
+  "The last change was not saved. Nothing saved earlier is lost. Make a backup, free some space and try again.": "Последнее изменение не сохранилось. Ничего из сохранённого раньше не потеряно. Сделай резервную копию, освободи место и попробуй снова.",
+  "Storage is almost full": "Хранилище почти заполнено",
+  "Make a backup": "Сделать резервную копию",
+  "Couldn't free space": "Не удалось освободить место",
+  "Orbita is close to the space your browser allows. Make a backup and free some space before it runs out.": "Orbita подходит к объёму, который разрешает твой браузер. Сделай резервную копию и освободи место, пока оно не кончилось.",
+  "No old recordings to delete": "Нет старых записей голоса для удаления",
+  "Recordings deleted: {n}": "Удалено записей голоса: {n}",
+  "Delete old recordings": "Удалить старые записи голоса",
+  "Delete recordings": "Удалить записи голоса",
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Записей голоса старше 30 дней: {n} ({size}). Удалить их? Тексты останутся; звук будет удалён с этого устройства."
 }

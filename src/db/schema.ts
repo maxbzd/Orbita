@@ -1,6 +1,7 @@
 import Dexie from 'dexie';
 import { normalizePersonRole } from '../domain/types';
-import type { DexieOptions, EntityTable, Transaction } from 'dexie';
+import type { DBCore, DexieOptions, EntityTable, Transaction } from 'dexie';
+import { reportWriteFailure, resolveFull, useStorageHealth } from '../lib/storageHealth';
 import { backendFactory, backendKeyRange, initBackend } from '../vault/backend';
 import type {
   AudioBlob,
@@ -104,6 +105,35 @@ export type OrbitDB = Dexie & {
 export function createDb(name: string = DB_NAME, versions: readonly SchemaVersion[] = SCHEMA_VERSIONS, options?: DexieOptions): OrbitDB {
   const dexie = new Dexie(name, options) as OrbitDB;
   applyVersions(dexie, versions);
+  // Every write passes here: a refusal for lack of room is announced to the person (see StorageBanner), and still thrown,
+  // so the caller knows the change was not saved. A failed write changes nothing (the transaction is rolled back).
+  dexie.use({
+    stack: 'dbcore',
+    name: 'storage-guard',
+    create: (down: DBCore): DBCore => ({
+      ...down,
+      table: (tableName: string) => {
+        const table = down.table(tableName);
+        return {
+          ...table,
+          // `.then` on the promise Dexie gave us, not async/await: a native promise in the middle would let a transaction
+          // commit before the rest of its work has run
+          mutate: (req) =>
+            table.mutate(req).then(
+              (result) => {
+                // writes work again (room was made, or the browser allowed more): the notice has done its job
+                if (useStorageHealth.getState().full) resolveFull();
+                return result;
+              },
+              (error: unknown) => {
+                reportWriteFailure(error);
+                throw error;
+              },
+            ),
+        };
+      },
+    }),
+  });
   return dexie;
 }
 
