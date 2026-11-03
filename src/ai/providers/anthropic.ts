@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../../lib/zodConfig';
 import type { AiModels } from '../../domain/types';
 import { AiError, BadKeyError, BadResponseError, ProviderError, RateLimitError } from '../errors';
 import { redact, requestJson, requestStream } from '../http';
