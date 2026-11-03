@@ -22,6 +22,7 @@ import {
   runImport,
 } from './dataActions';
 import type { BackupPreview, RawCleanup } from './dataActions';
+import { AutoBackupBlock } from './AutoBackupBlock';
 import { ConfirmSheet } from './ConfirmSheet';
 import styles from './Settings.module.css';
 import { t } from '../../i18n';
@@ -520,6 +521,7 @@ export function DataSection() {
   return (
     <Group id="data" title={t('Data')} footer={<p>{t("Data lives in the browser's storage on this device. A regular backup protects it if the phone is lost or the browser is cleared.")}</p>}>
       <ExportBlock />
+      <AutoBackupBlock />
       <ImportBlock />
       <TrashBlock />
       <DemoRow />

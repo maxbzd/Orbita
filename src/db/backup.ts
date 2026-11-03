@@ -37,6 +37,7 @@ import type {
   Tombstone,
   UsageRow,
 } from '../domain/types';
+import { isKeyBackup, keyEncryptedBackupSchema, openKeyBackup } from './backupKey';
 import { CryptoError, openText, sealText } from './crypto';
 import type { Argon2Params } from '../domain/types';
 import { base64ToBlob, blobToBase64 } from './encoding';
@@ -207,6 +208,7 @@ export function redactSecrets(settings: Settings): Settings {
     stt: { ...settings.stt, apiKey: '' },
     lock: { ...settings.lock, sealedSecrets: null },
     e2e: null,
+    autoBackup: null,
   };
 }
 
@@ -241,7 +243,8 @@ export async function exportBackup({ includeAudio = false, includeSecrets = fals
     includesAudio: includeAudio,
     tables: {
       ...rest,
-      settings: normalized && !includeSecrets ? redactSecrets(normalized) : normalized,
+      // the folder of automatic copies belongs to this device, never to a file
+      settings: normalized && (includeSecrets ? { ...normalized, autoBackup: null } : redactSecrets(normalized)),
       audio: await Promise.all(
         audio.map(async ({ data, ...meta }) => ({ ...meta, data: await blobToBase64(data) })),
       ),
@@ -330,6 +333,8 @@ export async function readBackup(text: string, password?: string): Promise<Plain
   assertBackupEnvelope(value);
   if (value.encrypted !== true) return parsePlain(value);
 
+  if (isKeyBackup(value)) return readKeyBackup(value, password);
+
   const envelope = encryptedBackupSchema.safeParse(value);
   if (!envelope.success) {
     throw new BackupError('invalid_data', t('The backup is damaged ({describeIssue}).', { describeIssue: describeIssue(envelope.error) }));
@@ -341,6 +346,28 @@ export async function readBackup(text: string, password?: string): Promise<Plain
     inner = await openText(password, envelope.data.sealed, { aad: BACKUP_AAD });
   } catch (error) {
     if (error instanceof CryptoError && error.code === 'wrong_password') {
+      throw new BackupError('wrong_password', t('Wrong password or the file is damaged.'));
+    }
+    throw error;
+  }
+  const decrypted = parseJson(inner);
+  assertBackupEnvelope(decrypted);
+  return parsePlain(decrypted);
+}
+
+/** A copy the automatic backups made: sealed to a public key, opened with the passphrase it was made from. */
+async function readKeyBackup(value: unknown, passphrase: string | undefined): Promise<PlainBackup> {
+  const envelope = keyEncryptedBackupSchema.safeParse(value);
+  if (!envelope.success) {
+    throw new BackupError('invalid_data', t('The backup is damaged ({describeIssue}).', { describeIssue: describeIssue(envelope.error) }));
+  }
+  if (!passphrase) throw new BackupError('password_required', t('The backup is encrypted: enter the password.'));
+  let inner: string;
+  try {
+    inner = await openKeyBackup(envelope.data, passphrase);
+  } catch (error) {
+    // the key-sealing code has its own error class (src/crypto): go by the code
+    if ((error as { code?: unknown } | null)?.code === 'wrong_password') {
       throw new BackupError('wrong_password', t('Wrong password or the file is damaged.'));
     }
     throw error;
@@ -434,7 +461,7 @@ function keepLocalSecrets(incoming: Settings, local: Settings | undefined): Sett
   if (!local) return incoming;
   const current = normalizeSettings(local);
   // The cloud key belongs to the device as well: a backup (which carries none unless it is a sealed one) keeps it.
-  incoming = { ...incoming, e2e: incoming.e2e ?? current.e2e };
+  incoming = { ...incoming, e2e: incoming.e2e ?? current.e2e, autoBackup: current.autoBackup };
   // The lock belongs to the device, not to the file: a backup without one must not switch off this device's lock
   // (and lose the sealed keys), and one with a lock must not leave plain keys next to it.
   if (current.lock.enabled && !incoming.lock.enabled) return { ...incoming, lock: current.lock };

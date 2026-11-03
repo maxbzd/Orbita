@@ -501,5 +501,18 @@ export const settingsSchema = section(
       .object({ key: z.string().min(1), id: z.string().min(1) })
       .nullable()
       .catch(null),
+    autoBackup: z
+      .object({
+        salt: z.string().min(1),
+        m: z.number().int().min(1),
+        t: z.number().int().min(1),
+        p: z.number().int().min(1),
+        publicKey: z.string().min(1),
+        folder: z.string(),
+        everyDays: z.number().int().min(1).max(365).catch(1),
+        lastAt: z.number().optional().catch(undefined),
+      })
+      .nullable()
+      .catch(null),
   }),
 ) satisfies z.ZodType<Settings>;
