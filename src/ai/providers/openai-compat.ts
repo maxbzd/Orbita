@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../../lib/zodConfig';
 import { estimateTokens } from '../../domain/tokens';
 import type { AiModels } from '../../domain/types';
 import { AiError, BadResponseError, NoKeyError, ProviderError } from '../errors';

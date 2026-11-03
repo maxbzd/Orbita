@@ -1,5 +1,5 @@
 import type { EntityTable, Table } from 'dexie';
-import { z } from 'zod';
+import { z } from '../lib/zodConfig';
 import { localDayKey, nowISO } from '../domain/dates';
 import {
   captureSchema,
