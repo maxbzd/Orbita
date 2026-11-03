@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../lib/zodConfig';
 import {
   AI_PROVIDERS,
   CAPTURE_CONTEXTS,

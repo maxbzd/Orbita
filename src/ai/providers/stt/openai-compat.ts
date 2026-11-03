@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../../../lib/zodConfig';
 import { BadResponseError, NoKeyError, ProviderError } from '../../errors';
 import { requestJson } from '../../http';
 import type { HttpConfig } from '../../http';

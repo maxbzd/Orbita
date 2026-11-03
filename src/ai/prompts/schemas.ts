@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../../lib/zodConfig';
 import { COMMITMENT_DIRECTIONS, IDEA_STAGES, PATTERN_KINDS, PERSON_ROLES, PROJECT_KINDS, TASK_PRIORITIES } from '../../domain/types';
 import { toModelJsonSchema } from '../jsonschema';
 

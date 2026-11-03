@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../lib/zodConfig';
 import type { ZodType } from 'zod';
 
 /**
