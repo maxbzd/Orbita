@@ -497,5 +497,9 @@ export const settingsSchema = section(
         completedAt: isoDateSchema.optional().catch(undefined),
       }),
     ),
+    e2e: z
+      .object({ key: z.string().min(1), id: z.string().min(1) })
+      .nullable()
+      .catch(null),
   }),
 ) satisfies z.ZodType<Settings>;

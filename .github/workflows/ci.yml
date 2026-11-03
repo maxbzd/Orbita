@@ -31,3 +31,28 @@ jobs:
       - run: npm run i18n:check
       - run: npm test
       - run: npm run build
+
+  # The server rules of sync (version ordering, refusing an out-of-date edit, sealed records, deletions) against a real PostgreSQL.
+  sql:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: ./scripts/test-sql.sh
+        env:
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres

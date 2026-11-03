@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { capturesRepo, db, wipeAll } from '../db';
+import { capturesRepo, db, getStoredSettings, updateSettings, wipeAll } from '../db';
 import { FakeCloud } from './testing';
 
 // A stand-in for supabase-js backed by the in-memory cloud: same shapes, same answers.
@@ -38,6 +38,10 @@ vi.mock('@supabase/supabase-js', () => ({
         resetPasswordForEmail: async () => ({ error: null }),
         updateUser: async () => ({ error: null }),
         setSession: async () => ({ error: null }),
+      },
+      rpc: async (name: string, { rows }: { rows: Parameters<ReturnType<typeof backend>['upsert']>[0] }) => {
+        if (name !== 'orbita_sync_push') return { data: null, error: { code: 'PGRST202', message: 'Could not find the function' } };
+        return { data: await backend().upsert(rows), error: null };
       },
       from: () => ({
         upsert: async (rows: { tbl: never; id: string; data: unknown }[]) => {
@@ -148,6 +152,28 @@ describe('signing in', () => {
   it('a sign-up that needs a confirmed mail does not pretend to be signed in', async () => {
     expect(await signUp('new@example.com', 'good-password')).toBe('confirm-email');
     expect(useCloud.getState().userId).toBeNull();
+  });
+});
+
+describe('an encrypted account', () => {
+  const sealed = { _e2e: 1, k: 'other', iv: 'AAAAAAAAAAAAAAAA', c: 'AAAA' };
+
+  it('a device without the key says so, reads nothing and sends nothing', async () => {
+    await fake.cloud.backend('u1').upsert([{ tbl: 'captures', id: 'c1', data: sealed }]);
+    await capturesRepo.create({ kind: 'text', text: 'только здесь', status: 'done' });
+    const before = JSON.stringify([...fake.cloud.rows.values()]);
+    await signIn('max@example.com', 'good-password');
+    await settle();
+    expect(useCloud.getState().status).toBe('e2e-locked');
+    expect(JSON.stringify([...fake.cloud.rows.values()])).toBe(before);
+  });
+
+  it('signing out takes the cloud key off the device', async () => {
+    await signIn('max@example.com', 'good-password');
+    await settle();
+    await updateSettings({ e2e: { key: 'AAAA', id: 'k1' } });
+    await signOut();
+    expect((await getStoredSettings()).e2e).toBeNull();
   });
 });
 
