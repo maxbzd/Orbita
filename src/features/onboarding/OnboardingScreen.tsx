@@ -5,7 +5,6 @@ import { createLlmProvider, describeError } from '../../ai';
 import { MicrophoneError, getMicrophoneAccess, probeMicrophone } from '../../audio';
 import { capturesRepo, getSettings, mergeSettings, profileRepo, updateSettings } from '../../db';
 import { useProfile } from '../../db/hooks';
-import { seedDemo } from '../../db/seed';
 import { nowISO } from '../../domain/dates';
 import { useCloud } from '../../sync';
 import { syncEnabled } from '../../sync/config';
@@ -345,7 +344,8 @@ function Trainer({ onFinish }: { onFinish: (to: string, state?: unknown) => void
   const loadDemo = async (): Promise<void> => {
     setBusy('demo');
     try {
-      await seedDemo();
+      // the example data is a separate chunk: only loaded when someone asks for it
+      await (await import('../../db/seed')).seedDemo();
       await markDone();
       toast.show({ message: t('Demo data loaded. You can remove it in Settings → Data.') });
       onFinish('/today');

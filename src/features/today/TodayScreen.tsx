@@ -3,7 +3,6 @@ import { Suspense, lazy, useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { getSettings } from '../../db';
 import { useProfile } from '../../db/hooks';
-import { seedDemo } from '../../db/seed';
 import { createLlmProvider, checkAiReadiness, generateReview } from '../../ai';
 import { formatDayLong, formatDayShort, localDayKey, localMinutesOfDay } from '../../domain/dates';
 import { greetingLine, isEveningHour, daySummary } from '../../lib/verdict';
@@ -83,7 +82,7 @@ export default function TodayScreen() {
   const onDemo = useCallback(async () => {
     setSeeding(true);
     try {
-      await seedDemo();
+      await (await import('../../db/seed')).seedDemo();
       toast.show({ message: t('Demo data loaded. You can remove it in Settings → Data.') });
     } catch {
       toast.show({ message: t('Could not load the demo data.'), tone: 'danger' });

@@ -38,9 +38,9 @@ describe('«Коллекции»', () => {
         </MemoryRouter>
       </ToastProvider>,
     );
-    const card = await screen.findByRole('button', { name: /^Обязательства, 2 записи/ });
-    expect(screen.getAllByRole('button', { name: /только ты/ })).toHaveLength(8);
-    expect(screen.getByRole('button', { name: /^Прогнозы, 0 записей/ })).toBeInTheDocument();
+    const card = await screen.findByRole('button', { name: /2 записи.*Обязательства/ });
+    expect(screen.getAllByRole('button', { name: /Только ты/ })).toHaveLength(8);
+    expect(screen.getByRole('button', { name: /0 записей.*Прогнозы/ })).toBeInTheDocument();
     fireEvent.click(card);
     await waitFor(() => expect(screen.getByTestId('where')).toHaveTextContent('/items/commitment'));
   });

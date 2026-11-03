@@ -102,7 +102,6 @@ export function CollectionCard({
         className={styles.card}
         style={{ '--c': typeColor(kind) } as CSSProperties}
         data-kind={kind}
-        aria-label={`${name}, ${countText}${isPrivate ? t(', only you') : ''}`}
         aria-haspopup={onMenu ? 'menu' : undefined}
         onClick={onClick}
         onPointerDown={onPointerDown}
@@ -113,15 +112,17 @@ export function CollectionCard({
         onContextMenu={onContextMenu}
         onKeyDown={onKeyDown}
       >
-        <span className={styles.top} aria-hidden="true">
-          <TypeMedallion kind={kind} size={36} />
+        <span className={styles.top}>
+          <span aria-hidden="true">
+            <TypeMedallion kind={kind} size={36} />
+          </span>
           <span className={styles.count}>{countText}</span>
         </span>
-        <span className={styles.title} aria-hidden="true">
+        <span className={styles.title}>
           {name}
         </span>
         {lines.length ? (
-          <span className={styles.preview} aria-hidden="true">
+          <span className={styles.preview}>
             {lines.map((line, i) => (
               <span key={`${i}-${line}`} className={styles.previewLine}>
                 {line}
@@ -130,7 +131,7 @@ export function CollectionCard({
           </span>
         ) : null}
         {isPrivate ? (
-          <span className={styles.lock} aria-hidden="true">
+          <span className={styles.lock}>
             <Icon name="lock" size={14} />
             {t('Only you')}
           </span>

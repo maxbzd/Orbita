@@ -4,7 +4,6 @@ import { checkAiReadiness, createLlmProvider, describeError } from '../../ai';
 import { BackupError, CryptoError, destroyFromTrash, emptyTrash, getSettings, hasDemoData, restoreFromTrash } from '../../db';
 import type { ImportMode, TrashEntry } from '../../db';
 import { useTrash } from '../../db/hooks';
-import { removeDemo, seedDemo } from '../../db/seed';
 import { formatDayShort, localDayKey } from '../../domain/dates';
 import { Body, Button, Caption, Field, ListRow, SegmentedControl, Sheet, Toggle, useToast } from '../../ui';
 import { Group, Row } from './Group';
@@ -367,10 +366,11 @@ function DemoRow() {
     setBusy(true);
     try {
       if (present) {
+        const { removeDemo } = await import('../../db/seed');
         const removed = await removeDemo();
         toast.show({ message: t('Demo data removed ({removed})', { removed }), duration: 3000 });
       } else {
-        await seedDemo();
+        await (await import('../../db/seed')).seedDemo();
         toast.show({ message: t('Demo data loaded. It is marked and does not mix with yours.'), duration: 4000 });
       }
     } catch (cause) {

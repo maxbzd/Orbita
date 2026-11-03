@@ -27,8 +27,9 @@ export function ItemRow({ item, today, now, people, onOpen, onToggleDone }: Item
 
   return (
     <li className={cx(styles.row, closed && styles.closed)} data-item={item.id} data-status={item.status}>
-      <button type="button" className={styles.main} onClick={() => onOpen(item)} aria-label={`${TYPE_LABELS[item.kind]}: ${item.title}`}>
+      <button type="button" className={styles.main} onClick={() => onOpen(item)}>
         <TypeMedallion kind={item.kind} size={36} />
+        <span className="sr-only">{`${TYPE_LABELS[item.kind]}:`}</span>{' '}
         <span className={styles.text}>
           <span className={cx(styles.title, closed && styles.struck)}>{item.title}</span>
           {subtitle ? <span className={styles.subtitle}>{subtitle}</span> : null}
