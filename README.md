@@ -79,6 +79,8 @@ hosting your own copy in a few minutes (GitHub Pages, Netlify, Cloudflare Pages,
 - All data lives in **IndexedDB on your device**. No analytics, no telemetry, no external fonts or CDNs at runtime.
 - The only thing that leaves the device is what *you* send to the AI provider you configured (your own key): a transcript to
   extract objects from, a question, a review. You can see what will be sent first.
+- **Protect this device** (optional): the data is encrypted at rest with a password, a recovery key and passkeys; nothing readable is stored. Trusted Types are enforced.
+- Edits made on two devices are merged field by field.
 - API keys stay on the device; with the lock enabled they are encrypted with a key derived from your password (Argon2id + AES-256-GCM).
 - The cloud is **off** until you sign in to your own Supabase project, and it is honest about its limits: the data is protected
   by row-level security and your password but is not end-to-end encrypted ([docs/CLOUD.md](docs/CLOUD.md)).
