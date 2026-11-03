@@ -2415,5 +2415,7 @@
   "Recordings deleted: {n}": "Видалено записів голосу: {n}",
   "Delete old recordings": "Видалити старі записи голосу",
   "Delete recordings": "Видалити записи голосу",
-  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Записів голосу старших за 30 днів: {n} ({size}). Видалити їх? Тексти залишаться; звук буде видалено з цього пристрою."
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Записів голосу старших за 30 днів: {n} ({size}). Видалити їх? Тексти залишаться; звук буде видалено з цього пристрою.",
+  "A new version is ready": "Нова версія готова",
+  "Update": "Оновити"
 }
