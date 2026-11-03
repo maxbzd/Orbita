@@ -42,6 +42,23 @@ function CloudStart() {
   return null;
 }
 
+/** Writes the automatic encrypted copy into the chosen folder when one is due: at launch, then whenever the app is visible again. */
+function AutoBackupRun() {
+  useEffect(() => {
+    const run = (): void => {
+      if (document.visibilityState === 'visible') void import('./db/autoBackup').then((module) => module.runAutoBackup());
+    };
+    run();
+    document.addEventListener('visibilitychange', run);
+    const timer = window.setInterval(run, 30 * 60_000);
+    return () => {
+      document.removeEventListener('visibilitychange', run);
+      window.clearInterval(timer);
+    };
+  }, []);
+  return null;
+}
+
 /** Keeps the tab title in step with the screen (history, task switcher, screen readers). */
 function DocumentTitle() {
   const { pathname } = useLocation();
@@ -58,6 +75,7 @@ export function App() {
       <ToastProvider>
         <LockGate>
           <SettingsSync />
+          <AutoBackupRun />
           <DocumentTitle />
           <CloudStart />
           <FirstRunRedirect />
