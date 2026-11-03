@@ -271,6 +271,68 @@ describe('edits made on two devices are merged field by field', () => {
   });
 });
 
+describe('the server refuses an edit built on an out-of-date copy', () => {
+  it('a write that names a base the cloud no longer has is reported, not stored', async () => {
+    const c = new FakeCloud();
+    const id = await a.use(async () => {
+      const item = await itemsRepo.create({ kind: 'task', title: 'Позвонить' });
+      await sync(c);
+      return item.id;
+    });
+    const row = c.table('items')[0] as { updatedAt: string };
+    const server = c.backend('u1');
+    const stale = await server.upsert([{ tbl: 'items', id, data: { ...row, title: 'старое', updatedAt: '2999-01-01T00:00:00.000Z' }, ver: '2999-01-01T00:00:00.000Z', base: '2000-01-01T00:00:00.000Z' }]);
+    expect(stale).toEqual({ conflicts: [`items:${id}`] });
+    expect((c.table('items')[0] as { title: string }).title).toBe('Позвонить');
+    const fresh = await server.upsert([{ tbl: 'items', id, data: { ...row, title: 'новое', updatedAt: '2999-01-01T00:00:00.000Z' }, ver: '2999-01-01T00:00:00.000Z', base: row.updatedAt }]);
+    expect(fresh).toEqual({ conflicts: [] });
+    expect((c.table('items')[0] as { title: string }).title).toBe('новое');
+  });
+
+  it('a device that loses the race reads again, merges, and sends the merged record in the same round', async () => {
+    const c = new FakeCloud();
+    const id = await a.use(async () => {
+      const item = await itemsRepo.create({ kind: 'task', title: 'Позвонить', body: 'текст' });
+      await sync(c);
+      return item.id;
+    });
+    await b.use(() => sync(c));
+    await tick();
+    await b.use(async () => {
+      await itemsRepo.update(id, { body: 'текст B' });
+    });
+    // while B is between reading and writing, another device changes the title in the cloud
+    const inner = c.backend('u1');
+    let raced = false;
+    const racing = {
+      ...inner,
+      upsert: async (rows: Parameters<typeof inner.upsert>[0]) => {
+        if (!raced) {
+          raced = true;
+          const current = c.table('items')[0] as { updatedAt: string };
+          const stamp = new Date(Date.parse(current.updatedAt) + 60_000).toISOString();
+          await inner.upsert([{ tbl: 'items', id, data: { ...current, title: 'Позвонить маме', updatedAt: stamp }, ver: stamp, base: current.updatedAt }]);
+        }
+        return inner.upsert(rows);
+      },
+    };
+    const report = await b.use(async () => {
+      const result = await runSync(racing, { push: true });
+      const item = await itemsRepo.get(id);
+      expect(item?.title).toBe('Позвонить маме');
+      expect(item?.body).toBe('текст B');
+      return result;
+    });
+    expect(report.pushed).toBe(1);
+    const stored = c.table('items')[0] as { title: string; body: string };
+    expect(stored).toMatchObject({ title: 'Позвонить маме', body: 'текст B' });
+    await a.use(async () => {
+      await sync(c);
+      expect(await itemsRepo.get(id)).toMatchObject({ title: 'Позвонить маме', body: 'текст B' });
+    });
+  });
+});
+
 describe('what stays on the device', () => {
   it('demo data and recordings in the making are not sent', async () => {
     const c = new FakeCloud();

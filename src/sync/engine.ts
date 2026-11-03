@@ -32,10 +32,35 @@ export interface RemoteRow {
   updated_at: string;
 }
 
+/** One record on its way up. `ver`, `base` and `target` stay readable by the server even when `data` is sealed. */
+export interface OutRow {
+  tbl: SyncTable;
+  id: ID;
+  data: unknown;
+  /** The record's own version (`updatedAt`, or `deletedAt` of a tombstone): what the server orders edits by. */
+  ver?: string;
+  /** The version of the cloud copy this edit was made on top of. The server refuses the write if the cloud moved on. */
+  base?: string;
+  /** Tombstones: the table of the record they delete. */
+  target?: string;
+}
+
+export interface UpsertResult {
+  /** `table:id` of rows the server did not write because the cloud copy changed since `base`: pull, merge, send again. */
+  conflicts: string[];
+}
+
+export class E2ELockedError extends Error {
+  constructor() {
+    super(t('The cloud data is encrypted and this device does not have the key.'));
+    this.name = 'E2ELockedError';
+  }
+}
+
 export interface SyncBackend {
   readonly userId: string;
-  /** Writes whole records. The server keeps the later `updatedAt` / `deletedAt` of each. */
-  upsert(rows: { tbl: SyncTable; id: ID; data: unknown }[]): Promise<void>;
+  /** Writes whole records. The server keeps the later `ver` of each, and refuses an edit whose `base` is out of date. */
+  upsert(rows: OutRow[]): Promise<UpsertResult | void>;
   /** Rows changed at or after `since` (everything when `null`), oldest first, at most `limit`. */
   pull(since: string | null, limit: number): Promise<RemoteRow[]>;
   /** Capture ids that have a recording in the cloud. */
@@ -75,6 +100,8 @@ const BATCH = 100;
 const BATCH_CHARS = 400_000;
 /** Rows are read again from a little before the cursor: transactions may become visible out of order. */
 const OVERLAP_MS = 15_000;
+/** How many times one round re-reads and re-sends after the server refused an out-of-date edit. */
+const MAX_TURNS = 4;
 
 /**
  * What each row looked like when this device and the cloud last agreed on it (`base:<table>:<id>` in the sync bookkeeping).
@@ -133,6 +160,16 @@ export async function adoptAccount(backend: Pick<SyncBackend, 'userId'>, mode: '
     }
     await db.syncmeta.put({ id: USER, v: backend.userId });
   });
+}
+
+/**
+ * Marks every record and recording as not yet sent, keeping the cursor and the account: the next push sends them all
+ * again. Used when the way records are stored in the cloud changes (sealing them), where the version stamps stay the same.
+ */
+export async function markAllUnsent(): Promise<void> {
+  const keep = (id: string): boolean => id.startsWith('@') || id.startsWith(BASE_PREFIX);
+  const ids = (await db.syncmeta.toCollection().primaryKeys()).filter((id) => !keep(String(id)));
+  await db.syncmeta.bulkDelete(ids);
 }
 
 /** Forgets what is known about the cloud (sign out for good, wipe): the next sign-in treats everything as new. */
@@ -241,6 +278,20 @@ async function applyIncoming(rows: readonly RemoteRow[]): Promise<{ applied: num
       applied += result.added + result.updated;
       written.push(...mine);
       const byId = new Map(prepared.list.map((row) => [row.id, row]));
+      // A row the cloud holds in a version this device did not take (its own copy is newer): the cloud copy is still what
+      // the next edit is built on, so remember it, or the server would keep refusing the send as out of date.
+      const kept = new Set(mine);
+      const rest = list.filter((row) => !kept.has(row.id));
+      if (rest.length > 0) {
+        const held = await (tableOf(table) as Table<RowLike, ID>).bulkGet(rest.map((row) => row.id));
+        rest.forEach((row, index) => {
+          const mineNow = held[index];
+          // only where this device's copy is the newer one (an equal copy is simply in step, and stays as it is)
+          if (mineNow?.updatedAt !== undefined && row.updatedAt !== undefined && mineNow.updatedAt > row.updatedAt && !tombstones.has(row.id)) {
+            meta.push({ id: metaKey(table, row.id), v: versionOf(table, row) });
+          }
+        });
+      }
       for (const id of mine) {
         // a merged row stays "not yet sent": what the cloud is known to have is the version it just sent us
         const row = prepared.remoteOf.get(id) ?? byId.get(id);
@@ -318,6 +369,8 @@ interface Dirty {
   id: ID;
   data: unknown;
   version: string;
+  /** What the cloud had when this edit began (versioned tables, once the row has been synced). */
+  base?: string;
 }
 
 async function collectDirty(): Promise<Dirty[]> {
@@ -328,15 +381,31 @@ async function collectDirty(): Promise<Dirty[]> {
       if (isLocalOnly(tbl, row)) continue;
       const version = versionOf(tbl, row);
       if (known.get(metaKey(tbl, row.id)) === version) continue;
-      dirty.push({ tbl, id: row.id, data: row, version });
+      const base = (VERSIONED_TABLES as readonly string[]).includes(tbl) ? known.get(metaKey(tbl, row.id)) : undefined;
+      dirty.push({ tbl, id: row.id, data: row, version, ...(base !== undefined ? { base } : {}) });
     }
   }
   // Tombstones go first, so a record is never sent after its own deletion.
   return dirty.sort((a, b) => Number(b.tbl === 'tombstones') - Number(a.tbl === 'tombstones'));
 }
 
-async function pushDirty(backend: SyncBackend, signal: AbortSignal | undefined): Promise<number> {
+/** The fields the server orders and checks edits by; they stay readable when the record itself is sealed. */
+function outRow({ tbl, id, data, version, base }: Dirty): OutRow {
+  const ordered = tbl === 'tombstones' || (VERSIONED_TABLES as readonly string[]).includes(tbl);
+  return {
+    tbl,
+    id,
+    data,
+    ...(ordered ? { ver: version } : {}),
+    ...(base !== undefined ? { base } : {}),
+    ...(tbl === 'tombstones' ? { target: (data as Tombstone).table } : {}),
+  };
+}
+
+async function pushDirty(backend: SyncBackend, signal: AbortSignal | undefined): Promise<{ sent: number; conflicts: number }> {
   const dirty = await collectDirty();
+  let sent = 0;
+  let conflicts = 0;
   // Batches of up to BATCH records and about BATCH_CHARS of text: a long monologue must not make one huge request.
   let batch: Dirty[] = [];
   let size = 0;
@@ -346,8 +415,12 @@ async function pushDirty(backend: SyncBackend, signal: AbortSignal | undefined):
     const sending = batch;
     batch = [];
     size = 0;
-    await backend.upsert(sending.map(({ tbl, id, data }) => ({ tbl, id, data })));
-    await db.syncmeta.bulkPut(sending.flatMap(({ tbl, id, version, data }) => {
+    const result = await backend.upsert(sending.map(outRow));
+    const refused = new Set(result?.conflicts ?? []);
+    const accepted = sending.filter(({ tbl, id }) => !refused.has(metaKey(tbl, id)));
+    conflicts += sending.length - accepted.length;
+    sent += accepted.length;
+    await db.syncmeta.bulkPut(accepted.flatMap(({ tbl, id, version, data }) => {
       const base = baseOf(tbl, data);
       return [{ id: metaKey(tbl, id), v: version }, ...(base ? [base] : [])];
     }));
@@ -359,7 +432,7 @@ async function pushDirty(backend: SyncBackend, signal: AbortSignal | undefined):
     size += length;
   }
   await flush();
-  return dirty.length;
+  return { sent, conflicts };
 }
 
 // ───────── Recordings ─────────
@@ -426,7 +499,20 @@ async function syncAudio(backend: SyncBackend, signal: AbortSignal | undefined, 
 export async function runSync(backend: SyncBackend, { push = true, signal }: SyncOptions = {}): Promise<SyncReport> {
   await checkAccount(backend);
   const pulled = await pullAll(backend, signal);
-  const pushed = push ? await pushDirty(backend, signal) : 0;
+  let pushed = 0;
+  if (push) {
+    // Another device may have written between our reading and our writing: the server then refuses that record, we read
+    // again (which merges the two edits) and send the merged one. A few turns are enough; the next round finishes the rest.
+    for (let turn = 0; turn < MAX_TURNS; turn += 1) {
+      const result = await pushDirty(backend, signal);
+      pushed += result.sent;
+      if (result.conflicts === 0) break;
+      const again = await pullAll(backend, signal);
+      pulled.pulled += again.pulled;
+      pulled.applied += again.applied;
+      pulled.rejected += again.rejected;
+    }
+  }
   const audio = await syncAudio(backend, signal, push);
   return { pushed, pulled: pulled.pulled, applied: pulled.applied, rejected: pulled.rejected, audioUp: audio.up, audioDown: audio.down };
 }

@@ -8,7 +8,7 @@ import type { SyncTable } from './rows';
  * number of devices (`cloud.backend(userId)`).
  */
 export class FakeCloud {
-  rows = new Map<string, RemoteRow & { userId: string }>();
+  rows = new Map<string, RemoteRow & { userId: string; ver?: string }>();
   audio = new Map<string, Blob>();
   private tick = 0;
   /** Set to make every call fail, like a lost connection. */
@@ -31,25 +31,37 @@ export class FakeCloud {
       upsert: async (rows) => {
         this.check();
         this.calls.upsert += 1;
-        for (const { tbl, id, data } of rows) {
-          const versionOf = (value: unknown): string | undefined => {
-            const record = value as { updatedAt?: string; deletedAt?: string };
-            return record.updatedAt ?? record.deletedAt;
-          };
+        const conflicts: string[] = [];
+        const sealed = (value: unknown): value is { _e2e: 1; k: string } => !!value && typeof value === 'object' && (value as { _e2e?: unknown })._e2e === 1;
+        // the version the server orders by: the stamp sent next to the record, or the record's own, as the SQL guard does
+        const versionOf = (value: unknown, ver?: string): string | undefined => {
+          const record = value as { updatedAt?: string; deletedAt?: string };
+          return ver ?? (sealed(value) ? undefined : (record.updatedAt ?? record.deletedAt));
+        };
+        for (const { tbl, id, data, ver, base, target } of rows) {
           const old = this.rows.get(key(tbl, id));
-          if (old) {
-            const oldVersion = versionOf(old.data);
-            const newVersion = versionOf(data);
-            if (oldVersion !== undefined && newVersion !== undefined && newVersion <= oldVersion) continue;
+          const oldVersion = old ? versionOf(old.data, old.ver) : undefined;
+          // a write built on a cloud copy that has changed since is refused, and reported
+          if (old && base !== undefined && oldVersion !== base) {
+            conflicts.push(`${tbl}:${id}`);
+            continue;
           }
-          this.rows.set(key(tbl, id), { tbl, id, data: structuredClone(data), updated_at: this.stamp(), userId });
+          if (old) {
+            const newVersion = versionOf(data, ver);
+            // sealing a record that was stored in the clear (or with another key) may repeat its version
+            const resealed = sealed(data) && (!sealed(old.data) || old.data.k !== data.k);
+            if (oldVersion !== undefined && newVersion !== undefined && (newVersion < oldVersion || (newVersion === oldVersion && !resealed))) continue;
+          }
+          this.rows.set(key(tbl, id), { tbl, id, data: structuredClone(data), updated_at: this.stamp(), userId, ver: versionOf(data, ver) });
           if (tbl === 'tombstones') {
-            const t = data as { id: string; table: string; deletedAt: string };
-            const target = this.rows.get(key(t.table, t.id));
-            const targetVersion = (target?.data as { updatedAt?: string } | undefined)?.updatedAt ?? '';
-            if (target && targetVersion <= t.deletedAt) this.rows.delete(key(t.table, t.id));
+            const targetTable = target ?? (data as { table?: string }).table ?? '';
+            const targetId = (data as { id?: string }).id ?? id;
+            const deletedAt = versionOf(data, ver) ?? '';
+            const victim = this.rows.get(key(targetTable, targetId));
+            if (victim && (versionOf(victim.data, victim.ver) ?? '') <= deletedAt) this.rows.delete(key(targetTable, targetId));
           }
         }
+        return { conflicts };
       },
       pull: async (since, limit) => {
         this.check();
@@ -58,7 +70,7 @@ export class FakeCloud {
           .filter((row) => row.userId === userId && (since === null || row.updated_at >= since))
           .sort((a, b) => (a.updated_at < b.updated_at ? -1 : a.updated_at > b.updated_at ? 1 : 0))
           .slice(0, limit)
-          .map(({ userId: _owner, ...row }) => structuredClone(row));
+          .map(({ userId: _owner, ver: _ver, ...row }) => structuredClone(row));
       },
       listAudio: async () => {
         this.check();

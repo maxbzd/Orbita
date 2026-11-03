@@ -1,7 +1,9 @@
 import Dexie from 'dexie';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { create } from 'zustand';
-import { AccountMismatchError, adoptAccount, forgetCloud, runSync } from './engine';
+import { AccountMismatchError, E2ELockedError, adoptAccount, forgetCloud, runSync } from './engine';
+import { withE2E } from './e2e';
+import { updateSettings } from '../db';
 import type { SyncBackend, SyncReport } from './engine';
 import { SUPABASE_KEY, SUPABASE_URL, syncEnabled } from './config';
 import { createSupabaseBackend, deleteCloudData } from './supabaseBackend';
@@ -13,7 +15,7 @@ import { t } from '../i18n';
  * an account, so a device that never signs in does not pay for it.
  */
 
-export type CloudStatus = 'starting' | 'signed-out' | 'idle' | 'syncing' | 'offline' | 'error' | 'account-conflict';
+export type CloudStatus = 'starting' | 'signed-out' | 'idle' | 'syncing' | 'offline' | 'error' | 'account-conflict' | 'e2e-locked';
 
 export interface CloudState {
   status: CloudStatus;
@@ -96,7 +98,7 @@ async function getClient(): Promise<SupabaseClient> {
       set({ status: 'signed-out', email: null, userId: null, error: null });
     } else if (session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED')) {
       if (backend?.userId !== session.user.id) {
-        backend = createSupabaseBackend(client as SupabaseClient, session.user.id);
+        backend = withE2E(createSupabaseBackend(client as SupabaseClient, session.user.id));
         set({ userId: session.user.id, email: session.user.email ?? null, status: 'idle', error: null });
         startAuto(session.user.id);
       }
@@ -159,6 +161,11 @@ async function round(push: boolean): Promise<void> {
     dirty = dirty || wantPush;
     if (error instanceof AccountMismatchError) {
       set({ status: 'account-conflict', error: null });
+      return;
+    }
+    if (error instanceof E2ELockedError) {
+      // Nothing was read and nothing was sent. Trying again changes nothing until the key arrives (joinWithKey syncs).
+      set({ status: 'e2e-locked', error: null });
       return;
     }
     set({ status: isOffline(error) ? 'offline' : 'error', error: isOffline(error) ? null : describeCloudError(error) });
@@ -308,6 +315,8 @@ export async function signOut(): Promise<void> {
   const supabase = await getClient();
   await supabase.auth.signOut();
   await forgetCloud();
+  // the cloud key leaves the device with the account: the next sign-in asks for it again
+  await updateSettings({ e2e: null });
   set({ lastSyncAt: null, lastReport: null });
 }
 

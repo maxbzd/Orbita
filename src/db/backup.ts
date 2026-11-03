@@ -206,6 +206,7 @@ export function redactSecrets(settings: Settings): Settings {
     },
     stt: { ...settings.stt, apiKey: '' },
     lock: { ...settings.lock, sealedSecrets: null },
+    e2e: null,
   };
 }
 
@@ -432,6 +433,8 @@ export async function mergeMissing<T extends { id: ID }>(table: EntityTable<T, '
 function keepLocalSecrets(incoming: Settings, local: Settings | undefined): Settings {
   if (!local) return incoming;
   const current = normalizeSettings(local);
+  // The cloud key belongs to the device as well: a backup (which carries none unless it is a sealed one) keeps it.
+  incoming = { ...incoming, e2e: incoming.e2e ?? current.e2e };
   // The lock belongs to the device, not to the file: a backup without one must not switch off this device's lock
   // (and lose the sealed keys), and one with a lock must not leave plain keys next to it.
   if (current.lock.enabled && !incoming.lock.enabled) return { ...incoming, lock: current.lock };
