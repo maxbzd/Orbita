@@ -164,6 +164,113 @@ describe('records travel between devices', () => {
   });
 });
 
+describe('edits made on two devices are merged field by field', () => {
+  async function shared(c: FakeCloud, extra: Record<string, unknown> = {}) {
+    const id = await a.use(async () => {
+      const item = await itemsRepo.create({ kind: 'task', title: 'Позвонить', body: 'первая строка\nвторая строка', tags: ['work'], ...extra });
+      await sync(c);
+      return item.id;
+    });
+    await b.use(() => sync(c));
+    await tick();
+    return id;
+  }
+
+  it('different fields edited on each device both survive', async () => {
+    const c = new FakeCloud();
+    const id = await shared(c);
+    await a.use(async () => {
+      await itemsRepo.update(id, { title: 'Позвонить маме' });
+    });
+    await tick();
+    await b.use(async () => {
+      await itemsRepo.update(id, { priority: 'high' } as never);
+    });
+    await tick();
+    await a.use(() => sync(c));
+    await b.use(() => sync(c));
+    await a.use(() => sync(c));
+    for (const device of [a, b]) {
+      const item = await device.use(async () => itemsRepo.get(id));
+      expect(item?.title).toBe('Позвонить маме');
+      expect((item as { priority?: string }).priority).toBe('high');
+    }
+  });
+
+  it('tags added on two devices are both kept', async () => {
+    const c = new FakeCloud();
+    const id = await shared(c);
+    await a.use(async () => {
+      await itemsRepo.update(id, { tags: ['work', 'a'] });
+    });
+    await tick();
+    await b.use(async () => {
+      await itemsRepo.update(id, { tags: ['work', 'b'] });
+    });
+    await tick();
+    await a.use(() => sync(c));
+    await b.use(() => sync(c));
+    const merged = await b.use(async () => (await itemsRepo.get(id))?.tags);
+    expect([...(merged ?? [])].sort()).toEqual(['a', 'b', 'work']);
+  });
+
+  it('the same field edited on both: the later one wins, and the loser is not resurrected', async () => {
+    const c = new FakeCloud();
+    const id = await shared(c);
+    await b.use(async () => {
+      await itemsRepo.update(id, { title: 'от B' });
+    });
+    await tick();
+    await a.use(async () => {
+      await itemsRepo.update(id, { title: 'от A, позже' });
+      await sync(c);
+    });
+    await b.use(() => sync(c));
+    await a.use(() => sync(c));
+    expect(await a.use(async () => (await itemsRepo.get(id))?.title)).toBe('от A, позже');
+    expect(await b.use(async () => (await itemsRepo.get(id))?.title)).toBe('от A, позже');
+    expect(await b.use(() => sync(c))).toMatchObject({ pushed: 0 });
+  });
+
+  it('without a remembered base the later whole row still wins', async () => {
+    const c = new FakeCloud();
+    const id = await shared(c);
+    await b.use(async () => {
+      await db.syncmeta.clear();
+      await itemsRepo.update(id, { title: 'от B' });
+    });
+    await tick();
+    await a.use(async () => {
+      await itemsRepo.update(id, { body: 'новое тело' });
+      await sync(c);
+    });
+    await b.use(() => sync(c));
+    const item = await b.use(async () => itemsRepo.get(id));
+    expect(item?.body).toBe('новое тело');
+  });
+
+  it('devices converge: after everyone syncs, all copies are equal', async () => {
+    const c = new FakeCloud();
+    const id = await shared(c);
+    await a.use(async () => {
+      await itemsRepo.update(id, { title: 'A1', body: 'первая строка\nвторая строка\nA добавил' });
+    });
+    await tick();
+    await b.use(async () => {
+      await itemsRepo.update(id, { title: 'B1', tags: ['work', 'b'] });
+    });
+    await tick();
+    await a.use(() => sync(c));
+    await b.use(() => sync(c));
+    await a.use(() => sync(c));
+    await b.use(() => sync(c));
+    const [x, y] = [await a.use(async () => itemsRepo.get(id)), await b.use(async () => itemsRepo.get(id))];
+    expect(x).toEqual(y);
+    expect(x?.body).toContain('A добавил');
+    expect(x?.tags).toContain('b');
+  });
+});
+
 describe('what stays on the device', () => {
   it('demo data and recordings in the making are not sent', async () => {
     const c = new FakeCloud();
