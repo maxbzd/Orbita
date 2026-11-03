@@ -107,6 +107,14 @@ export default defineConfig({
     setupFiles: ['./src/test-setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     restoreMocks: true,
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/main.tsx', 'src/devtools.ts', 'src/test-stubs/**', 'src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/test-setup.ts'],
+      reporter: ['text-summary', 'json-summary'],
+      // a floor, not a goal: coverage may only go up (measured 85.9 / 78.6 / 82.3 / 88.1 on 3 Nov 2026, test files not counted)
+      thresholds: { statements: 85, branches: 78, functions: 81, lines: 87 },
+    },
     // Cloud sync is off unless a Supabase project is configured; the suite runs against a fake one.
     env: { VITE_SUPABASE_URL: 'https://test-project.supabase.co', VITE_SUPABASE_KEY: 'sb_publishable_test' },
     // jsdom screens with many Dexie round-trips can pass 5 s when the whole suite runs in parallel.
