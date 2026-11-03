@@ -81,6 +81,8 @@ export default defineConfig({
     }),
   ],
   build: {
+    // one stylesheet instead of five requests that each block the first paint
+    cssCodeSplit: false,
     rollupOptions: {
       // zod 4 ships /*#__PURE__*/ hints Rollup cannot place; harmless, and they would bury real warnings.
       onwarn(warning, warn) {
