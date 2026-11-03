@@ -2338,5 +2338,16 @@
   "Couldn't save the backup": "No se pudo guardar la copia",
   "Automatic copies are off": "Las copias automáticas están desactivadas",
   "Back up now": "Copiar ahora",
-  "Turn off": "Desactivar"
+  "Turn off": "Desactivar",
+  "Storage is full": "El almacenamiento está lleno",
+  "The last change was not saved. Nothing saved earlier is lost. Make a backup, free some space and try again.": "El último cambio no se guardó. No se perdió nada de lo guardado antes. Haz una copia de seguridad, libera espacio e inténtalo de nuevo.",
+  "Storage is almost full": "El almacenamiento está casi lleno",
+  "Make a backup": "Hacer una copia de seguridad",
+  "Couldn't free space": "No se pudo liberar espacio",
+  "Orbita is close to the space your browser allows. Make a backup and free some space before it runs out.": "Orbita está cerca del espacio que permite tu navegador. Haz una copia de seguridad y libera espacio antes de que se agote.",
+  "No old recordings to delete": "No hay grabaciones antiguas que borrar",
+  "Recordings deleted: {n}": "Grabaciones borradas: {n}",
+  "Delete old recordings": "Borrar grabaciones antiguas",
+  "Delete recordings": "Borrar grabaciones",
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Grabaciones de más de 30 días: {n} ({size}). ¿Borrarlas? Los textos se quedan; el sonido se elimina de este dispositivo."
 }

@@ -2404,5 +2404,16 @@
   "Couldn't save the backup": "Не вдалося зберегти резервну копію",
   "Automatic copies are off": "Автоматичні копії вимкнено",
   "Back up now": "Зберегти зараз",
-  "Turn off": "Вимкнути"
+  "Turn off": "Вимкнути",
+  "Storage is full": "Сховище переповнене",
+  "The last change was not saved. Nothing saved earlier is lost. Make a backup, free some space and try again.": "Останню зміну не збережено. Нічого з раніше збереженого не втрачено. Зроби резервну копію, звільни місце й спробуй ще раз.",
+  "Storage is almost full": "Сховище майже заповнене",
+  "Make a backup": "Зробити резервну копію",
+  "Couldn't free space": "Не вдалося звільнити місце",
+  "Orbita is close to the space your browser allows. Make a backup and free some space before it runs out.": "Orbita наближається до місця, яке дозволяє твій браузер. Зроби резервну копію й звільни місце, поки воно не закінчилося.",
+  "No old recordings to delete": "Немає старих записів голосу для видалення",
+  "Recordings deleted: {n}": "Видалено записів голосу: {n}",
+  "Delete old recordings": "Видалити старі записи голосу",
+  "Delete recordings": "Видалити записи голосу",
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Записів голосу старших за 30 днів: {n} ({size}). Видалити їх? Тексти залишаться; звук буде видалено з цього пристрою."
 }
