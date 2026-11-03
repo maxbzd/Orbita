@@ -201,7 +201,7 @@ export function DayOrbit({
           const overdue = slot.satellite?.overdue === true;
           const name = slot.satellite
             ? `${slot.satellite.title}${overdue ? t(', overdue') : ''}${slot.satellite.dueLabel ? `, ${slot.satellite.dueLabel}` : ''}`
-            : t('{overflow} more commitments', { overflow: slot.overflow ?? 0 });
+            : `${full ? `+${slot.overflow ?? 0}, ` : ''}${t('{overflow} more commitments', { overflow: slot.overflow ?? 0 })}`;
           const handler = slot.satellite
             ? onSatelliteClick && interactiveSatellites
               ? () => onSatelliteClick(slot.satellite!.id)
@@ -220,7 +220,7 @@ export function DayOrbit({
               onActivate={handler}
               {...(handler ? satelliteRoving.itemProps(i) : {})}
             >
-              <title>{name}</title>
+              {slot.satellite ? <title>{name}</title> : null}
               {slot.satellite ? (
                 overdue ? (
                   <g transform={`translate(${slot.x} ${slot.y})`} className={styles.overdue}>
@@ -234,7 +234,7 @@ export function DayOrbit({
                 <g>
                   <circle cx={slot.x} cy={slot.y} r={11} className={styles.more} />
                   {full ? (
-                    <text x={slot.x} y={slot.y} className={styles.moreText} textAnchor="middle" dominantBaseline="central">
+                    <text x={slot.x} y={slot.y} className={styles.moreText} textAnchor="middle" dominantBaseline="central" aria-hidden="true">
                       +{slot.overflow}
                     </text>
                   ) : null}
@@ -250,7 +250,7 @@ export function DayOrbit({
           y={ORBIT_CENTER}
           hit={PLANET_RADIUS}
           ring={PLANET_RADIUS + 3}
-          label={planetLabel}
+          label={shownValue ? `${planetLabel}, ${shownValue}` : planetLabel}
           onActivate={onPlanetClick}
         >
           <circle

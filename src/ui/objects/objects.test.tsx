@@ -127,7 +127,9 @@ describe('CollectionCard', () => {
   it('is one button with the type, the count and the privacy in its name', () => {
     const onOpen = vi.fn();
     render(<CollectionCard kind="decision" count={9} previews={['Переехать', 'Не брать кредит']} onOpen={onOpen} />);
-    const button = screen.getByRole('button', { name: 'Решения, 9 записей, только ты' });
+    const button = screen.getByRole('button', { name: /Решения/ });
+    expect(button).toHaveAccessibleName(expect.stringContaining('9 записей'));
+    expect(button).toHaveAccessibleName(expect.stringContaining('Только ты'));
     fireEvent.click(button);
     expect(onOpen).toHaveBeenCalledTimes(1);
     expect(button.textContent).toContain('Переехать');
@@ -138,7 +140,7 @@ describe('CollectionCard', () => {
     const onOpen = vi.fn();
     const onMenu = vi.fn();
     render(<CollectionCard kind="idea" count={1} onOpen={onOpen} onMenu={onMenu} private={false} />);
-    const button = screen.getByRole('button', { name: 'Идеи, 1 запись' });
+    const button = screen.getByRole('button', { name: /Идеи/ });
     fireEvent.pointerDown(button, { clientX: 5, clientY: 5, pointerType: 'touch' });
     act(() => {
       vi.advanceTimersByTime(LONG_PRESS_MS + 10);

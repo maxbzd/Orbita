@@ -42,11 +42,12 @@ export function DayStrip({ day, today, cells, onSelect }: DayStripProps) {
             className={cx(styles.stripDay, selected && styles.stripSelected, date === today && styles.stripToday, date > today && styles.stripFuture)}
             aria-pressed={selected}
             aria-current={date === today ? 'date' : undefined}
-            aria-label={formatDayLong(date)}
+            // the name starts with what is on the button (so that "click Sat 31" works by voice), then says the full day
+            aria-label={`${formatWeekdayShort(date)} ${Number(date.slice(8, 10))} ${cell?.count ?? 0}, ${formatDayLong(date)}`}
             onClick={() => onSelect(date)}
           >
-            <span className={styles.stripWeekday}>{formatWeekdayShort(date)}</span>
-            <span className={styles.stripNumber}>{Number(date.slice(8, 10))}</span>
+            <span className={styles.stripWeekday}>{formatWeekdayShort(date)}</span>{' '}
+            <span className={styles.stripNumber}>{Number(date.slice(8, 10))}</span>{' '}
             <span className={styles.stripDot} style={style} aria-hidden="true" />
             <span className={cx(styles.stripCount, !cell?.count && styles.stripCountEmpty)} aria-hidden="true">
               {cell?.count ?? 0}
