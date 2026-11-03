@@ -1,6 +1,7 @@
 import Dexie from 'dexie';
 import { normalizePersonRole } from '../domain/types';
-import type { EntityTable, Transaction } from 'dexie';
+import type { DexieOptions, EntityTable, Transaction } from 'dexie';
+import { backendFactory, backendKeyRange, initBackend } from '../vault/backend';
 import type {
   AudioBlob,
   AudioChunk,
@@ -100,11 +101,13 @@ export type OrbitDB = Dexie & {
 };
 
 /** A database instance; tests use their own names for isolation. */
-export function createDb(name: string = DB_NAME, versions: readonly SchemaVersion[] = SCHEMA_VERSIONS): OrbitDB {
-  const dexie = new Dexie(name) as OrbitDB;
+export function createDb(name: string = DB_NAME, versions: readonly SchemaVersion[] = SCHEMA_VERSIONS, options?: DexieOptions): OrbitDB {
+  const dexie = new Dexie(name, options) as OrbitDB;
   applyVersions(dexie, versions);
   return dexie;
 }
 
 /** The application database. */
-export const db = createDb();
+// The storage underneath is chosen when the database is first opened: the browser's own, or (with encryption on) a memory copy.
+initBackend('orbita.vault');
+export const db = createDb(DB_NAME, SCHEMA_VERSIONS, { indexedDB: backendFactory, IDBKeyRange: backendKeyRange });

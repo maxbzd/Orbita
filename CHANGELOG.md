@@ -11,6 +11,7 @@ All notable changes to Orbita are documented here. The format follows [Keep a Ch
 
 ### Added
 
+- **Protect this device** (Settings): encryption at rest. With it on, nothing readable is ever written to the device: the database lives in memory while the app is open, and only sealed records (AES-256-GCM, each bound to its place, recordings included) go to an encrypted journal within a fraction of a second and whenever the app is left. The data key is wrapped by your password (Argon2id), a recovery key shown once, and optionally passkeys (Face ID, fingerprint, security key, through the WebAuthn PRF extension). It replaces the older app lock, which only guarded the entrance and the API keys. Locking reloads the page, which drops every plain value from memory; one window at a time. Verified in Chromium: before, 62 notes and names are readable in IndexedDB; after, none, and the plain database is gone.
 - On iPhone and iPad in a Safari tab, where the browser deletes a site's data after 7 idle days, the onboarding now explains it before anything is typed in and shows how to add the app to the Home Screen; the day screen reminds until it is installed.
 
 ## [1.0.0] - 2026-10-22

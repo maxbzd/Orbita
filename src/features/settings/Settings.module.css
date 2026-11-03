@@ -314,3 +314,13 @@
 .form p {
   margin: 0;
 }
+
+/* the recovery key of the vault: a long code that must be read without mistakes */
+.mono {
+  margin: var(--s-2) 0 var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  word-break: break-all;
+  user-select: all;
+}

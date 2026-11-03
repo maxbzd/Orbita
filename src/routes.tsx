@@ -34,6 +34,8 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <App />,
     errorElement: <RouteError />,
+    // Shown while the first lazy screen loads (the app unlocks first, so the router may be asked to render before it is ready).
+    HydrateFallback: () => null,
     children: [
       { index: true, element: <Navigate to="/today" replace /> },
       {

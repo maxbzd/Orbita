@@ -10,6 +10,8 @@ import { CaptureSection } from './CaptureSection';
 import { DataSection } from './DataSection';
 import { LanguageSection } from './LanguageSection';
 import { LockSection } from './LockSection';
+import { VaultSection } from '../vault/VaultSection';
+import { useVaultState } from '../../vault/state';
 import { SpeechSection } from './SpeechSection';
 import { SECTIONS } from './sections';
 import styles from './Settings.module.css';
@@ -21,6 +23,7 @@ function jump(id: string): void {
 }
 
 export default function SettingsScreen() {
+  const vaultOn = useVaultState((s) => s.state === 'unlocked');
   const [params] = useSearchParams();
   const section = params.get('section');
 
@@ -52,7 +55,8 @@ export default function SettingsScreen() {
       <LanguageSection />
       <AppearanceSection />
       <CaptureSection />
-      <LockSection />
+      <VaultSection />
+      {vaultOn ? null : <LockSection />}
       {syncEnabled() ? <CloudSection /> : null}
       <DataSection />
       <AboutSection />
