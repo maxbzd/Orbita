@@ -2382,5 +2382,7 @@
   "Recordings deleted: {n}": "Удалено записей голоса: {n}",
   "Delete old recordings": "Удалить старые записи голоса",
   "Delete recordings": "Удалить записи голоса",
-  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Записей голоса старше 30 дней: {n} ({size}). Удалить их? Тексты останутся; звук будет удалён с этого устройства."
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Записей голоса старше 30 дней: {n} ({size}). Удалить их? Тексты останутся; звук будет удалён с этого устройства.",
+  "A new version is ready": "Новая версия готова",
+  "Update": "Обновить"
 }

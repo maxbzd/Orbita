@@ -2349,5 +2349,7 @@
   "Recordings deleted: {n}": "Enregistrements supprimés : {n}",
   "Delete old recordings": "Supprimer les anciens enregistrements",
   "Delete recordings": "Supprimer les enregistrements",
-  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Enregistrements de plus de 30 jours : {n} ({size}). Les supprimer ? Les textes restent ; le son est retiré de cet appareil."
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Enregistrements de plus de 30 jours : {n} ({size}). Les supprimer ? Les textes restent ; le son est retiré de cet appareil.",
+  "A new version is ready": "Une nouvelle version est prête",
+  "Update": "Mettre à jour"
 }
