@@ -76,6 +76,18 @@ const BATCH_CHARS = 400_000;
 /** Rows are read again from a little before the cursor: transactions may become visible out of order. */
 const OVERLAP_MS = 15_000;
 
+/**
+ * What each row looked like when this device and the cloud last agreed on it (`base:<table>:<id>` in the sync bookkeeping).
+ * It is the common ancestor of a three-way merge, so that two devices editing different fields of one record both keep
+ * their edit. Rows over this size (long transcripts) are not kept: those merge by "the newer wins", as before.
+ */
+const BASE_PREFIX = 'base:';
+const BASE_LIMIT = 150_000;
+const baseOf = (table: SyncTable, row: unknown): { id: string; v: string } | null => {
+  const text = JSON.stringify(row);
+  return text.length <= BASE_LIMIT ? { id: `${BASE_PREFIX}${metaKey(table, (row as RowLike).id)}`, v: text } : null;
+};
+
 const CURSOR = '@cursor';
 const USER = '@user';
 const AUDIO_PREFIX = 'audio:';
@@ -160,10 +172,45 @@ function parseRows(rows: readonly RemoteRow[]): Incoming {
   return incoming;
 }
 
+/**
+ * A row edited here since the last sync and also changed in the cloud is merged field by field with the version both
+ * sides last agreed on. The merged row is stamped newer than both, so it is sent on this same round and the other
+ * devices take it as it is. With no base (a row never synced, or too large), the usual rule stands: the newer wins.
+ */
+async function mergeLocalEdits(
+  table: VersionedTable,
+  list: RowLike[],
+  mergeRecords: typeof import('./merge').mergeRecords,
+): Promise<{ list: RowLike[]; remoteOf: Map<ID, RowLike> }> {
+  const remoteOf = new Map<ID, RowLike>();
+  const locals = await (tableOf(table) as Table<RowLike, ID>).bulkGet(list.map((row) => row.id));
+  const metas = await db.syncmeta.bulkGet(list.flatMap((row) => [metaKey(table, row.id), `${BASE_PREFIX}${metaKey(table, row.id)}`]));
+  const merged = list.map((remote, index) => {
+    const local = locals[index];
+    const known = metas[index * 2]?.v;
+    const base = metas[index * 2 + 1]?.v;
+    if (!local || known === undefined || base === undefined) return remote;
+    if (versionOf(table, local) === known) return remote; // nothing edited here: the cloud's version simply replaces
+    if (remote.updatedAt === undefined || local.updatedAt === undefined || remote.updatedAt <= known) return remote; // nothing new in the cloud
+    const result = mergeRecords(JSON.parse(base) as Record<string, unknown>, local as unknown as Record<string, unknown>, remote as unknown as Record<string, unknown>, {
+      localTs: Date.parse(local.updatedAt),
+      remoteTs: Date.parse(remote.updatedAt),
+    });
+    // newer than both, so it wins the cloud's "newer version" rule and travels on
+    const newest = Math.max(Date.parse(local.updatedAt), Date.parse(remote.updatedAt), Date.now());
+    const row = { ...result.value, id: remote.id, updatedAt: new Date(newest + 1).toISOString() } as unknown as RowLike;
+    remoteOf.set(remote.id, remote);
+    return row;
+  });
+  return { list: merged, remoteOf };
+}
+
 /** Merges rows from the cloud into the database in one transaction. Returns how many changed this device. */
 async function applyIncoming(rows: readonly RemoteRow[]): Promise<{ applied: number; rejected: number }> {
   const incoming = parseRows(rows);
   let applied = 0;
+  // loaded before the transaction (waiting for a module inside one would end it), and only if a row could need it
+  const { mergeRecords } = await import('./merge');
 
   await db.transaction('rw', allTables(), async () => {
     const meta: { id: string; v: string }[] = [];
@@ -175,7 +222,7 @@ async function applyIncoming(rows: readonly RemoteRow[]): Promise<{ applied: num
     applied += tomb.added + tomb.updated;
     for (const tombstone of incoming.tombstones) {
       meta.push({ id: metaKey('tombstones', tombstone.id), v: tombstone.deletedAt });
-      metaDrop.push(metaKey(tombstone.table as SyncTable, tombstone.id));
+      metaDrop.push(metaKey(tombstone.table as SyncTable, tombstone.id), `${BASE_PREFIX}${metaKey(tombstone.table as SyncTable, tombstone.id)}`);
     }
 
     const written: ID[] = [];
@@ -184,18 +231,25 @@ async function applyIncoming(rows: readonly RemoteRow[]): Promise<{ applied: num
       const list = incoming.versioned.get(table);
       if (!list || list.length === 0) continue;
       const mine: ID[] = [];
+      const prepared = await mergeLocalEdits(table, list, mergeRecords);
       const result = await mergeVersioned(
         db[table] as never as Parameters<typeof mergeVersioned>[0],
-        list as never,
+        prepared.list as never,
         tombstones,
         mine,
       );
       applied += result.added + result.updated;
       written.push(...mine);
-      const byId = new Map(list.map((row) => [row.id, row]));
+      const byId = new Map(prepared.list.map((row) => [row.id, row]));
       for (const id of mine) {
-        const row = byId.get(id);
-        if (row) meta.push({ id: metaKey(table, id), v: versionOf(table, row) });
+        // a merged row stays "not yet sent": what the cloud is known to have is the version it just sent us
+        const row = prepared.remoteOf.get(id) ?? byId.get(id);
+        if (row) {
+          meta.push({ id: metaKey(table, id), v: versionOf(table, row) });
+          const base = baseOf(table, row);
+          if (base) meta.push(base);
+          else metaDrop.push(`${BASE_PREFIX}${metaKey(table, id)}`);
+        }
         // The recording was removed on the other device: drop the copy here too.
         if (table === 'captures' && row && (row as unknown as { audioId?: ID }).audioId === undefined) audioLost.push(id);
       }
@@ -293,7 +347,10 @@ async function pushDirty(backend: SyncBackend, signal: AbortSignal | undefined):
     batch = [];
     size = 0;
     await backend.upsert(sending.map(({ tbl, id, data }) => ({ tbl, id, data })));
-    await db.syncmeta.bulkPut(sending.map(({ tbl, id, version }) => ({ id: metaKey(tbl, id), v: version })));
+    await db.syncmeta.bulkPut(sending.flatMap(({ tbl, id, version, data }) => {
+      const base = baseOf(tbl, data);
+      return [{ id: metaKey(tbl, id), v: version }, ...(base ? [base] : [])];
+    }));
   };
   for (const row of dirty) {
     const length = JSON.stringify(row.data).length;
