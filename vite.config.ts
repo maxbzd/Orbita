@@ -20,6 +20,15 @@ function stripCspInDev(): Plugin {
   };
 }
 
+/** Puts the build's name in the page (`BUILD_TAG`), so that a test can tell two builds of the same code apart. */
+function buildTag(): Plugin {
+  return {
+    name: 'orbita:build-tag',
+    apply: 'build',
+    transformIndexHtml: () => [{ tag: 'meta', attrs: { name: 'build', content: process.env.BUILD_TAG ?? '' }, injectTo: 'head' as const }],
+  };
+}
+
 export default defineConfig({
   base: './',
   resolve: {
@@ -28,6 +37,7 @@ export default defineConfig({
   plugins: [
     react(),
     stripCspInDev(),
+    buildTag(),
     VitePWA({
       // 'prompt': a new service worker waits for the next launch instead of reloading the
       // page mid-recording. A UI for "update available" can use virtual:pwa-register later.
@@ -92,6 +102,7 @@ export default defineConfig({
     },
   },
   test: {
+    alias: { 'virtual:pwa-register': fileURLToPath(new URL('./src/test-stubs/pwa-register.ts', import.meta.url)) },
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],

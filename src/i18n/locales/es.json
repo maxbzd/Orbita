@@ -2349,5 +2349,7 @@
   "Recordings deleted: {n}": "Grabaciones borradas: {n}",
   "Delete old recordings": "Borrar grabaciones antiguas",
   "Delete recordings": "Borrar grabaciones",
-  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Grabaciones de más de 30 días: {n} ({size}). ¿Borrarlas? Los textos se quedan; el sonido se elimina de este dispositivo."
+  "Recordings older than 30 days: {n} ({size}). Delete them? Their texts stay; the sound is removed from this device.": "Grabaciones de más de 30 días: {n} ({size}). ¿Borrarlas? Los textos se quedan; el sonido se elimina de este dispositivo.",
+  "A new version is ready": "Hay una versión nueva",
+  "Update": "Actualizar"
 }

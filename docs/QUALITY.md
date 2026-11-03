@@ -15,14 +15,14 @@ Only Chromium was available, so **Firefox and Safari are not measured** (see Com
 | 4 | Speed | Lighthouse performance 0.67 → 0.76; the demo-data code (74 KB) and four extra stylesheets no longer block the first screen | build | Largest paint 4.8 s and blocking time 320 ms on the throttled profile; the orb chunk (128 KB) loads on the first screen |
 | 5 | Accessibility | axe-core (WCAG 2.2 AA) on 18 screens: 0 serious or critical issues after fixes (was 74 name mismatches on 8 screens); keyboard reachable; no horizontal scroll at 320 px; animations stop with reduced motion | `e2e:audit` | Screen-reader pass by a person; 200 % text zoom; 3 controls on Today without a visible focus ring |
 | 6 | Usability | Not measured | none | A test with people who have not seen the app |
-| 7 | Offline | Reload with the network off opens the app | `e2e:audit` | Update-while-open scenario |
+| 7 | Offline and updates | Reload with the network off opens the app; **a new version is fetched in the background and announced ("A new version is ready — Update"), never swapped in under someone's hands: a half-written name survives, and the app reloads into the new version only when the person says so** (before this the new version waited for the app to be closed, which on an installed phone can be weeks); the app asks for new versions hourly and when it comes to the front | `e2e:audit`, `e2e:update` (builds two versions and updates one to the other in a real browser) | — |
 | 8 | Compatibility | Chromium only | none | Firefox, Safari / iOS |
 | 9 | Languages | 7; five are machine drafts not reviewed by native speakers | `i18n:check` | Native review |
 | 10 | Code | 2929 tests; coverage 87.8 % statements, 78.8 % branches | `test:coverage` | Add a floor |
 | 11 | Supply chain | GitHub Actions pinned by commit hash and kept current by Dependabot; `npm audit` clean at high severity (10 low/moderate findings, all in build tooling that is not shipped) | `npm audit`, signatures | Reproducible build check |
 | 12 | Documentation | Security model, architecture, cloud, language guide | review | — |
 | 13 | Energy and memory | JS heap 15–80 MB with 5,000 rows in each of three tables; the stream is windowed (61 rows drawn for 3,000) | none | Long task of 316 ms when the stream opens with 5,000 records |
-| 14 | User rights | Full export, delete all, open JSON formats | unit tests | A test that the export restores byte for byte |
+| 14 | User rights | Full export, delete all, open JSON formats; **export → wipe → import → export gives the same data, field for field, recordings included; importing twice changes nothing; an import that fails halfway rolls back and leaves what was there; a damaged file is refused before anything is touched** | unit tests | — |
 | 15 | Open project | Contributing guide, security policy, code of conduct | review | — |
 
 ## How to repeat the measurements

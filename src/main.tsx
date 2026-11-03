@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
-import { registerSW } from 'virtual:pwa-register';
 import { requestPersistentStorage, runStartupMaintenance } from './db';
 import { initLocale, msg } from './i18n';
 import { LocaleRoot } from './i18n/react';
 import { VaultGate } from './features/vault/VaultGate';
+import { startUpdates } from './lib/updates';
 import { router } from './routes';
 import './styles/global.css';
 
@@ -34,5 +34,5 @@ void initLocale().then(() => {
 if (import.meta.env.DEV || import.meta.env.VITE_E2E) void import('./devtools');
 
 
-// The service worker only exists in production builds; a new version waits for the next launch.
-if (import.meta.env.PROD) registerSW();
+// A new version waits for the person's go-ahead (or the next launch): see lib/updates.ts.
+startUpdates();

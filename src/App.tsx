@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { Link, Outlet, isRouteErrorResponse, useLocation, useRouteError } from 'react-router';
 import { LockGate } from './features/lock';
+import { useUpdate } from './lib/updates';
 import { StorageBanner } from './features/storage/StorageBanner';
 import { FirstRunRedirect } from './features/onboarding/firstRun';
 import { useSettings } from './db/hooks';
 import { documentTitleFor } from './lib/documentTitle';
 import { startCloud } from './sync';
 import { ThemeProvider, themeFromSettings, useEffectsTier, useMotionPreference, useTheme } from './styles';
-import { Body, Display, ToastProvider } from './ui/primitives';
+import { Body, Display, ToastProvider, useToast } from './ui/primitives';
 import styles from './App.module.css';
 import { t } from './i18n';
 
@@ -60,6 +61,23 @@ function AutoBackupRun() {
   return null;
 }
 
+/** Tells the person that a new version is ready; it is applied only when they say so (or at the next launch). */
+function UpdateNotice() {
+  const ready = useUpdate((state) => state.ready);
+  const toast = useToast();
+  useEffect(() => {
+    if (!ready) return;
+    toast.show({
+      id: 'update',
+      message: t('A new version is ready'),
+      actionLabel: t('Update'),
+      onAction: () => useUpdate.getState().apply?.(),
+      duration: null,
+    });
+  }, [ready, toast]);
+  return null;
+}
+
 /** Keeps the tab title in step with the screen (history, task switcher, screen readers). */
 function DocumentTitle() {
   const { pathname } = useLocation();
@@ -80,6 +98,7 @@ export function App() {
           <DocumentTitle />
           <CloudStart />
           <StorageBanner />
+          <UpdateNotice />
           <FirstRunRedirect />
           <Outlet />
         </LockGate>
