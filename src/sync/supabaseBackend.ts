@@ -5,6 +5,9 @@ import type { RemoteRow, SyncBackend } from './engine';
 import type { SyncTable } from './rows';
 import { t } from '../i18n';
 
+/** PostgREST answers PGRST202 (or says so) for a function the project does not have. */
+const isMissingFunction = (error: { code?: string; message: string }): boolean => error.code === 'PGRST202' || /could not find the function/i.test(error.message);
+
 function fail(what: string, error: { message: string }): never {
   throw new Error(`${what}: ${error.message}`);
 }
@@ -13,16 +16,28 @@ function fail(what: string, error: { message: string }): never {
 export function createSupabaseBackend(client: SupabaseClient, userId: string): SyncBackend {
   const audio = () => client.storage.from(AUDIO_BUCKET);
   const path = (captureId: ID): string => `${userId}/${captureId}`;
+  let oldProject = false;
 
   return {
     userId,
 
     async upsert(rows) {
-      if (rows.length === 0) return;
+      if (rows.length === 0) return { conflicts: [] };
+      if (!oldProject) {
+        // One call, decided on the server: a record whose `base` is no longer what the cloud holds is refused and named.
+        const { data, error } = await client.rpc('orbita_sync_push', { rows });
+        if (!error) return { conflicts: ((data as { conflicts?: string[] } | null)?.conflicts ?? []) };
+        if (!isMissingFunction(error)) fail(t('Could not send data'), error);
+        oldProject = true; // the project has not had the latest migration yet: write the way it understands
+      }
+      if (rows.some(({ data }) => (data as { _e2e?: unknown } | null)?._e2e === 1)) {
+        throw new Error(t('The cloud project needs the latest migration (supabase/migrations) to hold encrypted data.'));
+      }
       const { error } = await client
         .from('sync_rows')
         .upsert(rows.map(({ tbl, id, data }) => ({ user_id: userId, tbl, id, data })), { onConflict: 'user_id,tbl,id' });
       if (error) fail(t('Could not send data'), error);
+      return { conflicts: [] };
     },
 
     async pull(since, limit) {

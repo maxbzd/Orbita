@@ -529,6 +529,8 @@ export interface Settings {
   ui: { effects: EffectsMode; reduceMotion: boolean };
   privacy: { contextLevel: PrivacyLevel; previewBeforeSend: boolean };
   onboarding: { done: boolean; completedAt?: ISODate };
+  /** The key that seals the cloud copy. Lives only on this device: never synced, and left out of plain backups. */
+  e2e: { key: string; id: string } | null;
 }
 
 // ───────── System ─────────

@@ -4,6 +4,7 @@ import { formatDayShort, formatTime, localDayKey } from '../../domain/dates';
 import { resolveAccountConflict, sendPasswordReset, setNewPassword, signIn, signOut, signUp, syncNow, useCloud, wipeCloud } from '../../sync';
 import type { CloudState } from '../../sync';
 import { Body, Button, Field, SegmentedControl, useToast } from '../../ui';
+import { CloudKeySheet } from './CloudKeySheet';
 import { ConfirmSheet } from './ConfirmSheet';
 import { Group, Row } from './Group';
 import styles from './Settings.module.css';
@@ -23,6 +24,8 @@ function statusLine(state: CloudState): string {
       return state.error ?? t('Could not sync. I will try again.');
     case 'account-conflict':
       return t("This device holds another account's data.");
+    case 'e2e-locked':
+      return t('This account is encrypted. This device needs the key.');
     default:
       break;
   }
@@ -195,6 +198,7 @@ function SignedIn({ state }: { state: CloudState }) {
   const toast = useToast();
   const [confirmOut, setConfirmOut] = useState(false);
   const [confirmWipe, setConfirmWipe] = useState(false);
+  const [keySheet, setKeySheet] = useState(false);
   const busy = state.status === 'syncing';
   const detail = reportLine(state);
 
@@ -215,6 +219,16 @@ function SignedIn({ state }: { state: CloudState }) {
         </div>
         {detail ? <Body tone="muted">{detail}</Body> : null}
       </Row>
+      <Row
+        label={t('Encrypt cloud data')}
+        hint={state.status === 'e2e-locked' ? t('This account is encrypted. This device needs the key.') : t('Seal your records and recordings on your devices, so that not even the server can read them.')}
+      >
+        <div className={styles.inline}>
+          <Button size="sm" variant={state.status === 'e2e-locked' ? 'primary' : 'secondary'} onClick={() => setKeySheet(true)}>
+            {state.status === 'e2e-locked' ? t('Enter the key') : t('Manage')}
+          </Button>
+        </div>
+      </Row>
       <Row label={t('Delete data from the cloud')} hint={t('Erases everything this account keeps in the cloud and signs out. Records stay on your devices.')}>
         <div className={styles.inline}>
           <Button size="sm" variant="danger" onClick={() => setConfirmWipe(true)}>
@@ -222,6 +236,7 @@ function SignedIn({ state }: { state: CloudState }) {
           </Button>
         </div>
       </Row>
+      <CloudKeySheet open={keySheet} onClose={() => setKeySheet(false)} />
       <ConfirmSheet
         open={confirmOut}
         onClose={() => setConfirmOut(false)}
@@ -260,7 +275,7 @@ export function CloudSection() {
       footer={
         <>
           <p>{t('Records, objects, people, projects, states, patterns, reviews, the profile and audio are copied to your cloud and appear on all devices where you are signed in to this account. Offline, everything works as before.')}</p>
-          <p>{t('AI keys, the lock and settings stay on the device. Cloud data is protected by your password and access rules, but not encrypted with your key: do not reuse a password from other places.')}</p>
+          <p>{t('AI keys, the lock and settings stay on the device. Cloud data is protected by your account and access rules. Turn on encryption below so that not even the server can read it.')}</p>
         </>
       }
     >
