@@ -29,6 +29,24 @@ function buildTag(): Plugin {
   };
 }
 
+/**
+ * The two fonts the first screen is drawn in are announced in the page head: otherwise the browser only learns of them
+ * once the app has drawn its first text, and the text waits for them.
+ */
+function preloadFonts(names: string[]): Plugin {
+  return {
+    name: 'orbita:preload-fonts',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler(_html, ctx) {
+        const files = Object.keys(ctx.bundle ?? {}).filter((file) => file.endsWith('.woff2') && names.some((name) => file.includes(`/${name}-`)));
+        return files.map((file) => ({ tag: 'link', attrs: { rel: 'preload', as: 'font', type: 'font/woff2', crossorigin: '', href: `./${file}` }, injectTo: 'head' as const }));
+      },
+    },
+  };
+}
+
 export default defineConfig({
   base: './',
   resolve: {
@@ -38,6 +56,7 @@ export default defineConfig({
     react(),
     stripCspInDev(),
     buildTag(),
+    preloadFonts(['onest-latin-wght-normal', 'cormorant-garamond-latin-wght-normal']),
     VitePWA({
       // 'prompt': a new service worker waits for the next launch instead of reloading the
       // page mid-recording. A UI for "update available" can use virtual:pwa-register later.
@@ -94,6 +113,15 @@ export default defineConfig({
     // one stylesheet instead of five requests that each block the first paint
     cssCodeSplit: false,
     rollupOptions: {
+      output: {
+        // What only some screens need is kept out of the chunk that every launch downloads: the AI pipeline and the search index
+        // are fetched when a screen asks for them, not at startup.
+        manualChunks(id: string) {
+          if (id.includes('node_modules/minisearch')) return 'search';
+          if (/node_modules\/react-router/.test(id)) return 'router';
+          return undefined;
+        },
+      },
       // zod 4 ships /*#__PURE__*/ hints Rollup cannot place; harmless, and they would bury real warnings.
       onwarn(warning, warn) {
         if (warning.code === 'INVALID_ANNOTATION' && warning.id?.includes('node_modules')) return;
