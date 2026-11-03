@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, Outlet, isRouteErrorResponse, useLocation, useRouteError } from 'react-router';
 import { LockGate } from './features/lock';
+import { StorageBanner } from './features/storage/StorageBanner';
 import { FirstRunRedirect } from './features/onboarding/firstRun';
 import { useSettings } from './db/hooks';
 import { documentTitleFor } from './lib/documentTitle';
@@ -78,6 +79,7 @@ export function App() {
           <AutoBackupRun />
           <DocumentTitle />
           <CloudStart />
+          <StorageBanner />
           <FirstRunRedirect />
           <Outlet />
         </LockGate>
