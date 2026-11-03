@@ -26,9 +26,10 @@ Especially interesting:
 ## What protects what
 
 - **Protect this device** (Settings → vault): nothing readable is written to the device. The database lives in memory; rows are sealed with AES-256-GCM (each bound to its table and id, recordings included) into an encrypted journal. The data key is wrapped by a password (Argon2id, 32 MiB, 3 passes), a recovery key, and optionally passkeys (WebAuthn PRF). Locking reloads the page so plain values leave memory. This protects a lost or stolen device, or someone reading the browser's files. It does not protect against malware running as you, or against an attacker who can change the page's code while you are unlocked.
-- **Encrypted backups** use the same Argon2id and AES-256-GCM, with the purpose authenticated.
+- **Encrypted backups** use the same Argon2id and AES-256-GCM, with the purpose authenticated. **Automatic copies** into a folder are sealed to a public key made from a passphrase (X25519 + ML-KEM-768, passphrase stretched with Argon2id): the app holds no secret to write one, and they carry no recordings or API keys.
+- **Cloud encryption** (optional, Settings → Cloud): records and recordings are sealed on the device with a key that stays on your devices (AES-256-GCM); a new device receives it through an X25519 + ML-KEM-768 exchange with check digits, or from the recovery key. The server still sees the table, id, size and time of each record.
 - **Trusted Types** (in the content policy) make the browser refuse any string that would become code; the only exception is a default policy that allows script addresses on the app's own origin.
-- **Sync** (optional, Supabase) sends records in the clear to your own project, protected by row-level security; it is **not** end-to-end encrypted in Orbita. Aster has an end-to-end mode; Orbita does not yet.
+- **Sync** (optional, Supabase) sends records to your own project, protected by row-level security; without the cloud encryption above, the owner of the project can read them.
 - No independent audit has been done. Treat these as defence in depth, not a guarantee.
 
 ## For people who host Orbita

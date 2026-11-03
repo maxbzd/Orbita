@@ -511,6 +511,22 @@ export interface LockSettings {
   sealedSecrets: SealedData | null;
 }
 
+/** Automatic encrypted copies into a folder. The copy is sealed to a public key made from a passphrase; only the public half is kept. */
+export interface AutoBackupSettings {
+  /** how the passphrase becomes the key pair (base64 salt and the Argon2id cost) */
+  salt: string;
+  m: number;
+  t: number;
+  p: number;
+  /** the public half, as text */
+  publicKey: string;
+  /** the folder's name, for the screen (the browser keeps the folder itself) */
+  folder: string;
+  everyDays: number;
+  /** `Date.now()` of the last copy written */
+  lastAt?: number;
+}
+
 export interface Settings {
   id: 'settings';
   ai: AiSettings;
@@ -531,6 +547,8 @@ export interface Settings {
   onboarding: { done: boolean; completedAt?: ISODate };
   /** The key that seals the cloud copy. Lives only on this device: never synced, and left out of plain backups. */
   e2e: { key: string; id: string } | null;
+  /** Automatic encrypted copies into a folder: this device only (the folder handle cannot travel), never in a backup. */
+  autoBackup: AutoBackupSettings | null;
 }
 
 // ───────── System ─────────
