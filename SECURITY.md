@@ -20,8 +20,16 @@ Especially interesting:
 
 - ways to read or write another user's rows (row-level security, the guard and tombstone triggers, the `audio` bucket policies);
 - leaks of API keys or the lock password into backups, sync, logs or the browser;
-- weaknesses in the password lock or the encrypted backup (`src/features/lock`, `src/db/backup*`);
+- weaknesses in the password lock, the encrypted backup, or the device vault (`src/features/lock`, `src/db/backup*`, `src/vault`, `src/crypto`);
 - cross-site scripting or content-policy bypasses in the web app, including through model answers, imported chats or shared text.
+
+## What protects what
+
+- **Protect this device** (Settings → vault): nothing readable is written to the device. The database lives in memory; rows are sealed with AES-256-GCM (each bound to its table and id, recordings included) into an encrypted journal. The data key is wrapped by a password (Argon2id, 32 MiB, 3 passes), a recovery key, and optionally passkeys (WebAuthn PRF). Locking reloads the page so plain values leave memory. This protects a lost or stolen device, or someone reading the browser's files. It does not protect against malware running as you, or against an attacker who can change the page's code while you are unlocked.
+- **Encrypted backups** use the same Argon2id and AES-256-GCM, with the purpose authenticated.
+- **Trusted Types** (in the content policy) make the browser refuse any string that would become code; the only exception is a default policy that allows script addresses on the app's own origin.
+- **Sync** (optional, Supabase) sends records in the clear to your own project, protected by row-level security; it is **not** end-to-end encrypted in Orbita. Aster has an end-to-end mode; Orbita does not yet.
+- No independent audit has been done. Treat these as defence in depth, not a guarantee.
 
 ## For people who host Orbita
 
