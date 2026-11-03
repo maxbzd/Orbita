@@ -3,7 +3,6 @@ import { Suspense, lazy, useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { getSettings } from '../../db';
 import { useProfile } from '../../db/hooks';
-import { createLlmProvider, checkAiReadiness, generateReview } from '../../ai';
 import { formatDayLong, formatDayShort, localDayKey, localMinutesOfDay } from '../../domain/dates';
 import { greetingLine, isEveningHour, daySummary } from '../../lib/verdict';
 import { installNudgeDue } from '../../lib/storageRisk';
@@ -37,6 +36,8 @@ function dateLabel(day: string): string {
 
 /** Closes the day with a review: by rules, and with the model's voice when a provider is ready. */
 async function closeDay(day: string): Promise<string> {
+  // the AI layer is the largest part of the code: it is fetched when the day is closed, not when this screen opens
+  const { checkAiReadiness, createLlmProvider, generateReview } = await import('../../ai');
   const settings = await getSettings();
   const aiReady = settings.ai.provider !== 'manual' && checkAiReadiness(settings).ready;
   const { review } = await generateReview('day', day, { llm: aiReady ? createLlmProvider(settings) : undefined });
