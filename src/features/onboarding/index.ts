@@ -1,11 +1,3 @@
-import type { RouteObject } from 'react-router';
-
 export { FIRST_RUN_EXEMPT, FirstRunRedirect, ONBOARDING_PATH, needsOnboarding } from './firstRun';
 
-/** "Знакомство": the first launch. */
-export const routes: RouteObject[] = [
-  {
-    path: 'onboarding',
-    lazy: async () => ({ Component: (await import('./OnboardingScreen')).default }),
-  },
-];
+export { routes } from './routes';

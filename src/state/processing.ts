@@ -1,17 +1,7 @@
 import { create } from 'zustand';
-import {
-  AbortedError,
-  NoKeyError,
-  OfflineError,
-  checkAiReadiness,
-  createLlmProvider,
-  createSttProvider,
-  isAiError,
-  isMockAiBuild,
-  processCapture,
-  sharedManualProvider,
-} from '../ai';
-import type { AiErrorCode, LlmProvider, ProcessDeps, ProcessResult, SttProvider } from '../ai';
+import { AbortedError, NoKeyError, OfflineError, isAiError } from '../ai/errors';
+import type { AiErrorCode } from '../ai/errors';
+import type { LlmProvider, ProcessDeps, ProcessResult, SttProvider } from '../ai';
 import { audioRepo, capturesRepo, settingsRepo } from '../db';
 import type { ID, Settings } from '../domain/types';
 import { t } from '../i18n';
@@ -67,17 +57,32 @@ export interface ProcessingDeps {
   readiness(settings: Settings): { ready: boolean; reason?: string };
   run(captureId: ID, deps: ProcessDeps): Promise<ProcessResult>;
   now(): number;
+  /** Called before a job needs the factories above: the AI code is loaded on demand, not at launch. */
+  prepare?(): Promise<void>;
 }
 
+/**
+ * The AI layer (providers, prompts, the pipeline) is the biggest part of the code and is needed only when a record is
+ * processed, so it is fetched then. It is held here once loaded: the factories below are synchronous.
+ */
+let loadedAi: typeof import('../ai') | undefined;
+const ai = (): typeof import('../ai') => {
+  if (!loadedAi) throw new Error('The AI layer is not loaded');
+  return loadedAi;
+};
+
 export const browserProcessingDeps: ProcessingDeps = {
+  prepare: async () => {
+    loadedAi ??= await import('../ai');
+  },
   getSettings: () => settingsRepo.getSettings(),
   hasAudio: async (captureId) => (await audioRepo.getForCapture(captureId)) !== undefined,
   textOf: async (captureId) => (await capturesRepo.get(captureId))?.text,
-  createLlm: (settings, manual) => (manual ? sharedManualProvider : createLlmProvider(settings)),
-  createStt: (settings) => createSttProvider(settings),
-  canTranscribe: (settings) => isMockAiBuild() || settings.stt.provider !== 'browser',
-  readiness: (settings) => checkAiReadiness(settings),
-  run: processCapture,
+  createLlm: (settings, manual) => (manual ? ai().sharedManualProvider : ai().createLlmProvider(settings)),
+  createStt: (settings) => ai().createSttProvider(settings),
+  canTranscribe: (settings) => ai().isMockAiBuild() || settings.stt.provider !== 'browser',
+  readiness: (settings) => ai().checkAiReadiness(settings),
+  run: (captureId, processDeps) => ai().processCapture(captureId, processDeps),
   now: () => Date.now(),
 };
 
@@ -144,6 +149,7 @@ export function createProcessing(deps: ProcessingDeps = browserProcessingDeps): 
     settle(put(captureId, { stage: 'waiting', mode, waiting: reason, message, ...extra }));
 
   async function run(captureId: ID, manualRequested: boolean): Promise<Job> {
+    await deps.prepare?.();
     const settings = await deps.getSettings();
     const manual = manualRequested || settings.ai.provider === 'manual';
     const mode: Job['mode'] = manual ? 'manual' : 'auto';
@@ -215,7 +221,9 @@ export function createProcessing(deps: ProcessingDeps = browserProcessingDeps): 
     },
     cancel(captureId) {
       controllers.get(captureId)?.abort();
-      sharedManualProvider.bridge.cancelPending();
+      // a request waiting for a pasted answer may come from any screen, so the AI layer is asked even if this service never loaded it
+      if (loadedAi) loadedAi.sharedManualProvider.bridge.cancelPending();
+      else void import('../ai').then((module) => module.sharedManualProvider.bridge.cancelPending());
     },
     forget(captureId) {
       store.setState((state) => {
