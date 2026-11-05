@@ -140,8 +140,8 @@ export default defineConfig({
       include: ['src/**/*.{ts,tsx}'],
       exclude: ['src/main.tsx', 'src/devtools.ts', 'src/test-stubs/**', 'src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/test-setup.ts'],
       reporter: ['text-summary', 'json-summary'],
-      // a floor, not a goal: coverage may only go up (measured 86.8 / 79.4 / 83.2 / 88.9 on 5 Nov 2026, test files not counted)
-      thresholds: { statements: 86, branches: 79, functions: 82, lines: 88 },
+      // a floor, not a goal: coverage may only go up (measured 87.3 / 79.9 / 83.7 / 89.5 on 5 Nov 2026, test files not counted)
+      thresholds: { statements: 87, branches: 79, functions: 83, lines: 89 },
     },
     // Cloud sync is off unless a Supabase project is configured; the suite runs against a fake one.
     env: { VITE_SUPABASE_URL: 'https://test-project.supabase.co', VITE_SUPABASE_KEY: 'sb_publishable_test' },
