@@ -11,6 +11,7 @@ All notable changes to Orbita are documented here. The format follows [Keep a Ch
 
 ### Added
 
+- **A big journal is tested for.** `npm run e2e:scale` (in CI) multiplies the demo data to 2,000 notes, items and people in a real Chromium and fails when a heavy screen holds the page for over 2.5 s or the memory passes 500 MB. At 3,000 of each, the longest task is half a second (the people list) and the heap stays under 100 MB.
 - **Faster launch**: 16 % less JavaScript is downloaded at start (330 → 276 KB): the AI layer loads only when a record is processed or a day is closed; the router no longer drags every screen's logic along; the first screen's fonts are fetched early.
 - **The build is reproducible**: two builds of the same source, in different folders, give byte-identical files; `npm run check:reproducible` (in CI) proves it and prints a fingerprint. The browser audit (`npm run e2e:audit`, in CI) now also fails when a control shows no focus ring, or when a screen needs sideways scrolling at 320 px with the page's text doubled.
 - **A new version never replaces the app under your hands.** It is downloaded in the background, then a notice says "A new version is ready" with an Update button; it also applies at the next launch. The app asks for new versions every hour and when it comes back to the front. Checked in a real browser with two builds (`npm run e2e:update`, in CI): a half-written name survives, and the app reloads into the new version on request.

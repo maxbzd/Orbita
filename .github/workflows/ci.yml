@@ -81,5 +81,6 @@ jobs:
           BASE_URL=http://localhost:4173/ npm run e2e:vault
           BASE_URL=http://localhost:4173/ npm run e2e:audit
           BASE_URL=http://localhost:4173/ npm run e2e:quota
+          BASE_URL=http://localhost:4173/ npm run e2e:scale
           npm run e2e:update
           npm run check:reproducible
