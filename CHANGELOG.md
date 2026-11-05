@@ -9,6 +9,10 @@ All notable changes to Orbita are documented here. The format follows [Keep a Ch
 - Upgraded the stack: React 19, Vite 8, TypeScript 7, Vitest 5, React Router 8 (`react-router`, with the v7 behaviours now the default), Motion 14.
 - Encryption: new backups and locks use Argon2id (32 MiB, 3 passes) instead of PBKDF2, split with HKDF into separate keys for encrypting and for checking the password, with the data's purpose authenticated. An unlock is one key derivation instead of two. Old backups and locks still open, and a lock made by an earlier version upgrades itself on its next unlock. Argon2id is pure JavaScript and loads on first use, so the content policy needs no `wasm-unsafe-eval`.
 
+### Fixed
+
+- On a 320 px screen, German suggested questions on the Ask screen pushed the page 74 px wider than the screen, and the period switch of the reviews was up to 25 px too wide in Spanish, French, Portuguese and Russian. Long chips now shorten with an ellipsis, and the segments give up some padding on the narrowest phones. The browser audit (`npm run e2e:audit`, in CI) now opens the screens at 320 px in all seven languages and fails on any sideways overflow.
+
 ### Added
 
 - **Licences are checked and shipped.** `npm run check:licenses` (in CI) fails when a production dependency is under a licence that is not on a short permissive list (GPL, AGPL and "unknown" stop the build until someone decides on purpose). `public/third-party-licenses.txt` carries the notice of every production dependency next to the app, as the MIT, Apache and font licences ask; `npm run licenses -- --check` keeps it current. `npm run check:docs` (in CI) fails on a broken relative link in any Markdown file.

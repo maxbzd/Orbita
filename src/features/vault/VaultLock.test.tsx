@@ -97,7 +97,7 @@ describe('the lock screen', () => {
     await waitFor(() => expect(runtime.unlock).toHaveBeenCalledWith({ kind: 'passkey', credentialId: 'cred', secret: expect.any(Uint8Array) }));
 
     const { askVaultPasskey, PasskeyError } = await import('../../vault/passkey');
-    vi.mocked(askVaultPasskey).mockRejectedValueOnce(new PasskeyError('cancelled' as never));
+    vi.mocked(askVaultPasskey).mockRejectedValueOnce(new PasskeyError('cancelled', 'cancelled'));
     await user.click(screen.getByRole('button', { name: t('Use a passkey') }));
     expect(screen.queryByText(t('The passkey did not work.'))).toBeNull();
 

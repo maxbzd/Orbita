@@ -1,5 +1,6 @@
 .group {
   display: inline-flex;
+  max-width: 100%;
   gap: 2px;
   padding: 3px;
   border-radius: var(--r-pill);
@@ -47,4 +48,14 @@
   color: var(--ink);
   font-weight: 600;
   box-shadow: inset 0 0 0 1px var(--stroke-ui);
+}
+
+/* On the narrowest phones the segments give up some padding, so longer words (Spanish, French, German) still fit the screen. */
+@media (max-width: 359px) {
+  .md .segment {
+    padding: 0 var(--s-3);
+  }
+  .sm .segment {
+    padding: 0 var(--s-2);
+  }
 }
