@@ -82,8 +82,8 @@ hosting your own copy in a few minutes (GitHub Pages, Netlify, Cloudflare Pages,
 - **Protect this device** (optional): the data is encrypted at rest with a password, a recovery key and passkeys; nothing readable is stored. Trusted Types are enforced.
 - Edits made on two devices are merged field by field.
 - API keys stay on the device; with the lock enabled they are encrypted with a key derived from your password (Argon2id + AES-256-GCM).
-- The cloud is **off** until you sign in to your own Supabase project, and it is honest about its limits: the data is protected
-  by row-level security and your password but is not end-to-end encrypted ([docs/CLOUD.md](docs/CLOUD.md)).
+- The cloud is **off** until you sign in to your own Supabase project. Its data is protected by row-level security, and with **Encrypt cloud data** switched on every record and recording is sealed on your devices first, so the server holds only data it cannot read ([docs/CLOUD.md](docs/CLOUD.md)).
+- What is protected, against whom, and where the protection ends: [docs/SECURITY_MODEL.md](docs/SECURITY_MODEL.md).
 - A strict Content-Security-Policy allows network requests only to the AI hosts listed in `index.html` and to Supabase.
 
 ## AI providers
@@ -107,6 +107,7 @@ rendered as HTML. Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | every type and table |
 | [docs/DESIGN.md](docs/DESIGN.md) | the visual language |
 | [docs/CLOUD.md](docs/CLOUD.md) | optional sync through your own Supabase project |
+| [docs/SECURITY_MODEL.md](docs/SECURITY_MODEL.md) | what is protected, against whom, and where it ends |
 | [docs/DEPLOY.md](docs/DEPLOY.md) | host your own copy |
 | [docs/I18N.md](docs/I18N.md) | translations and adding a language |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | how to help |
