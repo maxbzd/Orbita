@@ -3,6 +3,8 @@
   align-items: center;
   gap: var(--s-2);
   flex: none;
+  /* a long label (a suggested question in German) shortens with an ellipsis instead of pushing the page wider than the screen */
+  max-width: 100%;
   border-radius: var(--r-pill);
   border: 1px solid var(--stroke);
   background: var(--surface);
@@ -53,6 +55,7 @@
 }
 
 .text {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
