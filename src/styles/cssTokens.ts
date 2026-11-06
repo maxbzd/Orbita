@@ -61,7 +61,6 @@ export function parseCss(source: string, media: string | null = null): CssRule[]
     if (prelude.startsWith('@media') || prelude.startsWith('@supports')) {
       rules.push(...parseCss(body, norm(prelude.replace(/^@(media|supports)\s*/, ''))));
     } else if (prelude.startsWith('@')) {
-      continue; // @keyframes, @font-face: no tokens inside
     } else {
       const decls = new Map<string, string>();
       for (const part of splitTop(body, ';')) {

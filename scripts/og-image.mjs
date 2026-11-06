@@ -11,7 +11,7 @@ import { chromium } from '@playwright/test';
 import { fallbackChromiumPath } from './chromium.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, arg, i, all) => (arg.startsWith('--') ? [...pairs, [arg.slice(2), all[i + 1]]] : pairs), []));
+const args = Object.fromEntries(process.argv.slice(2).flatMap((arg, i, all) => (arg.startsWith('--') ? [[arg.slice(2), all[i + 1]]] : [])));
 const name = args.name ?? 'Orbita';
 const tagline = args.tagline ?? 'Think out loud. Keep what matters.';
 const sub = args.sub ?? 'A private, local-first journal that turns voice notes into decisions, commitments and ideas.';

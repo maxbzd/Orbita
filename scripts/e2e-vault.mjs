@@ -26,7 +26,8 @@ page.on('console', (message) => {
 page.on('pageerror', (error) => problems.push(`uncaught: ${String(error).slice(0, 200)}`));
 await page.addInitScript(() => {
   window.addEventListener('securitypolicyviolation', (event) => {
-    (window.__violations ||= []).push(`${event.violatedDirective} ${(event.sample || '').slice(0, 80)}`);
+    window.__violations = window.__violations ?? [];
+    window.__violations.push(`${event.violatedDirective} ${(event.sample || '').slice(0, 80)}`);
   });
 });
 

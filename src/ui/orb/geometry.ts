@@ -267,7 +267,7 @@ export function doneCurve(ageMs: number): { scale: number; flash: number } {
 /** Points for an orb of `size` CSS px when the full 220 px orb gets `maxPoints`: smaller orbs need far fewer. */
 export function pointsForSize(size: number, maxPoints: number): number {
   if (maxPoints <= 0 || size <= 0) return 0;
-  const share = Math.pow(clamp(size / 220, 0, 1), 1.5);
+  const share = clamp(size / 220, 0, 1) ** 1.5;
   return Math.min(maxPoints, Math.max(48, Math.round(maxPoints * share)));
 }
 

@@ -15,7 +15,7 @@ function Harness({ onClose = () => undefined, dismissible = true }: { onClose?()
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button onClick={() => setOpen(true)}>Открыть</button>
+      <button type="button" onClick={() => setOpen(true)}>Открыть</button>
       <Sheet
         open={open}
         title="Фильтры"
@@ -25,8 +25,8 @@ function Harness({ onClose = () => undefined, dismissible = true }: { onClose?()
           setOpen(false);
         }}
       >
-        <button>Первая</button>
-        <button>Последняя</button>
+        <button type="button">Первая</button>
+        <button type="button">Последняя</button>
       </Sheet>
     </>
   );
