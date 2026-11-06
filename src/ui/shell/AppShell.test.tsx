@@ -82,7 +82,7 @@ describe('AppShell layouts', () => {
     media.setWidth(900);
     function Opener() {
       const { setOpen } = useRightPanel();
-      return <button onClick={() => setOpen(true)}>показать детали</button>;
+      return <button type="button" onClick={() => setOpen(true)}>показать детали</button>;
     }
     render(
       <Shell panel={<p>Подробности записи</p>} panelTitle="Детали">
@@ -209,7 +209,7 @@ describe('shell context', () => {
       const { aura } = useShell();
       seen.push(aura);
       return (
-        <button onClick={toggle} aria-pressed={open}>
+        <button type="button" onClick={toggle} aria-pressed={open}>
           панель
         </button>
       );

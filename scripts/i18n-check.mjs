@@ -75,8 +75,7 @@ const CALL = /(?<![\w$.])(?<!get )(t|tn|tx|msg)\((?!\?)/g
 for (const file of walk(SRC)) {
   if (file.startsWith(join(SRC, 'i18n'))) continue
   const src = readFileSync(file, 'utf8')
-  let m
-  while ((m = CALL.exec(src))) {
+  for (const m of src.matchAll(CALL)) {
     const kind = m[1]
     const args = splitArgs(src, m.index + m[0].length).map(a => Object.assign(a, { src }))
     // t('key', vars?, ctx?)   tn(n, 'one', 'other', vars?, ctx?)   tx('key', vars, ctx?)   msg('key')

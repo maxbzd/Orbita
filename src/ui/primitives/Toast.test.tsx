@@ -157,7 +157,7 @@ describe('Toast', () => {
   it('does nothing outside a provider instead of throwing', () => {
     function Alone() {
       const toast = useToast();
-      return <button onClick={() => toast.show({ message: 'x' })}>go</button>;
+      return <button type="button" onClick={() => toast.show({ message: 'x' })}>go</button>;
     }
     render(<Alone />);
     expect(() => fireEvent.click(screen.getByText('go'))).not.toThrow();

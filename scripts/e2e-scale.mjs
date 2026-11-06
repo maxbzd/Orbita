@@ -45,7 +45,7 @@ try {
         if (copy.name) copy.name = `${copy.name} ${i}`;
         add.push(copy);
       }
-      await new Promise((res, rej) => { const tx = db.transaction(store, 'readwrite'); add.forEach((r) => tx.objectStore(store).put(r)); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
+      await new Promise((res, rej) => { const tx = db.transaction(store, 'readwrite'); for (const r of add) tx.objectStore(store).put(r); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
       out[store] = rows.length + add.length;
     }
     db.close();
@@ -59,7 +59,7 @@ try {
     await page.waitForTimeout(600);
     const m = await page.evaluate(async (to) => {
       const longs = [];
-      const po = new PerformanceObserver((l) => l.getEntries().forEach((e) => longs.push(e.duration)));
+      const po = new PerformanceObserver((l) => { for (const e of l.getEntries()) longs.push(e.duration); });
       po.observe({ type: 'longtask' });
       const t0 = performance.now();
       let last = t0;
