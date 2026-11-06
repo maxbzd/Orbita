@@ -56,8 +56,9 @@
   /* Ambient animations as full `animation` shorthands: `animation: var(--anim-aura)`. */
   --anim-aura: aura-drift 36s ease-in-out infinite alternate;
   --anim-breathe: orb-breathe 4s ease-in-out infinite;
-  --anim-spin: orb-spin 90s linear infinite;
-  --anim-spin-slow: orb-spin 120s linear infinite;
+  /* A turn takes minutes, so ten steps a second look the same as sixty while the page is redrawn six times less often (battery). */
+  --anim-spin: orb-spin 90s steps(900) infinite;
+  --anim-spin-slow: orb-spin 120s steps(1200) infinite;
   --anim-shimmer: shimmer 1.4s ease-in-out infinite;
   --anim-enter: fade-in var(--dur-fast) var(--ease-out) both; /* a new screen cross-fades in; no slide */
 

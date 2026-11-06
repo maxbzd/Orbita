@@ -11,6 +11,7 @@ import {
   AUTO_YAW_PER_SECOND,
   BELTS,
   BELT_LABELS,
+  IDLE_FRAME_MS,
   INERTIA_DECAY,
   ROLE_BELT,
   ROLE_LABELS,
@@ -211,7 +212,7 @@ function SphereView({ people, selectedId, links, onSelect, size, autoRotate, lab
   const names = useMemo(() => rimNames(people, TAU * RING_RADIUS), [people]);
   const selected = people.find((p) => p.id === selectedId) ?? null;
 
-  const view = useRef({ yaw: 0.5, pitch: -0.3, vyaw: 0, vpitch: 0, dragging: false, raf: 0, last: 0 });
+  const view = useRef({ yaw: 0.5, pitch: -0.3, vyaw: 0, vpitch: 0, dragging: false, raf: 0, last: 0, painted: 0 });
   const drawnRef = useRef<Drawn[]>([]);
   const sceneRef = useRef<Scene | null>(null);
   const runningRef = useRef(running);
@@ -259,7 +260,13 @@ function SphereView({ people, selectedId, links, onSelect, size, autoRotate, lab
       if (Math.abs(v.vpitch) < 1e-5) v.vpitch = 0;
       if (autoRef.current) v.yaw += AUTO_YAW_PER_SECOND * (dt / 1000);
     }
-    paint();
+    // Slowly turning by itself, the sphere needs about 24 pictures a second, not 60 (less work, less battery);
+    // while a finger is on it or it is coasting after a flick, every frame is drawn.
+    const moving = v.dragging || v.vyaw !== 0 || v.vpitch !== 0;
+    if (moving || now - v.painted >= IDLE_FRAME_MS) {
+      paint();
+      v.painted = now;
+    }
     if (runningRef.current && (v.dragging || v.vyaw !== 0 || v.vpitch !== 0 || autoRef.current)) request();
     else v.last = 0;
   };
