@@ -11,6 +11,7 @@ All notable changes to Orbita are documented here. The format follows [Keep a Ch
 
 ### Fixed
 
+- CI no longer fails on dependency updates: the third-party notices are made at every build from the lock file instead of being a committed file that every update made stale, and Biome is on 2.6 with its configuration adjusted, so the new version's checks do not reject existing code.
 - On a 320 px screen, German suggested questions on the Ask screen pushed the page 74 px wider than the screen, and the period switch of the reviews was up to 25 px too wide in Spanish, French, Portuguese and Russian. Long chips now shorten with an ellipsis, and the segments give up some padding on the narrowest phones. The browser audit (`npm run e2e:audit`, in CI) now opens the screens at 320 px in all seven languages and fails on any sideways overflow.
 
 ### Changed
@@ -20,7 +21,7 @@ All notable changes to Orbita are documented here. The format follows [Keep a Ch
 ### Added
 
 - **A linter** (Biome, `npm run lint`, in CI), set up like Aster's: zero errors across 683 files. Buttons in tests without a type were fixed; style and accessibility hints about drawn shapes stay as warnings, because the browser audit checks those screens with axe.
-- **Licences are checked and shipped.** `npm run check:licenses` (in CI) fails when a production dependency is under a licence that is not on a short permissive list (GPL, AGPL and "unknown" stop the build until someone decides on purpose). `public/third-party-licenses.txt` carries the notice of every production dependency next to the app, as the MIT, Apache and font licences ask; `npm run licenses -- --check` keeps it current. `npm run check:docs` (in CI) fails on a broken relative link in any Markdown file.
+- **Licences are checked and shipped.** `npm run check:licenses` (in CI) fails when a production dependency is under a licence that is not on a short permissive list (GPL, AGPL and "unknown" stop the build until someone decides on purpose). Every build writes `third-party-licenses.txt` next to the app with the notice of every production dependency, as the MIT, Apache and font licences ask (it is made from the lock file at build time, so a dependency update cannot leave it stale). `npm run check:docs` (in CI) fails on a broken relative link in any Markdown file.
 - **A compatibility guard** (`npm run check:syntax`, in CI): fails when any JavaScript file of the build uses syntax newer than ES2022 (Chrome 94, Firefox 93, Safari 15.4), so a dependency cannot raise the minimum browser unnoticed.
 - **A big journal is tested for.** `npm run e2e:scale` (in CI) multiplies the demo data to 2,000 notes, items and people in a real Chromium and fails when a heavy screen holds the page for over 2.5 s or the memory passes 500 MB. At 3,000 of each, the longest task is half a second (the people list) and the heap stays under 100 MB.
 - **Faster launch**: 16 % less JavaScript is downloaded at start (330 → 276 KB): the AI layer loads only when a record is processed or a day is closed; the router no longer drags every screen's logic along; the first screen's fonts are fetched early.
