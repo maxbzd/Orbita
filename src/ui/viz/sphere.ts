@@ -198,4 +198,6 @@ export function pickNearest<T extends { x: number; y: number; z: number; r: numb
 export const REVOLUTION_SECONDS = 120;
 /** Per-frame decay of the drag inertia at 60 fps (docs §2.7). */
 export const INERTIA_DECAY = 0.94;
+/** The longest gap between two drawn pictures while the sphere only turns on its own. */
+export const IDLE_FRAME_MS = 1000 / 24;
 export const AUTO_YAW_PER_SECOND = TAU / REVOLUTION_SECONDS;
