@@ -137,7 +137,7 @@ describe('ListRow, Chip, Badge, Pill', () => {
   it('a clickable row is one button with a chevron; the trailing action is separate', () => {
     const onClick = vi.fn();
     const onDone = vi.fn();
-    render(<ListRow title="Отправить отчёт" subtitle="Фёдору" meta="через 4 дня" onClick={onClick} trailing={<button onClick={onDone}>Готово</button>} />);
+    render(<ListRow title="Отправить отчёт" subtitle="Фёдору" meta="через 4 дня" onClick={onClick} trailing={<button type="button" onClick={onDone}>Готово</button>} />);
     fireEvent.click(screen.getByRole('button', { name: /Отправить отчёт/ }));
     expect(onClick).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole('button', { name: 'Готово' }));

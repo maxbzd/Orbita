@@ -28,6 +28,7 @@ jobs:
       - run: npm audit --audit-level=high
       - run: npm audit signatures
       - run: npm run typecheck
+      - run: npm run lint
       - run: npm run i18n:check
       - run: npm run check:docs
       - run: npm run check:licenses

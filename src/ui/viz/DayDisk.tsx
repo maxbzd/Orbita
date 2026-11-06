@@ -109,6 +109,7 @@ export function DayDisk({ date, segments = [], moods = [], nowMinutes = null, se
           );
         })}
 
+        {/* biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: a labelled picture of the day's moods; it is not a control (the browser audit checks it with axe) */}
         <g role="img" aria-label={moods.length === 0 ? t('State for the day not logged') : t('State: {v}', { v: moods.map((m) => `${minutesToClock(m.startMinutes)}–${minutesToClock(m.endMinutes)} ${moodWord(m.mood)}`).join('; ') })}>
           {moods.map((m) => {
             const [a0, a1] = spanAngles(m.startMinutes, m.endMinutes);
