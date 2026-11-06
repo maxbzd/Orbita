@@ -13,6 +13,10 @@ All notable changes to Orbita are documented here. The format follows [Keep a Ch
 
 - On a 320 px screen, German suggested questions on the Ask screen pushed the page 74 px wider than the screen, and the period switch of the reviews was up to 25 px too wide in Spanish, French, Portuguese and Russian. Long chips now shorten with an ellipsis, and the segments give up some padding on the narrowest phones. The browser audit (`npm run e2e:audit`, in CI) now opens the screens at 320 px in all seven languages and fails on any sideways overflow.
 
+### Changed
+
+- **Less work while nothing is happening.** The slow turning of the orbits (one turn in 90 seconds) redrew the page 60 times a second; it now moves in ten steps a second, which looks the same: page layouts at rest on Today dropped from 60 to 9 a second. The people sphere, when it only turns by itself, is drawn 24 times a second instead of 60 (with a finger on it or coasting after a flick, every frame is still drawn). Main-thread use on a screen left alone fell from 6.8 to 4.2 % on Today and from 8.8 to 5 % on People. `npm run e2e:idle` (in CI) fails when a screen uses over 10 % of the main thread while left alone.
+
 ### Added
 
 - **A linter** (Biome, `npm run lint`, in CI), set up like Aster's: zero errors across 683 files. Buttons in tests without a type were fixed; style and accessibility hints about drawn shapes stay as warnings, because the browser audit checks those screens with axe.
