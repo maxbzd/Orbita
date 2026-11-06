@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "vcs": {
     "enabled": false
   },
@@ -56,12 +56,18 @@
         "noImportantStyles": "off",
         "useOptionalChain": "warn",
         "noUselessFragments": "warn",
-        "noUselessContinue": "warn"
+        "noUselessContinue": "warn",
+        "useMathMinMax": "warn"
       },
       "correctness": {
         "useExhaustiveDependencies": "off",
         "useHookAtTopLevel": "off",
-        "noVoidTypeReturn": "warn"
+        "noVoidTypeReturn": "warn",
+        "noComponentHookFactories": "off"
+      },
+      "performance": {
+        "useDomNodeTextContent": "off",
+        "noDynamicNamespaceImportAccess": "off"
       }
     }
   }

@@ -29,7 +29,6 @@
     "check:syntax": "node scripts/check-syntax.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:licenses": "node scripts/check-licenses.mjs",
-    "licenses": "node scripts/write-licenses.mjs",
     "check:reproducible": "node scripts/check-reproducible.mjs",
     "test:coverage": "vitest run --coverage"
   },
@@ -55,7 +54,7 @@
     "zustand": "^5.0.16"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
+    "@biomejs/biome": "^2.6.5",
     "@playwright/test": "~1.64.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^7.0.1",
